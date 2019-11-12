@@ -7,6 +7,7 @@ const tokenAge = "2h";
 const WrapperObj = require('./sql_wrapper');
 const cryenc = require('./cryptoencryption');
 const dateParser = require('./dateParsing');
+const cors = require('cors');
 
 // Instance of sql_swapper.js. Allows us to use function within it. 
 let wrapper = new WrapperObj({
@@ -54,9 +55,10 @@ let app = express()
  * 501 == email error
  */
 
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
-app.enable('trust proxy')
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(cors());
+app.enable('trust proxy');
 
 /**
  * Regular functions
@@ -65,16 +67,16 @@ app.enable('trust proxy')
  // Have a regular every hour to delete old availability/hunger
  // TODO: Need to enact this
 
- function deleteOld() {
+function deleteOld() {
     let pastDateTime = dateParser.getCurrentDayOffset();
     //console.log(pastDateTime);
     let currDateTime = dateParser.getCurrentDate();
     //console.log(currDateTime);
     //wrapper.deleteOldObjects(pastDateTime, currDateTime);
     //console.log("DELETING OLD OBJECTS");
- }
- deleteOld();
- setInterval(deleteOld, 600000);
+}
+deleteOld();
+setInterval(deleteOld, 600000);
 
 /** GET requests -- getting any data from the database
  * Availability
@@ -304,7 +306,7 @@ const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
             });
         }
     });
- };
+};
 /** Token related functions
  * Make Token User: Makes a token given the user id
  * Make Token Email: makes email toen for email verification given all user details
@@ -312,7 +314,7 @@ const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
  */
 
  // creates and signs a new token
- function makeTokenUser(user_id) {
+function makeTokenUser(user_id) {
     let privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
     let payload = {
         "user_id" : user_id,
@@ -327,10 +329,10 @@ const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
     };
 
     return jwt.sign(payload, privateKey, signOptions);
- }
+}
 
  // creates and signs an email token
- function makeTokenEmail(fn, ln, un, password, pn, em, user_id = null) {
+function makeTokenEmail(fn, ln, un, password, pn, em, user_id = null) {
     let privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
     let passwordEnc = null;
     if (password !== null){
@@ -354,7 +356,7 @@ const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
     };
     let token = jwt.sign(payload, privateKey, signOptions);
     return cryenc.encrypt(token);
- }
+}
 
  // verfies a given token
 function verifyToken(token) {
@@ -382,8 +384,8 @@ function verifyToken(token) {
     }
 }
 
- // Login. Sends back a JWT for authentication
- app.post('/login/', (req, res) => {
+// Login. Sends back a JWT for authentication
+app.post('/login/', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
     let email = req.body.email;
@@ -404,7 +406,7 @@ function verifyToken(token) {
         });
     }
 
-    //console.log("Login attempt: " + username);
+    console.log("Login attempt: " + username + " " + password);
 
     // LoginChecked is an object returned by checkUser. 
     wrapper.checkUser(username, email, password).then((loginChecked) => {
@@ -450,7 +452,7 @@ function verifyToken(token) {
             });
         }
     });
- });
+});
 
  const sendEmail = (firstname, lastname, email, token, req, res) => {
     // let rand = Math.floor((Math.random() * 100) + 54);

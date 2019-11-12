@@ -1,0 +1,2 @@
+- Implement and style checkbox for login and registration (need to check if checked before storing cookie)
+- Registration method not started in API wrapper or react
