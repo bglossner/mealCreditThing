@@ -1,5 +1,5 @@
 import React from 'react';
-import './login.css';
+import './css/login.css';
 
 function Input(props) {
     return (
@@ -7,22 +7,43 @@ function Input(props) {
             type={props.type}
             placeholder={props.placeholder}
             name={props.name}
+            className="non-checkbox"
         />
     );
 }
 
-class LoginForm extends React.Component {
+class RememberMeCheckbox extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            checked: false,
+        };
     }
 
-    storeLoginInfo(apiResult) {
-        delete apiResult["message"];
-        console.log(apiResult);
-        for (let key in apiResult) {
-            storeCookie(key, apiResult[key], 5000);
-        }
+    handleClick() {
+        this.setState({
+            checked: !this.state.checked,
+        });
     }
+
+    render() {
+        this.props.store.dispatch({
+            type: 'CHECKBOX_CHANGED',
+            isChecked: this.state.checked,
+        });
+        const className = "remember-me " + (this.state.checked ? "checked-remember-me" : "unchecked-remember-me");
+        return (
+            <React.Fragment>
+                <div className="remember-me-div">
+                    <input onClick={() => this.handleClick()} id="remember-me-checkbox" type="checkbox" className={className} name="remember-me-check" />
+                    <label htmlFor="remember-me-checkbox"><span>Remember Me</span></label>
+                </div>
+            </React.Fragment>
+        );
+    }
+}
+
+class LoginForm extends React.Component {
 
     attemptLogin() {
         let formElements = document.querySelector("#info-form").getElementsByTagName("input");
@@ -38,7 +59,10 @@ class LoginForm extends React.Component {
             }
             else {
                 console.log(result);
-                this.storeLoginInfo(result);
+                if (this.props.store.getState().rememberMeChecked) {
+                    console.log("Storing cookies");
+                    this.props.storeLoginInfo(result);
+                }
                 alert("Success");
             }
         }).catch((reason) => {
@@ -52,6 +76,7 @@ class LoginForm extends React.Component {
                 <Input name="username" type="text" placeholder="Username/Email" />
                 <Input name="password" type="password" placeholder="Password" />
                 <button onClick={() => this.attemptLogin()}>login</button>
+                {/* eslint-disable-next-line */}
                 <p className="message">Not registered? <a onClick={() => this.props.switchForms()}>Create an account</a></p>
             </React.Fragment>
         );
@@ -59,9 +84,6 @@ class LoginForm extends React.Component {
 }
 
 class RegisterForm extends React.Component {
-    constructor(props) {
-        super(props);
-    }
     
     attemptRegistration() {
         return null;
@@ -77,6 +99,7 @@ class RegisterForm extends React.Component {
                 <Input name="lastname" type="text" placeholder="Last Name"/>
                 <Input name="phonenumber" type="text" placeholder="Phone Number"/>
                 <button onClick={() => this.attemptRegistration()}>create</button>
+                {/* eslint-disable-next-line */}
                 <p className="message">Already registered? <a onClick={() => this.props.switchForms()}>Sign in</a></p>
             </React.Fragment>
         );
@@ -90,6 +113,21 @@ class GeneralFormContainer extends React.Component {
             isLoginForm: true,
         };
         this.switchForms = this.switchForms.bind(this);
+        this.storeLoginInfo = this.storeLoginInfo.bind(this);
+    }
+
+    storeLoginInfo(apiResult) {
+        delete apiResult["message"];
+        //console.log(apiResult);
+        //console.log(typeof(apiResult));
+        this.props.cookieWrapper.storeCookie("user_information", JSON.stringify(apiResult), 5000);
+        this.props.store.dispatch({
+            type: 'CHANGE_LOGIN_INFO',
+            loginInfo: apiResult,
+        });
+        /* for (let key in apiResult) {
+            storeCookie(key, apiResult[key], 5000);
+        } */
     }
 
     switchForms() {
@@ -99,19 +137,14 @@ class GeneralFormContainer extends React.Component {
     }
 
     render() {
-        let userInfo = retrieveCookieIfExists("user-logged-in");
-        if (userInfo !== null) {
-            alert("LOGGING IN")
-        }
-
         let formClassName, input_fields;
         if (this.state.isLoginForm) {
             formClassName = "login-form";
-            input_fields = <LoginForm apiWrapper={this.props.api} switchForms={this.switchForms} />;
+            input_fields = <LoginForm storeLoginInfo={this.storeLoginInfo} store={this.props.store} apiWrapper={this.props.api} switchForms={this.switchForms} />;
         }
         else {
             formClassName = "register-form";
-            input_fields = <RegisterForm apiWrapper={this.props.api} switchForms={this.switchForms} />;
+            input_fields = <RegisterForm  storeLoginInfo={this.storeLoginInfo} store={this.props.store} apiWrapper={this.props.api} switchForms={this.switchForms} />;
         }
 
         return (
@@ -120,34 +153,11 @@ class GeneralFormContainer extends React.Component {
                     <div id="info-form" className={formClassName}>
                         {input_fields}
                     </div>
-                    <input type="checkbox" name="remember-me" className="remember-me" /><p className="right-align">Remember Me</p>
+                    <RememberMeCheckbox store={this.props.store} />
                 </div>
             </div>
         );
     }
-}
-
-function retrieveCookieIfExists(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) === 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return null;
-}
-
-function storeCookie(cname, data, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    var expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + data + ";" + expires + ";path=/";
 }
 
 export default GeneralFormContainer;
