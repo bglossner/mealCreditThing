@@ -1,0 +1,4 @@
+primaryColor: #ACCD2D
+linkColor: #0091FF
+headingColor: #4F4E4E
+softGray: #CFCCCC
