@@ -2,12 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 import GeneralFormContainer from './login';
+import Home from './home';
 import LogoutButton from './logout';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from './redux/reducers/index';
 import APIWrapper from './api_wrapper';
 import CookiesWrapper from './cookies';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    Redirect
+} from "react-router-dom";
 
 document.title = "Meal Credit App";
 
@@ -23,8 +31,17 @@ store.dispatch({
 
 ReactDOM.render (
     <Provider store={store}>
-        <LogoutButton store={store} cookieWrapper={cookieWrapper} />
-        <GeneralFormContainer cookieWrapper={cookieWrapper} store={store} api={apiWrapper} />
+        <Router>
+            <Switch>
+                <Route exact path="/">
+                    { retrievedLoginInfo === null ? <Redirect to="/login" /> : <Home /> }
+                </Route>
+                <Route path="/login">
+                    <LogoutButton store={store} cookieWrapper={cookieWrapper} />
+                    <GeneralFormContainer cookieWrapper={cookieWrapper} store={store} api={apiWrapper} />
+                </Route>
+            </Switch>
+        </Router>
     </Provider>,
     document.getElementById('root')
 );
