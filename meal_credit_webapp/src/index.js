@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
-import GeneralFormContainer from './login';
-import Home from './home';
-import LogoutButton from './logout';
+import GeneralFormContainer from './js/login';
+import Home from './js/home';
+import LogoutButton from './js/logout';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reducers from './redux/reducers/index';
-import APIWrapper from './api_wrapper';
-import CookiesWrapper from './cookies';
+import reducers from './js/redux/reducers/index';
+import APIWrapper from './js/api_wrapper/api_wrapper';
+import CookiesWrapper from './js/cookies';
 import {
     BrowserRouter as Router,
     Switch,

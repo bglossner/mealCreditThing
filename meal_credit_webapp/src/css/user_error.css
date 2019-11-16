@@ -1,0 +1,16 @@
+.user-error {
+    background: rgba(255, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5%;
+    margin-bottom: 5%;
+}
+
+.error-msg {
+    color: red;
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+    opacity: 0.8;
+}

@@ -440,14 +440,14 @@ app.post('/login/', (req, res) => {
             // Login or password does not match
             else {
                 return res.status(401).json({
-                    message : "OAuth failed 1",
+                    message : "Incorrect username or password",
                     status: 401
                 });
             }
         }
         else {
             return res.status(401).json({
-                message : "OAuth failed 2",
+                message : "Incorrect username or password",
                 status: 401
             });
         }

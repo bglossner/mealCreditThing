@@ -1,49 +1,43 @@
 import React from 'react';
-import './css/login.css';
+import '../css/login.css';
+import '../css/user_error.css'
+import Input from './Input';
+import RememberMeCheckbox from './Checkbox'
+import { connect } from 'react-redux';
 
-function Input(props) {
+function RibbonInfo(props) {
+    let label = props.label === null ? "" : props.label;
+    delete props["label"];
     return (
-        <input
-            type={props.type}
-            placeholder={props.placeholder}
-            name={props.name}
-            className="non-checkbox"
-        />
+        <div className="ribbon" style={props}>{label}</div>
     );
 }
 
-class RememberMeCheckbox extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            checked: false,
-        };
-    }
-
-    handleClick() {
-        this.setState({
-            checked: !this.state.checked,
-        });
-    }
-
-    render() {
-        this.props.store.dispatch({
-            type: 'CHECKBOX_CHANGED',
-            isChecked: this.state.checked,
-        });
-        const className = "remember-me " + (this.state.checked ? "checked-remember-me" : "unchecked-remember-me");
-        return (
-            <React.Fragment>
-                <div className="remember-me-div">
-                    <input onClick={() => this.handleClick()} id="remember-me-checkbox" type="checkbox" className={className} name="remember-me-check" />
-                    <label htmlFor="remember-me-checkbox"><span>Remember Me</span></label>
-                </div>
-            </React.Fragment>
-        );
-    }
+function UserError(props) {
+    return (
+        <div className="user-error">
+            <p className="error-msg">{props.errorMessage}</p>
+        </div>
+    );
 }
 
 class LoginForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            errorRibbons: null,
+        };
+    }
+
+    handleLoginErrors(error) {
+        let jsonError = {};
+        jsonError.status = error.status;
+        jsonError.errorMsg = error.message;
+        this.props.store.dispatch({
+            type: 'USER_ERROR',
+            userError: jsonError,
+        });
+    }
 
     attemptLogin() {
         let formElements = document.querySelector("#info-form").getElementsByTagName("input");
@@ -51,7 +45,7 @@ class LoginForm extends React.Component {
         for (let ele of formElements) {
             formEntries[ele.name] = ele.value;
         }
-        let returnVal = this.props.apiWrapper.makeLoginRequest(formEntries["username"], formEntries["password"]);
+        let returnVal = this.props.apiWrapper.login(formEntries["username"], formEntries["password"]);
     
         returnVal.then((result) => {
             if (result === false) {
@@ -63,10 +57,15 @@ class LoginForm extends React.Component {
                     console.log("Storing cookies");
                     this.props.storeLoginInfo(result);
                 }
+                this.props.store.dispatch({
+                    type: 'USER_ERROR',
+                    userError: null,
+                });
                 alert("Success");
             }
         }).catch((reason) => {
             console.log(reason);
+            this.handleLoginErrors(reason);
         });
     }
 
@@ -146,10 +145,14 @@ class GeneralFormContainer extends React.Component {
             formClassName = "register-form";
             input_fields = <RegisterForm  storeLoginInfo={this.storeLoginInfo} store={this.props.store} apiWrapper={this.props.api} switchForms={this.switchForms} />;
         }
+        //console.log("Rerendering: " + this.state.pageError);
+        //console.log(this.props.store.getState().userError);
 
         return (
             <div className="login-page">
                 <div className="user-info-form">
+                    { this.props.pageError === null || this.props.pageError === undefined ? (null) : <UserError errorMessage={this.props.pageError.errorMsg} /> }
+                    <RibbonInfo position="absolute" background="red" top="50px" right="-9.8vw" width="10vw"  />
                     <div id="info-form" className={formClassName}>
                         {input_fields}
                     </div>
@@ -160,4 +163,13 @@ class GeneralFormContainer extends React.Component {
     }
 }
 
-export default GeneralFormContainer;
+function mapStateToProps(state, ownProps) {
+    return {
+        pageError: state.userError,
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    null
+)(GeneralFormContainer);
