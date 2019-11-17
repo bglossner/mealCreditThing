@@ -1,8 +1,8 @@
 :root {
     --checkbox-line-color: white;
-    --checkbox-inside-color-checked: #4CAF50;
+    --checkbox-inside-color-checked: #4caf50;
     --checkbox-inside-color-unchecked: white;
-    --checkbox-border-color: #A0A0A0;
+    --checkbox-border-color: #a0a0a0;
     --checkbox-before-top: 7px;
     --checkbox-before-left: 10px;
     --ribbon-height: 5vh;
@@ -17,7 +17,7 @@
 .user-info-form {
     position: relative;
     z-index: 1;
-    background: #FFFFFF;
+    background: #ffffff;
     max-width: 360px;
     margin: 0 auto 100px;
     padding: 10% 10% 4% 10%;
@@ -31,7 +31,7 @@
     background: #f2f2f2;
     width: 100%;
     border: 0;
-    margin: 0 0 15px;
+    /* margin: 0 0 15px; */
     padding: 15px;
     box-sizing: border-box;
     font-size: 14px;
@@ -42,11 +42,11 @@
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
-    background: #4CAF50;
+    background: #4caf50;
     width: 100%;
     border: 0;
     padding: 15px;
-    color: #FFFFFF;
+    color: #ffffff;
     font-size: 14px;
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
@@ -56,7 +56,7 @@
 .user-info-form button:hover,
 .user-info-form button:active,
 .user-info-form button:focus {
-    background: #43A047;
+    background: #43a047;
 }
 
 .user-info-form .message {
@@ -67,7 +67,7 @@
 }
 
 .user-info-form .message a {
-    color: #4CAF50;
+    color: #4caf50;
     text-decoration: none;
 }
 
@@ -76,7 +76,7 @@
 }
 
 .user-info-form .checked-remember-me {
-    background: #43A047;
+    background: #43a047;
     color: white;
 }
 
@@ -102,7 +102,7 @@
     position: relative;
 }
 .user-info-form .remember-me-div label:before {
-    content: '';
+    content: "";
     position: absolute;
     left: var(--checkbox-before-left);
     top: var(--checkbox-before-top);
@@ -116,7 +116,7 @@
 }
 
 .user-info-form .remember-me-div label:after {
-    content: '';
+    content: "";
     display: block;
     width: 10px;
     height: 5px;
@@ -130,7 +130,10 @@
     top: calc(var(--checkbox-before-top) + 4px);
     left: calc(var(--checkbox-before-left) + 23.5px);
 }
-.user-info-form .remember-me-div input[type="checkbox"]:checked ~ label::before {
+.user-info-form
+    .remember-me-div
+    input[type="checkbox"]:checked
+    ~ label::before {
     color: var(--checkbox-line-color);
     border: 2px solid var(--checkbox-inside-color-checked);
     background-color: var(--checkbox-inside-color-checked);

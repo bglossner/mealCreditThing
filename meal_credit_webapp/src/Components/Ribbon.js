@@ -20,6 +20,8 @@ class Ribbon extends Component {
     }
 }
 
-Ribbon.propTypes = {};
+Ribbon.propTypes = {
+    label: PropTypes.string
+};
 
 export default Ribbon;
