@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { connect } from "react-redux";
+import { changeRememberMeValue } from "../redux/actions/index"
 
-export default class Checkbox extends React.Component {
+class Checkbox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,10 +18,7 @@ export default class Checkbox extends React.Component {
     }
 
     render() {
-        this.props.store.dispatch({
-            type: "CHECKBOX_CHANGED",
-            isChecked: this.state.checked
-        });
+        this.props.dispatch(changeRememberMeValue(this.state.checked));
         const className =
             "remember-me " +
             (this.state.checked
@@ -47,3 +46,5 @@ export default class Checkbox extends React.Component {
 Checkbox.propTypes = {
     message: PropTypes.string
 };
+
+export default connect()(Checkbox);

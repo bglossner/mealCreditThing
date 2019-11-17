@@ -82,7 +82,11 @@ function mapStateToProps(state, ownProps) {
     };
 }
 
-Register.propTypes = {};
+Register.propTypes = {
+    pageError: PropTypes.object,
+    apiWrapper: PropTypes.object,
+    cookieWrapper: PropTypes.object,
+};
 
 export default connect(
     mapStateToProps,
