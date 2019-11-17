@@ -20,7 +20,7 @@ class Login extends Component {
         this.storeLoginInfo = this.storeLoginInfo.bind(this);
     }
 
-    storeLoginInfo(apiResult) {
+    storeLoginInfo = apiResult => {
         delete apiResult["message"];
         //console.log(apiResult);
         //console.log(typeof(apiResult));
@@ -36,7 +36,7 @@ class Login extends Component {
         /* for (let key in apiResult) {
             storeCookie(key, apiResult[key], 5000);
         } */
-    }
+    };
 
     handleLoginErrors(error) {
         let jsonError = {};
