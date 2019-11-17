@@ -2,6 +2,13 @@ import React from "react";
 import "../css/logout.css";
 
 class LogoutButton extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            temp: false,
+        };
+    }
+
     handleClick() {
         this.props.cookieWrapper.deleteAllCookies();
         this.props.store.dispatch({
@@ -9,7 +16,7 @@ class LogoutButton extends React.Component {
             loginInfo: null
         });
         console.log("Removed info");
-        this.setState();
+        this.setState({ temp: true, })
     }
 
     render() {

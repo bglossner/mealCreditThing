@@ -20,7 +20,6 @@ import Register from "./Pages/Register";
 import { createStore } from "redux";
 import reducers from "./redux/reducers/index";
 
-const store = createStore(reducers);
 class App extends Component {
     render() {
         const apiWrapper = new APIWrapper();
@@ -28,6 +27,7 @@ class App extends Component {
         const retrievedLoginInfo = cookieWrapper.retrieveCookieIfExists(
             "user_information"
         );
+        const store = createStore(reducers);
         if (retrievedLoginInfo !== null) {
             console.log("NON NULL");
             store.dispatch({
