@@ -42,8 +42,10 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <Switch>
+                { console.log("fsejkfe") }
                 <Route exact path="/">
-                    {retrievedLoginInfo ? <Home /> : <Redirect to="/login" /> }
+                    { console.log("daw", store.getState().userLoginInfo) }
+                    { store.getState().userLoginInfo ? <Home /> : <Redirect to="/login" /> }
                     <LogoutButton store={store} cookieWrapper={cookieWrapper} />
                 </Route>
                 <Route path="/login">
@@ -66,6 +68,10 @@ ReactDOM.render(
                         store={store}
                         apiWrapper={apiWrapper}
                     />
+                </Route>
+                <Route path="/home">
+                    { console.log("da321312321w", store.getState().userLoginInfo) }
+                    {/* store.getState().userLoginInfo ? <Home /> : <Redirect to="/login" /> */}
                 </Route>
             </Switch>
         </Router>
