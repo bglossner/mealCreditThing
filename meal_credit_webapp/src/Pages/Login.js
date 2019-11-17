@@ -91,7 +91,7 @@ class Login extends Component {
                     this.props.pageError === undefined ? null : (
                         <Error message={this.props.pageError.errorMsg} />
                     )}
-                    <Ribbon />
+                    {/* <Ribbon /> */}
                     <div id="info-form" className="login-form">
                         <React.Fragment>
                             <Input
@@ -123,6 +123,13 @@ class Login extends Component {
         );
     }
 }
+
+Login.propTypes = {
+    pageError: PropTypes.object,
+    store: PropTypes.object,
+    apiWrapper: PropTypes.object,
+    cookieWrapper: PropTypes.object
+};
 
 function mapStateToProps(state, ownProps) {
     return {

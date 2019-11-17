@@ -22,7 +22,7 @@ class Register extends Component {
                     this.props.pageError === undefined ? null : (
                         <Error message={this.props.pageError.errorMsg} />
                     )}
-                    <Ribbon />
+                    {/* <Ribbon /> */}
                     <div id="info-form" className="register-form">
                         <React.Fragment>
                             <Input
