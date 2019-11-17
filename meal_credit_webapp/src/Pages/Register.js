@@ -23,7 +23,7 @@ class Register extends Component {
                     this.props.pageError === undefined ? null : (
                         <Error message={this.props.pageError.errorMsg} />
                     )}
-                    <Ribbon />
+                    {/* <Ribbon /> */}
                     <div id="info-form" className="register-form">
                         <React.Fragment>
                             <Input
@@ -85,7 +85,7 @@ function mapStateToProps(state, ownProps) {
 Register.propTypes = {
     pageError: PropTypes.object,
     apiWrapper: PropTypes.object,
-    cookieWrapper: PropTypes.object,
+    cookieWrapper: PropTypes.object
 };
 
 export default connect(
