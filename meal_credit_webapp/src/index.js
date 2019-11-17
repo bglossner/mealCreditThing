@@ -16,7 +16,6 @@ const retrievedLoginInfo = cookieWrapper.retrieveCookieIfExists(
     "user_information"
 );
 if (retrievedLoginInfo !== null) {
-    console.log("NON NULL");
     store.dispatch({
         type: "CHANGE_LOGIN_INFO",
         loginInfo: JSON.parse(retrievedLoginInfo)
