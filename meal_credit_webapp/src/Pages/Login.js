@@ -124,13 +124,18 @@ class Login extends Component {
     }
 }
 
+Login.propTypes = {
+    pageError: PropTypes.object,
+    store: PropTypes.object,
+    apiWrapper: PropTypes.object,
+    cookieWrapper: PropTypes.object,
+};
+
 function mapStateToProps(state, ownProps) {
     return {
         pageError: state.userError
     };
 }
-
-Login.propTypes = {};
 
 export default connect(
     mapStateToProps,
