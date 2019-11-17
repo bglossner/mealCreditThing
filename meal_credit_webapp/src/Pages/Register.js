@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import Checkbox from "../Components/Checkbox";
 import Error from "../Components/Error";
 import Input from "../Components/Input";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Ribbon from "../Components/Ribbon";
 import { connect } from "react-redux";
@@ -60,7 +61,8 @@ class Register extends Component {
                             </button>
                             {/* eslint-disable-next-line */}
                             <p className="message">
-                                Already registered? <a href="/login">Sign in</a>
+                                Already registered?
+                                <Link to="/login"> Sign in</Link>
                             </p>
                         </React.Fragment>
                     </div>
