@@ -6,6 +6,7 @@ import React, { Component } from "react";
 import Checkbox from "../Components/Checkbox";
 import Error from "../Components/Error";
 import Input from "../Components/Input";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Ribbon from "../Components/Ribbon";
 import { connect } from "react-redux";
@@ -16,13 +17,10 @@ class Login extends Component {
         this.state = {
             errorRibbons: null
         };
-        this.storeLoginInfo = this.storeLoginInfo.bind(this);
     }
 
-    storeLoginInfo(apiResult) {
+    storeLoginInfo = apiResult => {
         delete apiResult["message"];
-        //console.log(apiResult);
-        //console.log(typeof(apiResult));
         this.props.cookieWrapper.storeCookie(
             "user_information",
             JSON.stringify(apiResult),
@@ -32,10 +30,7 @@ class Login extends Component {
             type: "CHANGE_LOGIN_INFO",
             loginInfo: apiResult
         });
-        /* for (let key in apiResult) {
-            storeCookie(key, apiResult[key], 5000);
-        } */
-    }
+    };
 
     handleLoginErrors(error) {
         let jsonError = {};
@@ -68,13 +63,14 @@ class Login extends Component {
                     console.log(result);
                     if (this.props.store.getState().rememberMeChecked) {
                         console.log("Storing cookies");
-                        this.props.storeLoginInfo(result);
+                        this.storeLoginInfo(result);
                     }
                     this.props.store.dispatch({
                         type: "USER_ERROR",
                         userError: null
                     });
                     alert("Success");
+                    this.setState();
                 }
             })
             .catch(reason => {
@@ -110,13 +106,22 @@ class Login extends Component {
                             {/* eslint-disable-next-line */}
                             <p className="message">
                                 Not registered?{" "}
-                                <a href="/register">Create an account</a>
+                                <Link to="/register">Create an account</Link>
                             </p>
                         </React.Fragment>
                     </div>
                     <Checkbox
                         store={this.props.store}
                         message={"Remember Me"}
+                    />
+                    <button
+                        onClick={() => {
+                            console.log(
+                                this.props.cookieWrapper.retrieveCookieIfExists(
+                                    "user_information"
+                                )
+                            );
+                        }}
                     />
                 </div>
             </div>
@@ -136,8 +141,6 @@ function mapStateToProps(state, ownProps) {
         pageError: state.userError
     };
 }
-
-Login.propTypes = {};
 
 export default connect(
     mapStateToProps,

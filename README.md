@@ -1,1 +1,2 @@
-# mealCreditThing
+# mealCreditThing 
+Share meal credits
