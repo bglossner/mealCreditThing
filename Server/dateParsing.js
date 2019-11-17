@@ -3,7 +3,6 @@ function makeDateTime(year, month, day, hour, minute, second) {
 }
 
 function parseDateTime(dateTime) {
-    let dateTime = dateTime.replace("T", " ");
     let periodIndex = dateTime.indexOf(".");
     let firstHy = dateTime.indexOf("-");
     let secondHy = dateTime.substring(firstHy + 1).indexOf("-") + firstHy + 1;
