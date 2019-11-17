@@ -1,22 +1,13 @@
 import React from "react";
 import "../css/logout.css";
+import { connect } from "react-redux";
 
 class LogoutButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            temp: false,
-        };
-    }
 
     handleClick() {
         this.props.cookieWrapper.deleteAllCookies();
-        this.props.store.dispatch({
-            type: "CHANGE_LOGIN_INFO",
-            loginInfo: null
-        });
+        this.props.logout();
         console.log("Removed info");
-        this.setState({ temp: true, })
     }
 
     render() {
@@ -24,4 +15,16 @@ class LogoutButton extends React.Component {
     }
 }
 
-export default LogoutButton;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logout: () => dispatch({
+            type: "CHANGE_LOGIN_INFO",
+            loginInfo: null
+        }),
+    }
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(LogoutButton);
