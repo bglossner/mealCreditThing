@@ -24,7 +24,8 @@ class Input extends Component {
     onFocusOut() {
         if (this.props.valid) {
             this.setState({
-                border: "green 1px solid"
+                border: "green 1px solid",
+                showErrorLabel: false
             });
         } else {
             this.setState({
