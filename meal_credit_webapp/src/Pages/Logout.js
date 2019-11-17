@@ -8,6 +8,8 @@ class LogoutButton extends React.Component {
             type: "CHANGE_LOGIN_INFO",
             loginInfo: null
         });
+        console.log("Removed info");
+        this.setState();
     }
 
     render() {

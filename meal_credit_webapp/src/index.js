@@ -12,6 +12,7 @@ import APIWrapper from "./API/api_wrapper";
 import CookiesWrapper from "./API/cookies";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
+import LogoutButton from "./Pages/Logout"
 import { Provider } from "react-redux";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -27,31 +28,36 @@ var retrievedLoginInfo = cookieWrapper.retrieveCookieIfExists(
     "user_information"
 );
 const store = createStore(reducers);
+console.log(JSON.parse(retrievedLoginInfo))
 
-store.dispatch({
-    type: "CHANGE_LOGIN_INFO",
-    loginInfo:
-        retrievedLoginInfo === null ? null : JSON.parse(retrievedLoginInfo)
-});
+if (retrievedLoginInfo !== null) {
+    console.log("NON NULL")
+    store.dispatch({
+        type: "CHANGE_LOGIN_INFO",
+        loginInfo: JSON.parse(retrievedLoginInfo),
+    });
+}
 
 ReactDOM.render(
     <Provider store={store}>
         <Router>
             <Switch>
                 <Route exact path="/">
-                    {retrievedLoginInfo === null ? (
-                        <Redirect to="/login" />
-                    ) : (
-                        <Home />
-                    )}
+                    {retrievedLoginInfo ? <Home /> : <Redirect to="/login" /> }
+                    <LogoutButton store={store} cookieWrapper={cookieWrapper} />
                 </Route>
                 <Route path="/login">
+                    {
+                        store.getState().userLoginInfo ? 
+                        <Redirect to="/" /> : 
+                        <Login
+                            cookieWrapper={cookieWrapper}
+                            store={store}
+                            apiWrapper={apiWrapper}
+                        />
+                    }
+                    <LogoutButton store={store} cookieWrapper={cookieWrapper} />
                     {/* <LogoutButton store={store} cookieWrapper={cookieWrapper} /> */}
-                    <Login
-                        cookieWrapper={cookieWrapper}
-                        store={store}
-                        apiWrapper={apiWrapper}
-                    />
                 </Route>
                 <Route path="/register">
                     {/* <LogoutButton store={store} cookieWrapper={cookieWrapper} /> */}
