@@ -16,7 +16,7 @@ export default class RegisterAPIWrapper {
         }
         // eslint-disable-next-line
         else if (
-            username == email &&
+            username === email &&
             (username === null || username.length === 0)
         ) {
             return false;

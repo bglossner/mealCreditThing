@@ -1,95 +1,75 @@
 import "./css/index.css";
 
 import {
-    Link,
     Redirect,
     Route,
     BrowserRouter as Router,
     Switch
 } from "react-router-dom";
 import React, { Component } from "react";
-
-import APIWrapper from "./API/api_wrapper";
-import CookiesWrapper from "./API/cookies";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import LogoutButton from "./Pages/Logout";
-import { Provider } from "react-redux";
-import ReactDOM from "react-dom";
 import Register from "./Pages/Register";
-import { createStore } from "redux";
-import reducers from "./redux/reducers/index";
+import { connect } from "react-redux";
 
 class App extends Component {
+
     render() {
-        const apiWrapper = new APIWrapper();
-        const cookieWrapper = new CookiesWrapper();
-        const retrievedLoginInfo = cookieWrapper.retrieveCookieIfExists(
-            "user_information"
-        );
-        const store = createStore(reducers);
-        if (retrievedLoginInfo !== null) {
-            console.log("NON NULL");
-            store.dispatch({
-                type: "CHANGE_LOGIN_INFO",
-                loginInfo: JSON.parse(retrievedLoginInfo)
-            });
-        }
         return (
-            <Provider store={store}>
-                <Router>
-                    <Switch>
-                        {console.log("fsejkfe")}
-                        <Route exact path="/">
-                            {console.log("daw", store.getState().userLoginInfo)}
-                            {store.getState().userLoginInfo ? (
-                                <Home />
-                            ) : (
-                                <Redirect to="/login" />
-                            )}
-                            <LogoutButton
-                                store={store}
-                                cookieWrapper={cookieWrapper}
+            <Router>
+                <Switch>
+                    <Route exact path="/">
+                        {this.props.userLoginInfo ? (
+                            <Home />
+                        ) : (
+                            <Redirect to="/login" />
+                        )}
+                        <LogoutButton
+                            store={this.props.store}
+                            cookieWrapper={this.props.cookieWrapper}
+                        />
+                    </Route>
+                    <Route path="/login">
+                        {this.props.userLoginInfo ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Login
+                                cookieWrapper={this.props.cookieWrapper}
+                                store={this.props.store}
+                                apiWrapper={this.props.apiWrapper}
                             />
-                        </Route>
-                        <Route path="/login">
-                            {store.getState().userLoginInfo ? (
-                                <Redirect to="/" />
-                            ) : (
-                                <Login
-                                    cookieWrapper={cookieWrapper}
-                                    store={store}
-                                    apiWrapper={apiWrapper}
-                                />
-                            )}
-                            <LogoutButton
-                                store={store}
-                                cookieWrapper={cookieWrapper}
-                            />
-                            {/* <LogoutButton store={store} cookieWrapper={cookieWrapper} /> */}
-                        </Route>
-                        <Route path="/register">
-                            {/* <LogoutButton store={store} cookieWrapper={cookieWrapper} /> */}
-                            <Register
-                                cookieWrapper={cookieWrapper}
-                                store={store}
-                                apiWrapper={apiWrapper}
-                            />
-                        </Route>
-                        <Route path="/home">
-                            {console.log(
-                                "da321312321w",
-                                store.getState().userLoginInfo
-                            )}
-                            {/* store.getState().userLoginInfo ? <Home /> : <Redirect to="/login" /> */}
-                        </Route>
-                    </Switch>
-                </Router>
-            </Provider>
+                        )}
+                        <LogoutButton
+                            store={this.props.store}
+                            cookieWrapper={this.props.cookieWrapper}
+                        />
+                        {/* <LogoutButton this.props.store={this.props.store} cookieWrapper={cookieWrapper} /> */}
+                    </Route>
+                    <Route path="/register">
+                        {/* <LogoutButton this.props.store={this.props.store} cookieWrapper={cookieWrapper} /> */}
+                        <Register
+                            cookieWrapper={this.props.cookieWrapper}
+                            store={this.props.store}
+                            apiWrapper={this.props.apiWrapper}
+                        />
+                    </Route>
+                    <Route path="/home">
+                        {this.props.userLoginInfo ? <Home /> : <Redirect to="/login" />}
+                    </Route>
+                </Switch>
+            </Router>
         );
     }
 }
 
 App.propTypes = {};
 
-export default App;
+const mapStateToProps = (state) => ({
+    userLoginInfo: state.userLoginInfo,
+});
+
+export default connect(
+    mapStateToProps,
+    null
+)(App);
