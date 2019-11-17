@@ -6,7 +6,7 @@ const styles = {
     container: { marginBottom: 10 },
     errorLabel: {
         color: "red",
-        textAlign: "left",
+        textAlign: "center",
         fontSize: 12
     },
     input: {}
@@ -43,7 +43,7 @@ class Input extends Component {
         return (
             <div style={styles.container}>
                 <input
-                    onBlur={this.onFocusOut.bind(this)}
+                    onBlur={() => this.onFocusOut()}
                     type={this.props.type}
                     placeholder={this.props.placeholder}
                     name={this.props.name}
