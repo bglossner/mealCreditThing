@@ -12,6 +12,7 @@ import Login from "./Pages/Login";
 import LogoutButton from "./Pages/Logout";
 import Register from "./Pages/Register";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class App extends Component {
 
@@ -26,7 +27,6 @@ class App extends Component {
                             <Redirect to="/login" />
                         )}
                         <LogoutButton
-                            store={this.props.store}
                             cookieWrapper={this.props.cookieWrapper}
                         />
                     </Route>
@@ -36,7 +36,6 @@ class App extends Component {
                         ) : (
                             <Login
                                 cookieWrapper={this.props.cookieWrapper}
-                                store={this.props.store}
                                 apiWrapper={this.props.apiWrapper}
                             />
                         )}
@@ -44,13 +43,12 @@ class App extends Component {
                             store={this.props.store}
                             cookieWrapper={this.props.cookieWrapper}
                         />
-                        {/* <LogoutButton this.props.store={this.props.store} cookieWrapper={cookieWrapper} /> */}
+                        {/* <LogoutButton cookieWrapper={cookieWrapper} /> */}
                     </Route>
                     <Route path="/register">
-                        {/* <LogoutButton this.props.store={this.props.store} cookieWrapper={cookieWrapper} /> */}
+                        {/* <LogoutButton cookieWrapper={cookieWrapper} /> */}
                         <Register
                             cookieWrapper={this.props.cookieWrapper}
-                            store={this.props.store}
                             apiWrapper={this.props.apiWrapper}
                         />
                     </Route>
@@ -63,7 +61,10 @@ class App extends Component {
     }
 }
 
-App.propTypes = {};
+App.propTypes = {
+    cookieWrapper: PropTypes.object,
+    apiWrapper: PropTypes.object
+};
 
 const mapStateToProps = (state) => ({
     userLoginInfo: state.userLoginInfo,

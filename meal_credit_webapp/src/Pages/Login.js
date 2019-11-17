@@ -19,7 +19,8 @@ class Login extends Component {
         this.state = {
             shouldDirect: false,
             username: "",
-            password: ""
+            password: "",
+            error: {},
         };
     }
 
@@ -37,13 +38,13 @@ class Login extends Component {
     };
 
     handleLoginErrors(error) {
+        this.props.newError(error.message);
         this.setState({
             error: {
                 status: error.status,
                 errorMsg: error.message,
             }
         });
-        this.props.newError(error.errorMsg);
     }
 
     attemptLogin() {
@@ -51,7 +52,6 @@ class Login extends Component {
             this.state.username,
             this.state.password
         );
-        console.log("HERE");
 
         returnVal
             .then(result => {
@@ -102,14 +102,13 @@ class Login extends Component {
     }
 
     render() {
-        console.log("RERE")
-        console.log("Current login infp", this.props.rememberMeChecked, this.props.currentLoginInfo);
+        // console.log("Current login infp", this.props.rememberMeChecked, this.props.currentLoginInfo);
         return (
             <div className="login-page">
                 <div className="user-info-form">
                     {this.props.pageError === null ||
                     this.props.pageError === undefined ? null : (
-                        <Error message={this.props.pageError.errorMsg} />
+                        <Error message={this.props.pageError} />
                     )}
                     {/* <Ribbon /> */}
                     <div id="info-form" className="login-form">
@@ -144,15 +143,6 @@ class Login extends Component {
                         store={this.props.store}
                         message={"Remember Me"}
                     />
-                    {/* <button
-                        onClick={() => {
-                            console.log(
-                                this.props.cookieWrapper.retrieveCookieIfExists(
-                                    "user_information"
-                                )
-                            );
-                        }}
-                    /> */}
                 </div>
             </div>
         );
@@ -160,7 +150,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-    pageError: PropTypes.object,
+    pageError: PropTypes.string,
     apiWrapper: PropTypes.object,
     cookieWrapper: PropTypes.object
 };
@@ -175,7 +165,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // dispatching plain actions
         loginStore: (apiResult) => dispatch(userLoginInfo(apiResult)),
         newError: (errorMsg) => dispatch(createNewError(errorMsg)),
     }
