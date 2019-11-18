@@ -36,6 +36,9 @@ class Input extends Component {
     }
 
     render() {
+        if (this.props.forceShowErrors && this.state.border === "") {
+            this.onFocusOut();
+        }
         const statusStyle = {
             border: this.state.border,
             borderRadius: 6
@@ -43,7 +46,11 @@ class Input extends Component {
         return (
             <div style={styles.container}>
                 <input
+<<<<<<< Updated upstream
                     onBlur={this.onFocusOut.bind(this)}
+=======
+                    onKeyUp={() => this.onFocusOut()}
+>>>>>>> Stashed changes
                     type={this.props.type}
                     placeholder={this.props.placeholder}
                     name={this.props.name}
@@ -65,7 +72,8 @@ Input.propTypes = {
     name: PropTypes.string,
     showStatus: PropTypes.bool,
     successStatus: PropTypes.bool,
-    errorMessage: PropTypes.string
+    errorMessage: PropTypes.string,
+    forceShowErrors: PropTypes.bool
 };
 
 export default Input;

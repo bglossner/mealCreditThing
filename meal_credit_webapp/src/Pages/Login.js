@@ -1,17 +1,15 @@
-import "../css/login.css";
-import "../css/user_error.css";
-
 import * as Constants from "../Constants";
 
 import React, { Component } from "react";
 
-import Checkbox from "../Components/Checkbox";
+import { Button } from "react-bootstrap";
 import Error from "../Components/Error";
 import Input from "../Components/Input";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import SmartCheckbox from "../Components/Checkbox";
 import { connect } from "react-redux";
-import { userLoginInfo, createNewError } from "../redux/actions/index"
+import { userLoginInfo } from "../redux/actions/index";
 
 class Login extends Component {
     constructor(props) {
@@ -21,6 +19,7 @@ class Login extends Component {
             username: "",
             password: "",
             error: {},
+            forceShowErrors: false
         };
     }
 
@@ -38,16 +37,21 @@ class Login extends Component {
     };
 
     handleLoginErrors(error) {
-        this.props.newError(error.message);
         this.setState({
             error: {
                 status: error.status,
-                errorMsg: error.message,
+                message: error.message
             }
         });
     }
 
     attemptLogin() {
+        if (!(this.validateUsername() && this.validatePassword())) {
+            this.setState({
+                forceShowErrors: true
+            });
+            return;
+        }
         let returnVal = this.props.apiWrapper.login(
             this.state.username,
             this.state.password
@@ -55,13 +59,8 @@ class Login extends Component {
 
         returnVal
             .then(result => {
-                if (result === false) {
-                    console.log("Username/password empty");
-                } else {
-                    console.log(result);
-                    this.props.newError(null);
-                    this.storeLoginInfo(result, this.props.rememberMeChecked);
-                }
+                console.log(result);
+                this.storeLoginInfo(result, this.props.rememberMeChecked);
             })
             .catch(reason => {
                 console.log(reason);
@@ -106,9 +105,8 @@ class Login extends Component {
         return (
             <div className="login-page">
                 <div className="user-info-form">
-                    {this.props.pageError === null ||
-                    this.props.pageError === undefined ? null : (
-                        <Error message={this.props.pageError} />
+                    {this.state.error.message && (
+                        <Error message={this.state.error.message} />
                     )}
                     {/* <Ribbon /> */}
                     <div id="info-form" className="login-form">
@@ -118,6 +116,7 @@ class Login extends Component {
                                 type="text"
                                 placeholder="Username/Email"
                                 onChange={evt => this.updateUsername(evt)}
+                                forceShowErrors={this.state.forceShowErrors}
                                 valid={this.validateUsername()}
                                 errorMessage={`Username length should be at least ${Constants.MIN_USERNAME_LENGTH} and at most ${Constants.MAX_USERNAME_LENGTH}`}
                             />
@@ -126,20 +125,24 @@ class Login extends Component {
                                 type="password"
                                 placeholder="Password"
                                 onChange={evt => this.updatePassword(evt)}
+                                forceShowErrors={this.state.forceShowErrors}
                                 valid={this.validatePassword()}
                                 errorMessage={`Password length should be at least ${Constants.MIN_PASSWORD_LENGTH} and at most ${Constants.MAX_PASSWORD_LENGTH}`}
                             />
-                            <button onClick={() => this.attemptLogin()}>
+                            <Button
+                                variant="success"
+                                type="submit"
+                                onClick={() => this.attemptLogin()}
+                            >
                                 login
-                            </button>
-                            {/* eslint-disable-next-line */}
+                            </Button>
                             <p className="message">
                                 Not registered?{" "}
                                 <Link to="/register">Create an account</Link>
                             </p>
                         </React.Fragment>
                     </div>
-                    <Checkbox
+                    <SmartCheckbox
                         store={this.props.store}
                         message={"Remember Me"}
                     />
@@ -157,17 +160,15 @@ Login.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        pageError: state.userError,
         rememberMeChecked: state.rememberMeChecked,
-        currentLoginInfo: state.userLoginInfo,
+        currentLoginInfo: state.userLoginInfo
     };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
-        loginStore: (apiResult) => dispatch(userLoginInfo(apiResult)),
-        newError: (errorMsg) => dispatch(createNewError(errorMsg)),
-    }
+        loginStore: apiResult => dispatch(userLoginInfo(apiResult))
+    };
 };
 
 export default connect(

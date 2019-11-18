@@ -1,13 +1,11 @@
-import "../css/login.css";
-
 import React, { Component } from "react";
 
-import Checkbox from "../Components/Checkbox";
 import Error from "../Components/Error";
 import Input from "../Components/Input";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Ribbon from "../Components/Ribbon";
+import SmartCheckbox from "../Components/Checkbox";
 import { connect } from "react-redux";
 
 class Register extends Component {
@@ -66,7 +64,7 @@ class Register extends Component {
                             </p>
                         </React.Fragment>
                     </div>
-                    <Checkbox
+                    <SmartCheckbox
                         store={this.props.store}
                         message={"Remember Me"}
                     />

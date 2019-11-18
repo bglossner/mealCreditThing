@@ -1,21 +1,19 @@
-import "./css/index.css";
-
+import React, { Component } from "react";
 import {
     Redirect,
     Route,
     BrowserRouter as Router,
     Switch
 } from "react-router-dom";
-import React, { Component } from "react";
+
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import LogoutButton from "./Pages/Logout";
+import PropTypes from "prop-types";
 import Register from "./Pages/Register";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 
 class App extends Component {
-
     render() {
         return (
             <Router>
@@ -53,7 +51,11 @@ class App extends Component {
                         />
                     </Route>
                     <Route path="/home">
-                        {this.props.userLoginInfo ? <Home /> : <Redirect to="/login" />}
+                        {this.props.userLoginInfo ? (
+                            <Home />
+                        ) : (
+                            <Redirect to="/login" />
+                        )}
                     </Route>
                 </Switch>
             </Router>
@@ -66,8 +68,8 @@ App.propTypes = {
     apiWrapper: PropTypes.object
 };
 
-const mapStateToProps = (state) => ({
-    userLoginInfo: state.userLoginInfo,
+const mapStateToProps = state => ({
+    userLoginInfo: state.userLoginInfo
 });
 
 export default connect(

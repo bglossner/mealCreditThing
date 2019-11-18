@@ -9,3 +9,188 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+:root {
+    --checkbox-line-color: white;
+    --checkbox-inside-color-checked: #4caf50;
+    --checkbox-inside-color-unchecked: white;
+    --checkbox-border-color: #a0a0a0;
+    --checkbox-before-top: 7px;
+    --checkbox-before-left: 10px;
+    --ribbon-height: 5vh;
+}
+
+.login-page {
+    width: 360px;
+    padding: 8% 0 0;
+    margin: auto;
+}
+
+.user-info-form {
+    position: relative;
+    z-index: 1;
+    background: #ffffff;
+    max-width: 360px;
+    margin: 0 auto 100px;
+    padding: 10% 10% 4% 10%;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.user-info-form input.non-checkbox {
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+    height: 8vh;
+}
+
+.user-info-form button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: #4caf50;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #ffffff;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+}
+
+.user-info-form button:hover,
+.user-info-form button:active,
+.user-info-form button:focus {
+    background: #43a047;
+}
+
+.user-info-form .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.user-info-form .message a {
+    color: #4caf50;
+    text-decoration: none;
+}
+
+.user-info-form .remember-me {
+    margin-top: 5px;
+}
+
+.user-info-form .checked-remember-me {
+    background: #43a047;
+    color: white;
+}
+
+.user-info-form .unchecked-remember-me {
+    background: var(--checkbox-line-color);
+}
+
+.user-info-form .remember-me-div {
+    width: 70%;
+    margin: 20px auto 0 auto;
+    position: relative;
+    display: block;
+}
+
+.user-info-form .remember-me-div input[type="checkbox"] {
+    width: auto;
+    opacity: 0.00000001;
+    position: absolute;
+    left: 0;
+    margin-left: 0px;
+}
+.user-info-form .remember-me-div label {
+    position: relative;
+}
+.user-info-form .remember-me-div label:before {
+    content: "";
+    position: absolute;
+    left: var(--checkbox-before-left);
+    top: var(--checkbox-before-top);
+    margin-left: 20px;
+    width: 15px;
+    height: 15px;
+    transition: transform 0.28s ease;
+    border-radius: 3px;
+    background-color: var(--checkbox-inside-color-unchecked);
+    border: 2px solid var(--checkbox-border-color);
+}
+
+.user-info-form .remember-me-div label:after {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 5px;
+    border-bottom: 2px solid var(--checkbox-line-color);
+    border-left: 2px solid var(--checkbox-line-color);
+    -webkit-transform: rotate(-45deg) scale(0);
+    -moz-transform: rotate(-45deg) scale(0);
+    -ms-transform: rotate(-45deg) scale(0);
+    transform: rotate(-45deg) scale(0);
+    position: absolute;
+    top: calc(var(--checkbox-before-top) + 4px);
+    left: calc(var(--checkbox-before-left) + 23.5px);
+}
+.user-info-form
+    .remember-me-div
+    input[type="checkbox"]:checked
+    ~ label::before {
+    color: var(--checkbox-line-color);
+    border: 2px solid var(--checkbox-inside-color-checked);
+    background-color: var(--checkbox-inside-color-checked);
+}
+
+.user-info-form .remember-me-div input[type="checkbox"]:checked ~ label::after {
+    -webkit-transform: rotate(-45deg) scale(1);
+    -moz-transform: rotate(-45deg) scale(1);
+    -ms-transform: rotate(-45deg) scale(1);
+    transform: rotate(-45deg) scale(1);
+}
+
+.user-info-form .remember-me-div label {
+    display: block;
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+}
+.user-info-form .remember-me-div input[type="checkbox"]:focus + label::before {
+    outline: 0;
+}
+
+/* .user-info-form .ribbon {
+    width: 60%;
+    height: var(--ribbon-height);
+    z-index: 10;
+} */
+
+/*.ribbon:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid #14455B;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid #14455B;
+}*/
+
+/* .ribbon:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(-1 * (var(--ribbon-height)));
+    border-left: calc(var(--ribbon-height) / 2) solid transparent;
+    border-right: calc(var(--ribbon-height) / 2) solid red;
+    border-top: calc(var(--ribbon-height) / 2) solid transparent;
+    border-bottom: calc(var(--ribbon-height) / 2) solid transparent;
+} */

@@ -1,13 +1,14 @@
 import "./css/index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
+import APIWrapper from "./API/api_wrapper";
 import App from "./App";
+import CookiesWrapper from "./API/cookies";
+import { Provider } from "react-redux";
 import React from "react";
 import ReactDOM from "react-dom";
-import APIWrapper from "./API/api_wrapper";
-import CookiesWrapper from "./API/cookies";
 import { createStore } from "redux";
 import reducers from "./redux/reducers/index";
-import { Provider } from "react-redux";
 
 const store = createStore(reducers);
 const apiWrapper = new APIWrapper();
@@ -25,7 +26,7 @@ if (retrievedLoginInfo !== null) {
 ReactDOM.render(
     <Provider store={store}>
         <App cookieWrapper={cookieWrapper} apiWrapper={apiWrapper} />
-    </Provider>, 
+    </Provider>,
     document.getElementById("root")
 );
 

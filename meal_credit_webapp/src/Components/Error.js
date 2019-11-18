@@ -1,17 +1,11 @@
-import "../css/user_error.css";
-
 import React, { Component } from "react";
 
+import { Alert } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 class Error extends Component {
-
     render() {
-        return (
-            <div className="user-error">
-                <p className="error-msg">{this.props.message}</p>
-            </div>
-        );
+        return <Alert variant="danger">{this.props.message}</Alert>;
     }
 }
 
