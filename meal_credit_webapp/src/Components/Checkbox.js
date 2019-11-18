@@ -46,7 +46,6 @@ class SmartCheckbox extends React.Component {
                     <GreenCheckbox
                         checked={this.state.checked}
                         onChange={() => this.handleClick()}
-                        value="gilad"
                     />
                 }
                 label="Remember Me"

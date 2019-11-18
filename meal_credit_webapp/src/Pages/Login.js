@@ -46,7 +46,7 @@ class Login extends Component {
     }
 
     attemptLogin() {
-        if (!(this.validateUsername() && this.validatePassword())) {
+        if (!(this.validateUsername().valid && this.validatePassword().valid)) {
             this.setState({
                 forceShowErrors: true
             });
@@ -76,12 +76,26 @@ class Login extends Component {
 
     validateUsername() {
         if (
-            this.state.username.length <= Constants.MAX_USERNAME_LENGTH &&
-            this.state.username.length >= Constants.MIN_USERNAME_LENGTH
+            !(
+                this.state.username.length <= Constants.MAX_USERNAME_LENGTH &&
+                this.state.username.length >= Constants.MIN_USERNAME_LENGTH
+            )
         ) {
-            return true;
+            return {
+                valid: false,
+                errorMessage: `Username length should be at least ${Constants.MIN_USERNAME_LENGTH} and at most ${Constants.MAX_USERNAME_LENGTH}`
+            };
         }
-        return false;
+        if (this.state.username.indexOf(" ") >= 0) {
+            return {
+                valid: false,
+                errorMessage: `Username may not contain any spaces`
+            };
+        }
+        return {
+            valid: true,
+            errorMessage: ""
+        };
     }
 
     updatePassword(evt) {
@@ -92,12 +106,26 @@ class Login extends Component {
 
     validatePassword() {
         if (
-            this.state.password.length <= Constants.MAX_PASSWORD_LENGTH &&
-            this.state.password.length >= Constants.MIN_PASSWORD_LENGTH
+            !(
+                this.state.password.length <= Constants.MAX_PASSWORD_LENGTH &&
+                this.state.password.length >= Constants.MIN_PASSWORD_LENGTH
+            )
         ) {
-            return true;
+            return {
+                valid: false,
+                errorMessage: `Password length should be at least ${Constants.MIN_PASSWORD_LENGTH} and at most ${Constants.MAX_PASSWORD_LENGTH}`
+            };
         }
-        return false;
+        if (this.state.password.indexOf(" ") >= 0) {
+            return {
+                valid: false,
+                errorMessage: `Password may not contain any spaces`
+            };
+        }
+        return {
+            valid: true,
+            errorMessage: ""
+        };
     }
 
     render() {
@@ -117,8 +145,7 @@ class Login extends Component {
                                 placeholder="Username/Email"
                                 onChange={evt => this.updateUsername(evt)}
                                 forceShowErrors={this.state.forceShowErrors}
-                                valid={this.validateUsername()}
-                                errorMessage={`Username length should be at least ${Constants.MIN_USERNAME_LENGTH} and at most ${Constants.MAX_USERNAME_LENGTH}`}
+                                checkInput={this.validateUsername()}
                             />
                             <Input
                                 name="password"
@@ -126,8 +153,7 @@ class Login extends Component {
                                 placeholder="Password"
                                 onChange={evt => this.updatePassword(evt)}
                                 forceShowErrors={this.state.forceShowErrors}
-                                valid={this.validatePassword()}
-                                errorMessage={`Password length should be at least ${Constants.MIN_PASSWORD_LENGTH} and at most ${Constants.MAX_PASSWORD_LENGTH}`}
+                                checkInput={this.validatePassword()}
                             />
                             <Button
                                 variant="success"

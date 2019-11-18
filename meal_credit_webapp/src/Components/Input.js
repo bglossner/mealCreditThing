@@ -22,7 +22,7 @@ class Input extends Component {
     }
 
     onFocusOut() {
-        if (this.props.valid) {
+        if (this.props.checkInput.valid) {
             this.setState({
                 border: "green 1px solid",
                 showErrorLabel: false
@@ -47,6 +47,7 @@ class Input extends Component {
             <div style={styles.container}>
                 <input
                     onKeyUp={() => this.onFocusOut()}
+                    onBlur={() => this.onFocusOut()}
                     type={this.props.type}
                     placeholder={this.props.placeholder}
                     name={this.props.name}
@@ -55,7 +56,9 @@ class Input extends Component {
                     onChange={this.props.onChange}
                 />
                 {this.state.showErrorLabel && (
-                    <p style={styles.errorLabel}>{this.props.errorMessage}</p>
+                    <p style={styles.errorLabel}>
+                        {this.props.checkInput.errorMessage}
+                    </p>
                 )}
             </div>
         );
@@ -66,10 +69,8 @@ Input.propTypes = {
     type: PropTypes.string,
     placeholder: PropTypes.string,
     name: PropTypes.string,
-    showStatus: PropTypes.bool,
-    successStatus: PropTypes.bool,
-    errorMessage: PropTypes.string,
-    forceShowErrors: PropTypes.bool
+    forceShowErrors: PropTypes.bool,
+    checkInput: PropTypes.string
 };
 
 export default Input;
