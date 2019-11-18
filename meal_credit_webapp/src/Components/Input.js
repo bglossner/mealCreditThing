@@ -46,11 +46,7 @@ class Input extends Component {
         return (
             <div style={styles.container}>
                 <input
-<<<<<<< Updated upstream
-                    onBlur={this.onFocusOut.bind(this)}
-=======
                     onKeyUp={() => this.onFocusOut()}
->>>>>>> Stashed changes
                     type={this.props.type}
                     placeholder={this.props.placeholder}
                     name={this.props.name}
