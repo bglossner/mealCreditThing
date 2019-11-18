@@ -6,7 +6,7 @@ const styles = {
     container: { marginBottom: 10 },
     errorLabel: {
         color: "red",
-        textAlign: "left",
+        textAlign: "center",
         fontSize: 12
     },
     input: {}
