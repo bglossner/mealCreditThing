@@ -110,42 +110,41 @@ class Login extends Component {
                     )}
                     {/* <Ribbon /> */}
                     <div id="info-form" className="login-form">
-                        <React.Fragment>
-                            <Input
-                                name="username"
-                                type="text"
-                                placeholder="Username/Email"
-                                onChange={evt => this.updateUsername(evt)}
-                                forceShowErrors={this.state.forceShowErrors}
-                                valid={this.validateUsername()}
-                                errorMessage={`Username length should be at least ${Constants.MIN_USERNAME_LENGTH} and at most ${Constants.MAX_USERNAME_LENGTH}`}
-                            />
-                            <Input
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                                onChange={evt => this.updatePassword(evt)}
-                                forceShowErrors={this.state.forceShowErrors}
-                                valid={this.validatePassword()}
-                                errorMessage={`Password length should be at least ${Constants.MIN_PASSWORD_LENGTH} and at most ${Constants.MAX_PASSWORD_LENGTH}`}
-                            />
-                            <Button
-                                variant="success"
-                                type="submit"
-                                onClick={() => this.attemptLogin()}
-                            >
-                                login
-                            </Button>
-                            <p className="message">
-                                Not registered?{" "}
-                                <Link to="/register">Create an account</Link>
-                            </p>
-                        </React.Fragment>
+                        <Input
+                            name="username"
+                            type="text"
+                            placeholder="Username/Email"
+                            onChange={evt => this.updateUsername(evt)}
+                            forceShowErrors={this.state.forceShowErrors}
+                            valid={this.validateUsername()}
+                            errorMessage={`Username length should be at least ${Constants.MIN_USERNAME_LENGTH} and at most ${Constants.MAX_USERNAME_LENGTH}`}
+                        />
+                        <Input
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            onChange={evt => this.updatePassword(evt)}
+                            forceShowErrors={this.state.forceShowErrors}
+                            valid={this.validatePassword()}
+                            errorMessage={`Password length should be at least ${Constants.MIN_PASSWORD_LENGTH} and at most ${Constants.MAX_PASSWORD_LENGTH}`}
+                        />
+
+                        <SmartCheckbox
+                            store={this.props.store}
+                            message={"Remember Me"}
+                        />
+                        <Button
+                            variant="success"
+                            type="submit"
+                            onClick={() => this.attemptLogin()}
+                        >
+                            login
+                        </Button>
+                        <p className="message">
+                            Not registered?{" "}
+                            <Link to="/register">Create an account</Link>
+                        </p>
                     </div>
-                    <SmartCheckbox
-                        store={this.props.store}
-                        message={"Remember Me"}
-                    />
                 </div>
             </div>
         );
@@ -171,7 +170,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

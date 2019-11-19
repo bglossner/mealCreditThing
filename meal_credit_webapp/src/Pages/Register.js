@@ -76,7 +76,6 @@ class Register extends Component {
 
 function mapStateToProps(state, ownProps) {
     return {
-        pageError: state.userError
     };
 }
 
