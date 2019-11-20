@@ -1,4 +1,4 @@
-import { red } from "@material-ui/core/colors";
+import { red, purple } from "@material-ui/core/colors";
 import { createMuiTheme } from "@material-ui/core/styles";
 
 // A custom theme for this app
@@ -8,13 +8,13 @@ const theme = createMuiTheme({
             main: "#accd2d"
         },
         secondary: {
-            main: "#fff"
+            main: purple[600]
         },
         error: {
-            main: red.A400
+            main: red[700]
         },
         background: {
-            default: "#000"
+            default: "#accd2d"
         }
     }
 });

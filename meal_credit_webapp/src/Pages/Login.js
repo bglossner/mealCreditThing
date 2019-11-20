@@ -2,7 +2,6 @@ import * as Constants from "../Constants";
 
 import React, { Component } from "react";
 
-import { Button } from "react-bootstrap";
 import Error from "../Components/Error";
 import Input from "../Components/Input";
 import { Link } from "react-router-dom";
@@ -10,6 +9,37 @@ import PropTypes from "prop-types";
 import SmartCheckbox from "../Components/Checkbox";
 import { connect } from "react-redux";
 import { userLoginInfo } from "../redux/actions/index";
+import {
+    Grid,
+    Paper,
+    Button,
+    withStyles,
+    Box,
+    Typography
+} from "@material-ui/core";
+
+const styles = theme => ({
+    root: {
+        flexGrow: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column"
+    },
+    button: {
+        margin: theme.spacing(1),
+        alignSelf: "stretch",
+        padding: theme.spacing(2)
+    },
+    paper: {
+        padding: theme.spacing(2),
+        margin: theme.spacing(2),
+        textAlign: "center",
+        color: theme.palette.text.secondary,
+        width: "45%",
+        minWidth: 300
+    }
+});
 
 class Login extends Component {
     constructor(props) {
@@ -101,51 +131,63 @@ class Login extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         // console.log("Current login infp", this.props.rememberMeChecked, this.props.currentLoginInfo);
         return (
-            <div className="login-page">
-                <div className="user-info-form">
-                    {this.state.error.message && (
-                        <Error message={this.state.error.message} />
-                    )}
-                    {/* <Ribbon /> */}
-                    <div id="info-form" className="login-form">
+            <div className={classes.root}>
+                <Box textAlign="center" display="block" p={1} m={1}>
+                    <Typography variant="h2">Sign In</Typography>
+                </Box>
+                <Paper className={classes.paper}>
+                    <Grid
+                        container
+                        item
+                        direction="column"
+                        justify="center"
+                        alignItems="center"
+                    >
+                        {this.state.error.message && (
+                            <Error message={this.state.error.message} />
+                        )}
                         <Input
-                            name="username"
+                            name="Username"
                             type="text"
-                            placeholder="Username/Email"
                             onChange={evt => this.updateUsername(evt)}
                             forceShowErrors={this.state.forceShowErrors}
                             valid={this.validateUsername()}
                             errorMessage={`Username length should be at least ${Constants.MIN_USERNAME_LENGTH} and at most ${Constants.MAX_USERNAME_LENGTH}`}
                         />
                         <Input
-                            name="password"
+                            name="Password"
                             type="password"
-                            placeholder="Password"
                             onChange={evt => this.updatePassword(evt)}
                             forceShowErrors={this.state.forceShowErrors}
                             valid={this.validatePassword()}
                             errorMessage={`Password length should be at least ${Constants.MIN_PASSWORD_LENGTH} and at most ${Constants.MAX_PASSWORD_LENGTH}`}
                         />
-
                         <SmartCheckbox
                             store={this.props.store}
                             message={"Remember Me"}
                         />
                         <Button
-                            variant="success"
-                            type="submit"
+                            variant="contained"
+                            color="primary"
                             onClick={() => this.attemptLogin()}
+                            className={classes.button}
                         >
-                            login
+                            Login
                         </Button>
+                        <Box textAlign="center">
+                            <Typography variant="h6">
+                                Profile Completion
+                            </Typography>
+                        </Box>
                         <p className="message">
                             Not registered?{" "}
                             <Link to="/register">Create an account</Link>
                         </p>
-                    </div>
-                </div>
+                    </Grid>
+                </Paper>
             </div>
         );
     }
@@ -170,4 +212,7 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(Login));

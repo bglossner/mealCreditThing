@@ -1,70 +1,69 @@
 import React, { Component } from "react";
 
 import PropTypes from "prop-types";
+import { withStyles, TextField, Grid } from "@material-ui/core";
 
-const styles = {
-    container: { marginBottom: 10 },
-    errorLabel: {
-        color: "red",
-        textAlign: "center",
-        fontSize: 12
-    },
-    input: {}
-};
+const styles = theme => ({
+    root: {},
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        alignSelf: "stretch"
+    }
+});
 
 class Input extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            border: "",
             showErrorLabel: false
         };
     }
 
-    onFocusOut() {
+    triggerError() {
         if (this.props.valid) {
             this.setState({
-                border: "green 1px solid",
                 showErrorLabel: false
             });
         } else {
             this.setState({
-                border: "red 1px solid",
                 showErrorLabel: true
             });
         }
     }
 
     render() {
-        if (this.props.forceShowErrors && this.state.border === "") {
-            this.onFocusOut();
+        const { classes } = this.props;
+        let errorProps = {};
+        if (
+            (this.state.showErrorLabel && !this.props.valid) ||
+            this.forceShowErrors
+        ) {
+            errorProps = {
+                error: true,
+                id: "standard-error-helper-text",
+                helperText: this.props.errorMessage
+            };
         }
-        const statusStyle = {
-            border: this.state.border,
-            borderRadius: 6
-        };
         return (
-            <div style={styles.container}>
-                <input
-                    onKeyUp={() => this.onFocusOut()}
-                    type={this.props.type}
-                    placeholder={this.props.placeholder}
-                    name={this.props.name}
-                    className="non-checkbox"
-                    style={statusStyle}
-                    onChange={this.props.onChange}
-                />
-                {this.state.showErrorLabel && (
-                    <p style={styles.errorLabel}>{this.props.errorMessage}</p>
-                )}
-            </div>
+            <TextField
+                {...errorProps}
+                required
+                label={this.props.name}
+                className={classes.textField}
+                margin="normal"
+                onKeyUp={() => this.triggerError()}
+                onBlur={() => this.triggerError()}
+                type={this.props.type}
+                onChange={this.props.onChange}
+                variant="outlined"
+            />
         );
     }
 }
 
 Input.propTypes = {
     type: PropTypes.string,
-    placeholder: PropTypes.string,
     name: PropTypes.string,
     showStatus: PropTypes.bool,
     successStatus: PropTypes.bool,
@@ -72,4 +71,4 @@ Input.propTypes = {
     forceShowErrors: PropTypes.bool
 };
 
-export default Input;
+export default withStyles(styles)(Input);
