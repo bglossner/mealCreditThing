@@ -37,10 +37,10 @@ class App extends Component {
                                 apiWrapper={this.props.apiWrapper}
                             />
                         )}
-                        <LogoutButton
+                        {/* <LogoutButton
                             store={this.props.store}
                             cookieWrapper={this.props.cookieWrapper}
-                        />
+                        /> */}
                         {/* <LogoutButton cookieWrapper={cookieWrapper} /> */}
                     </Route>
                     <Route path="/register">
@@ -72,7 +72,4 @@ const mapStateToProps = state => ({
     userLoginInfo: state.userLoginInfo
 });
 
-export default connect(
-    mapStateToProps,
-    null
-)(App);
+export default connect(mapStateToProps, null)(App);

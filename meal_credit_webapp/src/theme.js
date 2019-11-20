@@ -14,7 +14,7 @@ const theme = createMuiTheme({
             main: red[700]
         },
         background: {
-            default: "#accd2d"
+            default: "rgba(172, 205, 45, 0.8)"
         }
     }
 });

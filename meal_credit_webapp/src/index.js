@@ -1,4 +1,3 @@
-import "./css/index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import APIWrapper from "./API/api_wrapper";

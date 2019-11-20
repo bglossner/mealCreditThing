@@ -20,6 +20,7 @@ import {
 
 const styles = theme => ({
     root: {
+        height: "80vh",
         flexGrow: 1,
         display: "flex",
         justifyContent: "center",
@@ -29,7 +30,8 @@ const styles = theme => ({
     button: {
         margin: theme.spacing(1),
         alignSelf: "stretch",
-        padding: theme.spacing(2)
+        padding: theme.spacing(1),
+        fontSize: theme.spacing(2)
     },
     paper: {
         padding: theme.spacing(2),
@@ -37,7 +39,8 @@ const styles = theme => ({
         textAlign: "center",
         color: theme.palette.text.secondary,
         width: "45%",
-        minWidth: 300
+        maxWidth: "450px",
+        minWidth: "300px"
     }
 });
 
@@ -136,7 +139,9 @@ class Login extends Component {
         return (
             <div className={classes.root}>
                 <Box textAlign="center" display="block" p={1} m={1}>
-                    <Typography variant="h2">Sign In</Typography>
+                    <Typography variant="h2" color="textSecondary">
+                        Sign In
+                    </Typography>
                 </Box>
                 <Paper className={classes.paper}>
                     <Grid
@@ -177,11 +182,6 @@ class Login extends Component {
                         >
                             Login
                         </Button>
-                        <Box textAlign="center">
-                            <Typography variant="h6">
-                                Profile Completion
-                            </Typography>
-                        </Box>
                         <p className="message">
                             Not registered?{" "}
                             <Link to="/register">Create an account</Link>
