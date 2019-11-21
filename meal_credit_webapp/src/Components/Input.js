@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { withStyles, TextField } from "@material-ui/core";
 
 const styles = theme => ({
-    root: {},
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),

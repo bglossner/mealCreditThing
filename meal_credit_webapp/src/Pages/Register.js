@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import Error from "../Components/Error";
 import Input from "../Components/Input";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -16,10 +15,10 @@ class Register extends Component {
         return (
             <div className="login-page">
                 <div className="user-info-form">
-                    {this.props.pageError === null ||
+                    {/* {this.props.pageError === null ||
                     this.props.pageError === undefined ? null : (
-                        <Error message={this.props.pageError.errorMsg} />
-                    )}
+                        // <Error message={this.props.pageError.errorMsg} />
+                    )} */}
                     {/* <Ribbon /> */}
                     <div id="info-form" className="register-form">
                         <React.Fragment>

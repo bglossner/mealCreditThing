@@ -2,8 +2,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import PropTypes from "prop-types";
 import React from "react";
-import { changeRememberMeValue } from "../redux/actions/index";
-import { connect } from "react-redux";
 
 class SmartCheckbox extends React.Component {
     constructor(props) {
@@ -25,8 +23,8 @@ class SmartCheckbox extends React.Component {
             <FormControlLabel
                 control={
                     <Checkbox
-                        checked={this.state.checked}
-                        onChange={() => this.handleClick()}
+                        checked={this.props.checked}
+                        onChange={this.props.onChange}
                         color="primary"
                     />
                 }
@@ -40,4 +38,4 @@ Checkbox.propTypes = {
     message: PropTypes.string
 };
 
-export default connect()(SmartCheckbox);
+export default SmartCheckbox;

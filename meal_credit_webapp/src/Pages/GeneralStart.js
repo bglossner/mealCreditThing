@@ -1,14 +1,13 @@
 import * as Constants from "../Constants";
 
-import React from "react";
+import React, { Component } from "react";
 
 import Input from "../Components/Input";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { userLoginInfo, changeRememberMeValue } from "../redux/actions/actions";
-import { Grid, withStyles, Box, Typography } from "@material-ui/core";
-import GeneralStart from "./GeneralStart";
+import SmartCheckbox from "../Components/Checkbox";
+import { changeRememberMeValue } from "../redux/actions/actions";
+import { Grid, Paper, Button, Box, Typography } from "@material-ui/core";
+import { Alert } from "react-bootstrap";
 
 const styles = theme => ({
     root: {
@@ -36,7 +35,7 @@ const styles = theme => ({
     }
 });
 
-class Login extends GeneralStart {
+export default class GeneralStart extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -61,14 +60,14 @@ class Login extends GeneralStart {
         this.props.loginStore(apiResult);
     };
 
-    // handleLoginErrors(error) {
-    //     this.setState({
-    //         error: {
-    //             status: error.status,
-    //             message: error.message
-    //         }
-    //     });
-    // }
+    handleLoginErrors(error) {
+        this.setState({
+            error: {
+                status: error.status,
+                message: error.message
+            }
+        });
+    }
 
     attemptLogin() {
         if (!(this.validateUsername() && this.validatePassword())) {
@@ -138,13 +137,13 @@ class Login extends GeneralStart {
         );
     }
 
-    // renderErrorMessage() {
-    //     return (
-    //         this.state.error.message && (
-    //             <Alert variant="danger">{this.state.error.message}</Alert>
-    //         )
-    //     );
-    // }
+    renderErrorMessage() {
+        return (
+            this.state.error.message && (
+                <Alert variant="danger">{this.state.error.message}</Alert>
+            )
+        );
+    }
 
     /**
      * Should be implemented by subclass
@@ -188,35 +187,35 @@ class Login extends GeneralStart {
         this.attemptLogin();
     }
 
-    // renderSubmitButton() {
-    //     return (
-    //         <Button
-    //             variant="contained"
-    //             color="primary"
-    //             onClick={() => this.onSubmit()}
-    //             className={this.props.classes.button}
-    //         >
-    //             Login
-    //         </Button>
-    //     );
-    // }
+    renderSubmitButton() {
+        return (
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => this.onSubmit()}
+                className={this.props.classes.button}
+            >
+                Login
+            </Button>
+        );
+    }
 
-    // renderRememberMe() {
-    //     return (
-    //         <div style={{ alignSelf: "center" }}>
-    //             <SmartCheckbox
-    //                 store={this.props.store}
-    //                 message={"Remember Me"}
-    //                 checked={this.props.rememberMeChecked}
-    //                 onChange={() =>
-    //                     this.props.changeRememberMeValue(
-    //                         !this.props.rememberMeChecked
-    //                     )
-    //                 }
-    //             />
-    //         </div>
-    //     );
-    // }
+    renderRememberMe() {
+        return (
+            <div style={{ alignSelf: "center" }}>
+                <SmartCheckbox
+                    store={this.props.store}
+                    message={"Remember Me"}
+                    checked={this.props.rememberMeChecked}
+                    onChange={() =>
+                        this.props.changeRememberMeValue(
+                            !this.props.rememberMeChecked
+                        )
+                    }
+                />
+            </div>
+        );
+    }
 
     /**
      * Should be implemented by subclass
@@ -232,52 +231,45 @@ class Login extends GeneralStart {
         );
     }
 
-    // render() {
-    //     const { classes } = this.props;
-    //     // console.log("Current login infp", this.props.rememberMeChecked, this.props.currentLoginInfo);
-    //     return (
-    //         <div className={classes.root}>
-    //             {this.renderHeading()}
-    //             <Paper className={classes.paper}>
-    //                 <Grid
-    //                     container
-    //                     direction="column"
-    //                     justify="center"
-    //                     // alignItems="center"
-    //                 >
-    //                     {this.renderErrorMessage()}
-    //                     {this.renderFormFields()}
-    //                     {this.renderSubmitButton()}
-    //                     {this.renderRememberMe()}
-    //                     {this.renderTransitionText()}
-    //                 </Grid>
-    //             </Paper>
-    //         </div>
-    //     );
-    // }
+    render() {
+        const { classes } = this.props;
+        // console.log("Current login infp", this.props.rememberMeChecked, this.props.currentLoginInfo);
+        return (
+            <div className={classes.root}>
+                {this.renderHeading()}
+                <Paper className={classes.paper}>
+                    <Grid
+                        container
+                        direction="column"
+                        justify="center"
+                        // alignItems="center"
+                    >
+                        {this.renderErrorMessage()}
+                        {this.renderFormFields()}
+                        {this.renderSubmitButton()}
+                        {this.renderRememberMe()}
+                        {this.renderTransitionText()}
+                    </Grid>
+                </Paper>
+            </div>
+        );
+    }
 }
-
-Login.propTypes = {
-    apiWrapper: PropTypes.object,
-    cookieWrapper: PropTypes.object
-};
 
 function mapStateToProps(state) {
     return {
-        rememberMeChecked: state.rememberMeChecked,
-        currentLoginInfo: state.userLoginInfo
+        rememberMeChecked: state.rememberMeChecked
     };
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        loginStore: apiResult => dispatch(userLoginInfo(apiResult)),
         changeRememberMeValue: newValue =>
             dispatch(changeRememberMeValue(newValue))
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(Login));
+// export default connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+// )(withStyles(styles)(GeneralStart));

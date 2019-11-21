@@ -6,13 +6,12 @@ import CookiesWrapper from "./API/cookies";
 import { Provider } from "react-redux";
 import React from "react";
 import ReactDOM from "react-dom";
-import { createStore } from "redux";
-import reducers from "./redux/reducers/index";
+import reducers from "./redux/reducers/store";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
 
-const store = createStore(reducers);
+const store = reducers;
 const apiWrapper = new APIWrapper();
 const cookieWrapper = new CookiesWrapper();
 const retrievedLoginInfo = cookieWrapper.retrieveCookieIfExists(
