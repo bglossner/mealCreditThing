@@ -10,12 +10,13 @@ import { connect } from "react-redux";
 
 const styles = theme => ({
     root: {
-        height: "80vh",
+        height: "100vh",
         flexGrow: 1,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column"
+        // background: `linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)`
     },
     button: {
         margin: theme.spacing(1),

@@ -44,9 +44,34 @@ export default class APIWrapper {
         return this.registerWrapper.makeRegisterRequest(json);
     }
 
-    checkIfEmail(username) {
-        return new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/).test(
-            username
-        );
+    /**
+     *
+     * @param {*} address The variable to validate.
+     * Rules for valid Email: https://help.returnpath.com/hc/en-us/articles/220560587-What-are-the-rules-for-email-address-syntax-
+     */
+    checkIfEmail(address) {
+        if (!address) return false;
+
+        if (address.length > 254) return false;
+
+        if (
+            !new RegExp(
+                /^\w+([!#$%&'*+-/=?^_`{|]?\w)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+            ).test(address)
+        )
+            return false;
+
+        const parts = address.split("@");
+        if (parts[0].length > 64) return false;
+
+        const domainParts = parts[1].split(".");
+        if (
+            domainParts.some(function(part) {
+                return part.length > 63;
+            })
+        )
+            return false;
+
+        return true;
     }
 }
