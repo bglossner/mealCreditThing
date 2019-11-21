@@ -37,18 +37,16 @@ class App extends Component {
                                 apiWrapper={this.props.apiWrapper}
                             />
                         )}
-                        <LogoutButton
-                            store={this.props.store}
-                            cookieWrapper={this.props.cookieWrapper}
-                        />
-                        {/* <LogoutButton cookieWrapper={cookieWrapper} /> */}
                     </Route>
                     <Route path="/register">
-                        {/* <LogoutButton cookieWrapper={cookieWrapper} /> */}
-                        <Register
-                            cookieWrapper={this.props.cookieWrapper}
-                            apiWrapper={this.props.apiWrapper}
-                        />
+                        {this.props.userLoginInfo ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Register
+                                cookieWrapper={this.props.cookieWrapper}
+                                apiWrapper={this.props.apiWrapper}
+                            />
+                        )}
                     </Route>
                     <Route path="/home">
                         {this.props.userLoginInfo ? (

@@ -3,38 +3,10 @@ export default class RegisterAPIWrapper {
         this.baseURL = baseURL;
     }
 
-    makeRegisterRequest(
-        username,
-        firstname,
-        lastname,
-        email,
-        password,
-        phoneNumber
-    ) {
-        if (password === null || password.length === 0) {
-            return false;
-        }
-        // eslint-disable-next-line
-        else if (
-            username === email &&
-            (username === null || username.length === 0)
-        ) {
-            return false;
-        }
-
-        let json = {
-            password: password
-        };
-        if (this.checkIfEmail(username)) {
-            json["email"] = username;
-        } else {
-            json["username"] = username;
-        }
-        //console.log(username + " | "  + password);
-
+    makeRegisterRequest(json) {
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", this.baseURL + "login/", true);
+            xhr.open("POST", this.baseURL + "register/", true);
             xhr.setRequestHeader("Content-Type", "application/json");
 
             xhr.onreadystatechange = function() {
