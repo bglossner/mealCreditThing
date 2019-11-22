@@ -22,6 +22,8 @@ if (retrievedLoginInfo !== null) {
     });
 }
 
+document.title = "Meal Credit App";
+
 ReactDOM.render(
     <Provider store={store}>
         <App cookieWrapper={cookieWrapper} apiWrapper={apiWrapper} />
