@@ -16,14 +16,14 @@ export default class RegisterAPIWrapper {
                         resolve(JSON.parse(this.response));
                     } else if (this.status === 401) {
                         reject(JSON.parse(this.response));
+                        console.log("HERE");
+                    } else {
+                        reject({
+                            status: 0,
+                            message: "Could not connect to the server!"
+                        });
                     }
                 }
-            };
-            xhr.onerror = function() {
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
             };
             xhr.send(JSON.stringify(json));
         });
