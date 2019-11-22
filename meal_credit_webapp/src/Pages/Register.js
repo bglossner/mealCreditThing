@@ -186,6 +186,28 @@ class Register extends GeneralStart {
         };
     }
 
+    updateEmail(evt) {
+        this.setState({
+            email: evt.target.value
+        });
+    }
+
+    validateEmail() {
+        if (
+            this.state.email &&
+            this.props.apiWrapper.checkIfEmail(this.state.email) === false
+        ) {
+            return {
+                errorMessage: "Please enter a valid email address",
+                valid: false
+            };
+        }
+        return {
+            valid: true,
+            errorMessage: ""
+        };
+    }
+
     /**
      * Render Functions
      */
@@ -239,7 +261,13 @@ class Register extends GeneralStart {
                     forceShowErrors={this.state.forceShowErrors}
                     checkInput={this.validatePassword()}
                 />
-                <Input name="Email" type="email" required={false} />
+                <Input
+                    name="Email"
+                    type="email"
+                    required={false}
+                    onChange={evt => this.updateEmail(evt)}
+                    checkInput={this.validateEmail()}
+                />
                 <Input name="Phone Number" type="text" required={false} />
             </Grid>
         );
