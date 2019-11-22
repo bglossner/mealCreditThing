@@ -1,9 +1,7 @@
 import React from "react";
-import "../css/logout.css";
 import { connect } from "react-redux";
 
 class LogoutButton extends React.Component {
-
     handleClick() {
         this.props.cookieWrapper.deleteAllCookies();
         this.props.logout();
@@ -15,13 +13,14 @@ class LogoutButton extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
-        logout: () => dispatch({
-            type: "CHANGE_LOGIN_INFO",
-            loginInfo: null
-        }),
-    }
+        logout: () =>
+            dispatch({
+                type: "CHANGE_LOGIN_INFO",
+                loginInfo: null
+            })
+    };
 };
 
 export default connect(

@@ -3,13 +3,13 @@ import RegistrationAPIWrapper from "./registration_wrapper";
 
 export default class APIWrapper {
     constructor() {
+        // TODO: Make this an environment variable??
         this.baseURL = "http://localhost:8000/";
         this.loginWrapper = new LoginAPIWrapper(this.baseURL);
         this.registerWrapper = new RegistrationAPIWrapper(this.baseURL);
     }
 
     login(username, password) {
-        
         if (
             username === null ||
             username.length === 0 ||
@@ -19,7 +19,7 @@ export default class APIWrapper {
             return false;
         }
 
-        let json = {
+        const json = {
             password: password
         };
         if (this.checkIfEmail(username)) {
@@ -32,15 +32,16 @@ export default class APIWrapper {
         return this.loginWrapper.makeLoginRequest(json);
     }
 
-    register(username, firstname, lastname, email, password, phoneNumber) {
-        return this.registerWrapper.makeRegisterRequest(
+    register(firstname, lastname, username, password, email, phoneNumber) {
+        const json = {
             username,
             firstname,
             lastname,
             email,
             password,
             phoneNumber
-        );
+        };
+        return this.registerWrapper.makeRegisterRequest(json);
     }
 
     checkIfEmail(username) {
