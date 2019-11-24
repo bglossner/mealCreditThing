@@ -122,9 +122,9 @@ class Login extends GeneralStart {
     /**
      * Render Functions
      */
-    getHeadingText() {
+    /* getHeadingText() {
         return "Sign In";
-    }
+    } */
 
     /**
      * Should be implemented by subclass

@@ -2,7 +2,7 @@ import { Box, Button, Grid, Paper, Typography } from "@material-ui/core";
 import React, { Component } from "react";
 
 import { Alert } from "react-bootstrap";
-import { FaLock } from "react-icons/fa";
+// import { FaLock } from "react-icons/fa";
 import SmartCheckbox from "../Components/Checkbox";
 
 // const styles = theme => ({
@@ -59,7 +59,7 @@ export default class GeneralStart extends Component {
         console.warn("getHeadingText() should be implemented in subclasses");
     }
 
-    renderHeading() {
+    /* renderHeading() {
         // console.warn("This should be implemented in subclasses");
         return (
             <Grid
@@ -76,7 +76,7 @@ export default class GeneralStart extends Component {
                 </Box>
             </Grid>
         );
-    }
+    } */
 
     renderErrorMessage() {
         return (
@@ -169,7 +169,7 @@ export default class GeneralStart extends Component {
         // console.log("Current login infp", this.props.rememberMeChecked, this.props.currentLoginInfo);
         return (
             <div className={classes.root}>
-                {this.renderHeading()}
+                { /*this.renderHeading() */}
                 <Paper className={classes.paper}>
                     <Grid
                         container

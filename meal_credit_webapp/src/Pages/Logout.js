@@ -1,5 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import { withStyles, Button } from "@material-ui/core";
+
+const styles = theme => ({
+    root: {
+        backgroundColor: "red",
+    }
+});
 
 class LogoutButton extends React.Component {
     handleClick() {
@@ -9,7 +16,7 @@ class LogoutButton extends React.Component {
     }
 
     render() {
-        return <button onClick={() => this.handleClick()}>Logout</button>;
+        return <Button onClick={() => this.handleClick()}>Logout</Button>;
     }
 }
 
@@ -26,4 +33,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     null,
     mapDispatchToProps
-)(LogoutButton);
+)(withStyles(styles)(LogoutButton));

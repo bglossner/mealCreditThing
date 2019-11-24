@@ -12,11 +12,13 @@ import LogoutButton from "./Pages/Logout";
 import PropTypes from "prop-types";
 import Register from "./Pages/Register";
 import { connect } from "react-redux";
+import TopNavbar from "./Components/Navbar";
 
 class App extends Component {
     render() {
         return (
             <Router>
+                { this.props.userLoginInfo ? <TopNavbar /> : <TopNavbar /> }
                 <Switch>
                     <Route exact path="/">
                         {this.props.userLoginInfo ? (
@@ -24,9 +26,6 @@ class App extends Component {
                         ) : (
                             <Redirect to="/login" />
                         )}
-                        <LogoutButton
-                            cookieWrapper={this.props.cookieWrapper}
-                        />
                     </Route>
                     <Route path="/login">
                         {this.props.userLoginInfo ? (

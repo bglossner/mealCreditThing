@@ -32,14 +32,13 @@ export default class APIWrapper {
         return this.loginWrapper.makeLoginRequest(json);
     }
 
-    register(firstname, lastname, username, password, email, phoneNumber) {
+    register(firstname, lastname, username, password, email) {
         const json = {
             username,
             firstname,
             lastname,
             email,
-            password,
-            phoneNumber
+            password
         };
         return this.registerWrapper.makeRegisterRequest(json);
     }

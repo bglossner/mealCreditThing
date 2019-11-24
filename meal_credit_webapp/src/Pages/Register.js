@@ -45,7 +45,6 @@ class Register extends GeneralStart {
             username: "",
             password: "",
             email: null,
-            phoneNumber: null,
             error: {},
             forceShowErrors: false
         };
@@ -84,7 +83,6 @@ class Register extends GeneralStart {
             this.state.username,
             this.state.password,
             this.state.email,
-            this.state.phoneNumber
         );
 
         returnVal
@@ -211,9 +209,9 @@ class Register extends GeneralStart {
     /**
      * Render Functions
      */
-    getHeadingText() {
+    /* getHeadingText() {
         return "Register";
-    }
+    } */
 
     /**
      * Should be implemented by subclass
@@ -268,7 +266,6 @@ class Register extends GeneralStart {
                     onChange={evt => this.updateEmail(evt)}
                     checkInput={this.validateEmail()}
                 />
-                <Input name="Phone Number" type="text" required={false} />
             </Grid>
         );
     }
