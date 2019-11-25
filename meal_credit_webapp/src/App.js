@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Home from "./Pages/Home";
+import Availability from "./Pages/Availability"
 import Login from "./Pages/Login";
 import LogoutButton from "./Pages/Logout";
 import PropTypes from "prop-types";
@@ -50,6 +51,15 @@ class App extends Component {
                     <Route path="/home">
                         {this.props.userLoginInfo ? (
                             <Home />
+                        ) : (
+                            <Redirect to="/login" />
+                        )}
+                    </Route>
+                    <Route path="/availability">
+                        {this.props.userLoginInfo ? (
+                            <Availability
+                                apiWrapper={this.props.apiWrapper}
+                            />
                         ) : (
                             <Redirect to="/login" />
                         )}

@@ -92,6 +92,7 @@ app.get("/availability-list", (req, res) => {
     wrapper
         .getAvailabilityList(-1, false, false, false, false, false)
         .then(result => {
+            // console.log(result)
             return res.json({
                 result: result
             });
@@ -331,6 +332,7 @@ app.get("/recover_account/:token/", function(req, res) {
         // once the user does this, they should be prompted to a page to change their password
     }
 });
+
 app.get("/token/:user_id", (req, res) => {
     let token = makeTokenUser(req.params.user_id);
     return res.json({
@@ -743,6 +745,24 @@ app.post("/create/hunger/", function(req, res) {
             location,
             start_time,
             end_time
+        )
+        .then(result => sendResult(res, result));
+});
+
+app.post("/user/", function(req, res) {
+    let user_id = req.body.user_id;
+    let token = req.body.token;
+
+    let authentic = authenticate(token, res, user_id);
+    if (authentic !== true) {
+        // This means that the user does not have permission or that something went wrong
+        return authentic;
+    }
+
+    wrapper
+        .getUsersFromIDs(
+            Number(user_id),
+            1
         )
         .then(result => sendResult(res, result));
 });

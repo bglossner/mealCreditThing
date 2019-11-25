@@ -31,7 +31,10 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            <App cookieWrapper={cookieWrapper} apiWrapper={apiWrapper} />
+            <App
+                cookieWrapper={cookieWrapper}
+                apiWrapper={apiWrapper}
+            />
         </ThemeProvider>
     </Provider>,
     document.getElementById("root")

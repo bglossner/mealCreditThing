@@ -1,5 +1,6 @@
 import LoginAPIWrapper from "./login_wrapper";
 import RegistrationAPIWrapper from "./registration_wrapper";
+import AvailabilityAPIWrapper from "./availability_wrapper";
 
 export default class APIWrapper {
     constructor() {
@@ -7,6 +8,7 @@ export default class APIWrapper {
         this.baseURL = "http://localhost:8000/";
         this.loginWrapper = new LoginAPIWrapper(this.baseURL);
         this.registerWrapper = new RegistrationAPIWrapper(this.baseURL);
+        this.availabilityWrapper = new AvailabilityAPIWrapper(this.baseURL);
     }
 
     login(username, password) {
@@ -72,5 +74,13 @@ export default class APIWrapper {
             return false;
 
         return true;
+    }
+
+    getAvailabilityPosts() {
+        return this.availabilityWrapper.getAllPosts();
+    }
+
+    getFilteredAvailabilityPosts(jsonFilter) {
+
     }
 }

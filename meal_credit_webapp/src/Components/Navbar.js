@@ -35,11 +35,44 @@ const styles = theme => ({
         '&:hover': {
             textDecoration: "none",
             color: PRIMARY_COLOR,
+            paddingBottom: "10px",
+            borderBottom: `2px solid ${PRIMARY_COLOR}`,
         }
+    },
+    underline: {
+        paddingBottom: "10px",
+        borderBottom: `2px solid ${PRIMARY_COLOR}`,
     }
 });
 
+class Navlink extends React.Component {
+    render() {
+        const linkClass = `${this.props.classes.link} ${this.props.isActive ? this.props.classes.underline : '' }`;
+        return (
+            <Link
+                onClick={ () => this.props.onClick() }
+                className={linkClass}
+                to={this.props.to}
+            >
+                { this.props.title }
+            </Link>
+        );
+    }
+}
+
 class TopNavbar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            active: -1,
+        };
+    }
+
+    handleClick = (i) => {
+        this.setState({
+            active: i,
+        });
+    }
 
     render() {
         const { classes } = this.props;
@@ -57,18 +90,36 @@ class TopNavbar extends React.Component {
                         Meal Credit Sharing
                     </Typography>
                     <Toolbar className={classes.toolBar}>
-                        <Link className={classes.link} to="/">
-                            Availability Listings
-                        </Link>
-                        <Link className={classes.link} to="/">
-                            Hunger Listings
-                        </Link>
-                        <Link className={classes.link} to="/">
-                            Messages
-                        </Link>
-                        <Link className={classes.link} to="/">
-                            <SettingsIcon />
-                        </Link>
+                        <Navlink 
+                            title="Availability Listings"
+                            onClick={() => this.handleClick(0)}
+                            to="/availability"
+                            isActive={this.state.active === 0}
+                            classes={classes}
+                        />
+                        <Navlink 
+                            title="Hunger Listings"
+                            onClick={() => this.handleClick(1)}
+                            to="/home"
+                            isActive={this.state.active === 1}
+                            classes={classes}
+                        />
+                        <Navlink 
+                            title="Messages"
+                            onClick={() => this.handleClick(2)}
+                            to="/home"
+                            isActive={this.state.active === 2}
+                            classes={classes}
+                        />
+                        <Navlink
+                            title={<SettingsIcon />}
+                            onClick={() => this.handleClick(3)}
+                            to="/home"
+                            isActive={this.state.active === 3}
+                            classes={classes}
+                        >
+
+                        </Navlink>
                         <LogoutButton />
                     </Toolbar>
                 </Grid>
