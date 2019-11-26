@@ -85,7 +85,6 @@ module.exports = class DataAccess {
                         "av_id" : element.av_id,
                         "user_id" : element.user_id,
                         "username" : element.username,
-                        "fullname" : element.firstname + " " + element.lastname,
                         "asking_price" : element.asking_price,
                         "location" : element.location,
                         "start_time" : element.start_time,

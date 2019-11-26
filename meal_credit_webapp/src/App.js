@@ -9,7 +9,6 @@ import {
 import Home from "./Pages/Home";
 import Availability from "./Pages/Availability"
 import Login from "./Pages/Login";
-import LogoutButton from "./Pages/Logout";
 import PropTypes from "prop-types";
 import Register from "./Pages/Register";
 import { connect } from "react-redux";

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Navlink from "./Navlink";
 import SettingsIcon from '@material-ui/icons/Settings';
 import LogoutButton from '../Pages/Logout'
 import { withStyles, AppBar, Toolbar, Typography, Grid } from "@material-ui/core";
@@ -45,21 +45,6 @@ const styles = theme => ({
     }
 });
 
-class Navlink extends React.Component {
-    render() {
-        const linkClass = `${this.props.classes.link} ${this.props.isActive ? this.props.classes.underline : '' }`;
-        return (
-            <Link
-                onClick={ () => this.props.onClick() }
-                className={linkClass}
-                to={this.props.to}
-            >
-                { this.props.title }
-            </Link>
-        );
-    }
-}
-
 class TopNavbar extends React.Component {
     constructor(props) {
         super(props);
@@ -84,7 +69,7 @@ class TopNavbar extends React.Component {
                     alignItems="center"
                 >
                     <Typography className={classes.sideText} variant="body1">
-                        { this.props.loginInfo ? `Welcome ${this.props.loginInfo.firstname} ${this.props.loginInfo.lastname}` : `Not signed in` }
+                        { this.props.loginInfo ? `Welcome ${this.props.loginInfo.firstname}!` : `Not signed in` }
                     </Typography>
                     <Typography className={classes.centerText} variant="h4">
                         Meal Credit Sharing

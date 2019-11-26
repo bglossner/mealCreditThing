@@ -50,7 +50,6 @@ class Availability extends React.Component {
                         <AvailabilityPost
                             username={postInfo.username}
                             userId={postInfo.user_id}
-                            fullname={postInfo.fullname}
                             location={postInfo.location}
                             askingPrice={postInfo.asking_price}
                             startTime={postInfo.start_time}
@@ -63,7 +62,7 @@ class Availability extends React.Component {
         return (
             <React.Fragment>
                 <div className={classes.toolbar} />
-                <List subheader={<ListSubheader>Latest Posts</ListSubheader>} className={classes.postList}>
+                <List className={classes.postList}>
                     { listItems }
                 </List>
             </React.Fragment>

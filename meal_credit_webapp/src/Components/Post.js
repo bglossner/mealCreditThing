@@ -1,5 +1,5 @@
 import React from "react";
-import { withStyles, Card, Typography } from "@material-ui/core";
+import { Card } from "@material-ui/core";
 
 class Post extends React.Component {
     constructor(props) {
