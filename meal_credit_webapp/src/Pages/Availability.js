@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { withStyles, List, ListSubheader, ListItem } from "@material-ui/core";
+import { withStyles, List, ListItem } from "@material-ui/core";
 import AvailabilityPost from "../Components/AvailabilityPost";
 
 const styles = theme => ({
@@ -43,7 +43,7 @@ class Availability extends React.Component {
         let listItems;
         if (this.state.currPosts !== null) {
             // console.log(this.state.currPosts);
-            listItems = this.state.currPosts.slice(0, 3).map((postInfo, step) => {
+            listItems = this.state.currPosts.map((postInfo, step) => {
                 // console.log(postInfo, step);
                 return (
                     <ListItem className={classes.listItem} key={step} divider button>

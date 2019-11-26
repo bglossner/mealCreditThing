@@ -133,6 +133,25 @@ module.exports = class DataAccess {
         return users;
     }
 
+    async getAllLocations() {
+        let locations = [];
+        let myQuery = "SELECT DISTINCT location FROM (SELECT location FROM Availability UNION SELECT location FROM Hunger) t;";
+
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                for (let element of result) {
+                    locations.push(element.location);
+                }
+                resolve(locations);
+            }
+        }));
+
+        return locations;
+    }
+
     async getHungerListUser(userId) {
         let users = [];
         let myQuery = `SELECT * FROM Hunger WHERE user_id = ${userId}`;

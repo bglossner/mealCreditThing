@@ -114,6 +114,20 @@ app.get("/availability-list/:userId", (req, res) => {
     });
 });
 
+app.get("/locations", (req, res) => {
+    wrapper.getAllLocations()
+        .then(result => {
+            res.status(200).json({
+                result: result
+            });
+        })
+        .catch(reason => {
+            res.status(500).json({
+                result: reason
+            });
+        });
+});
+
 app.get(
     "/availability-list/:size/:where/:who/:start/:end/:price/:sortBy",
     (req, res) => {
