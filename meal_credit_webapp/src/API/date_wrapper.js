@@ -13,9 +13,8 @@ export default class DateWrapper {
 
     getTimeBetween(dt1, dt2) {
         let d1 = new Date(dt1), d2 = new Date(dt2);
-        console.log(dt1, d1.toUTCString(), dt2, d2.toUTCString());
+        // console.log(dt1, d1.toUTCString(), dt2, d2.toUTCString());
         let between = (d2.getTime() - d1.getTime()) / 1000;
-        console.log()
         let minutes = Math.floor(between / 60);
         let hours = Math.floor(between / 3600);
         let days = Math.floor(between / (3600 * 24));
@@ -34,7 +33,6 @@ export default class DateWrapper {
     }
 
     getTimeFromNow(dt1) {
-        console.log(dt1);
         return this.getTimeBetween((new Date()).toUTCString(), dt1);
     }
 }

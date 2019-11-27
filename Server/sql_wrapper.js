@@ -19,10 +19,10 @@ module.exports = class DataAccess {
 
     async getAvailabilityList(size, where, who, startTime, endTime, price, sort) {
         let users = [];
-        let myQuery = `SELECT a.*, u.username, u.firstname, u.lastname FROM Availability AS a INNER JOIN Users AS u ON a.user_id = u.user_id`;
+        let myQuery = `SELECT a.*, u.username FROM Availability AS a INNER JOIN Users AS u ON a.user_id = u.user_id`;
 
         if(who != "") {
-            myQuery = `SELECT a.*, u.username, u.firstname, u.lastname FROM Availability a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username = '${who}'`;
+            myQuery = `SELECT a.*, u.username FROM Availability a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username = '${who}'`;
         }
 
         if(where != "") {
@@ -104,7 +104,7 @@ module.exports = class DataAccess {
 
     async getAvailabilityListUser(userId) {
         let users = [];
-        let myQuery = `SELECT * FROM Availability WHERE user_id = ${userId}`;
+        let myQuery = `SELECT a.*, u.username FROM Availability AS a INNER JOIN Users AS u ON a.user_id = u.user_id WHERE u.user_id = ${userId} ORDER BY start_time`;
 
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
@@ -115,6 +115,7 @@ module.exports = class DataAccess {
                     let userRet = {
                         "av_id" : element.av_id,
                         "user_id" : element.user_id,
+                        "username" : element.username,
                         "asking_price" : element.asking_price,
                         "location" : element.location,
                         "start_time" : element.start_time,

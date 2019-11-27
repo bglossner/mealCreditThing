@@ -1,6 +1,7 @@
 import LoginAPIWrapper from "./login_wrapper";
 import RegistrationAPIWrapper from "./registration_wrapper";
 import AvailabilityAPIWrapper from "./availability_wrapper";
+import GeneralAPIWrapper from "./general_wrapper";
 
 export default class APIWrapper {
     constructor() {
@@ -9,6 +10,7 @@ export default class APIWrapper {
         this.loginWrapper = new LoginAPIWrapper(this.baseURL);
         this.registerWrapper = new RegistrationAPIWrapper(this.baseURL);
         this.availabilityWrapper = new AvailabilityAPIWrapper(this.baseURL);
+        this.generalWrapper = new GeneralAPIWrapper(this.baseURL)
     }
 
     login(username, password) {
@@ -82,5 +84,13 @@ export default class APIWrapper {
 
     getFilteredAvailabilityPosts(jsonFilter) {
 
+    }
+
+    getAllLocations() {
+        return this.generalWrapper.getAllLocations();
+    }
+
+    getMyAvailabilityPosts(myID) {
+        return this.availabilityWrapper.getUserPosts(myID);
     }
 }
