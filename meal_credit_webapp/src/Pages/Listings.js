@@ -19,9 +19,9 @@ class Listings extends React.Component {
         this.setupPage();
     }
 
-    getDefaultModalInfo() {
+    getDefaultModalInfo(startTime = null) {
         return {
-            startTime: null,
+            startTime: startTime,
             endTime: null,
             askingPrice: 0,
             location: null,
@@ -32,14 +32,34 @@ class Listings extends React.Component {
         return this.state.modalInfo.innerInfo ? this.state.modalInfo.innerInfo[field] : null;
     }
 
+    getLocationOptions() {
+        if (!this.state.locations) {
+            console.log("HERE");
+            return null;
+        }
+        let newArray = [<option key={-1} value="" />]
+        newArray.push(...(this.state.locations.map((location, step) => {
+            return <option key={step} value={location}>{location}</option>
+        })));
+        return newArray;
+    }
+
     setCurrentModalInfo(field, value) {
-        let curState = Object.assign({}, this.state.modalInfo);
+        let curModalInfo = Object.assign({}, this.state.modalInfo);
         if (this.state.modalInfo.innerInfo) {
-            curState.modalInfo.innerInfo[field] = value;
+            curModalInfo.innerInfo[field] = value;
             this.setState({
-                modalInfo: curState,
+                modalInfo: curModalInfo,
             });
         }
+    }
+
+    handleSelectChange = (field) => (event) => {
+        this.setCurrentModalInfo(field, event.target.value);
+    }
+
+    handleNonSelectChange = (field) => (newInfo) => {
+        this.setCurrentModalInfo(field, newInfo);
     }
 
     handleStartTimeChange = (dateTime) => {
@@ -113,6 +133,7 @@ class Listings extends React.Component {
     }
 
     render() {
+        console.log("rerender")
         const { classes } = this.props;
         return (
             <React.Fragment>
@@ -156,7 +177,7 @@ class Listings extends React.Component {
                     onClose={this.onModalClose}
                     title={this.getTitle()}
                 >
-                    { this.renderInnerModal() }
+                    { this.renderInnerModal(classes) }
                 </ListingModal>
             </React.Fragment>
         );

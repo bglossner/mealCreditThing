@@ -12,7 +12,10 @@ const styles = theme => ({
         padding: theme.spacing(2, 4, 3),
     },
     title: {
-        fontStyle: "italic"
+        fontStyle: "italic",
+        fontWeight: "bold",
+        width: "100%",
+        textAlign: "center",
     }
 });
 
