@@ -105,7 +105,7 @@ class TopNavbar extends React.Component {
                         >
 
                         </Navlink>
-                        <LogoutButton />
+                        <LogoutButton cookieWrapper={this.props.cookieWrapper} />
                     </Toolbar>
                 </Grid>
             </AppBar>

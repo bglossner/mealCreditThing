@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import AvailabilityPost from "../Components/AvailabilityPost";
 import DateTimePicker from "../Components/DateTimePicker";
 import Listings from "./Listings";
-import { withStyles, Grid } from "@material-ui/core";
+import { withStyles, Grid, InputAdornment, FormControl, InputLabel } from "@material-ui/core";
 import Selector from "../Components/Selector";
+import Input from "../Components/Input";
 
 const styles = theme => ({
     toolbar: theme.mixins.toolbar,
@@ -69,6 +70,36 @@ class Availability extends Listings {
                     formControlClass={classes.formControl}
                     options={super.getLocationOptions()}
                     label="Location"
+                    required={true}
+                />
+                {/* <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="standard-adornment-amount">
+                        Amount
+                    </InputLabel>
+                    <Input
+                        id="modal-price"
+                        label="Price"
+                        type="number"
+                        required
+                        onChange={this.handleNonSelectChange("askingPrice")}
+                        className={classes.textField}
+                        margin="normal"
+                        startAdornment={
+                            <InputAdornment
+                                position="start"
+                            >
+                                $
+                            </InputAdornment>
+                        }
+                    />
+                </FormControl> */}
+                <Input
+                    name="Price"
+                    type="number"
+                    required={true}
+                    /*onChange={evt => this.updatePassword(evt)}
+                    forceShowErrors={this.state.forceShowErrors}
+                    checkInput={this.validatePassword()}*/
                 />
             </Grid>
         );

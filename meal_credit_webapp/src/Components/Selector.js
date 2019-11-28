@@ -1,5 +1,6 @@
 import React from "react";
 import { FormControl, InputLabel, Select } from "@material-ui/core";
+import PropTypes from 'prop-types';
 
 class Selector extends React.Component {
     constructor(props) {
@@ -25,6 +26,7 @@ class Selector extends React.Component {
                 </InputLabel>
                 <Select
                     native
+                    required={this.props.required}
                     value={this.props.value || ""}
                     onChange={this.props.onChange}
                     labelWidth={this.state.labelWidth}
@@ -39,5 +41,13 @@ class Selector extends React.Component {
         );
     }
 }
+
+Selector.propTypes = {
+    option: PropTypes.array,
+    value: PropTypes.string,
+    label: PropTypes.string,
+    formControlClass: PropTypes.string,
+    required: PropTypes.bool
+};
 
 export default (Selector);

@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import "./index.css"
 import APIWrapper from "./API/api_wrapper";
 import App from "./App";
 import CookiesWrapper from "./API/cookies";
@@ -10,6 +10,7 @@ import reducers from "./redux/reducers/store";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
+
 
 const store = reducers;
 const apiWrapper = new APIWrapper();

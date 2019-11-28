@@ -18,7 +18,7 @@ class App extends Component {
     render() {
         return (
             <Router>
-                { this.props.userLoginInfo ? <TopNavbar /> : <TopNavbar /> }
+                { this.props.userLoginInfo ? <TopNavbar cookieWrapper={this.props.cookieWrapper} /> : <TopNavbar cookieWrapper={this.props.cookieWrapper} /> }
                 <Switch>
                     <Route exact path="/">
                         {this.props.userLoginInfo ? (
