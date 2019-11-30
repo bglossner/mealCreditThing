@@ -34,6 +34,11 @@ const styles = theme => ({
         width: "45%",
         maxWidth: "450px",
         minWidth: "300px"
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        alignSelf: "stretch"
     }
 });
 class Register extends GeneralStart {

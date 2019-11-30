@@ -82,6 +82,10 @@ export default class APIWrapper {
         return this.availabilityWrapper.getAllPosts();
     }
 
+    makeAvailabilityPost() {
+        return this.availabilityWrapper.makeNewPost();
+    }
+
     getFilteredAvailabilityPosts(jsonFilter) {
 
     }

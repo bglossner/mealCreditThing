@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { List, ListItem, Grid, Typography, Box } from "@material-ui/core";
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import { List, ListItem, Grid, Typography, Box, Fab } from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
 import ListingModal from "../Components/ListingModal";
 
 class Listings extends React.Component {
@@ -9,94 +8,11 @@ class Listings extends React.Component {
         super(props);
         this.state = {
             currPosts: null,
-            locations: null,
             myPosts: null,
-            modalInfo: {
-                open: false,
-                type: "Add",
-                innerInfo: this.getDefaultModalInfo()
-            },
+            modalType: null,
+            modalOpen: false,
         };
-        this.setupPage();
-    }
-
-    getDefaultModalInfo(startTime = null) {
-        return {
-            startTime: startTime,
-            endTime: null,
-            askingPrice: 0,
-            location: null,
-        };
-    }
-
-    getCurrentModalInfo(field) {
-        return this.state.modalInfo.innerInfo ? this.state.modalInfo.innerInfo[field] : null;
-    }
-
-    getLocationOptions() {
-        if (!this.state.locations) {
-            console.log("HERE");
-            return null;
-        }
-        let newArray = [<option key={-1} value="" />]
-        newArray.push(...(this.state.locations.map((location, step) => {
-            return <option key={step} value={location}>{location}</option>
-        })));
-        return newArray;
-    }
-
-    setCurrentModalInfo(field, value) {
-        let curModalInfo = Object.assign({}, this.state.modalInfo);
-        if (this.state.modalInfo.innerInfo) {
-            curModalInfo.innerInfo[field] = value;
-            this.setState({
-                modalInfo: curModalInfo,
-            });
-        }
-    }
-
-    handleSelectChange = (field) => (event) => {
-        this.setCurrentModalInfo(field, event.target.value);
-    }
-
-    handleNonSelectChange = (field) => (newInfo) => {
-        this.setCurrentModalInfo(field, newInfo);
-    }
-
-    handleStartTimeChange = (dateTime) => {
-        this.setCurrentModalInfo("startTime", dateTime);
-    }
-
-    handleEndTimeChange = (dateTime) => {
-        this.setCurrentModalInfo("endTime", dateTime);
-    }
-
-    setupPage() {
         this.getAllCurrentPosts();
-        this.getAllLocations();
-    }
-
-    getAllLocations() {
-        let retVal = this.props.apiWrapper.getAllLocations();
-        retVal
-            .then(locations => {
-                this.setState({
-                    locations: locations,
-                });
-            })
-            .catch(reason => {
-                console.log(reason)
-            });
-    }
-
-    onModalClose = () => {
-        this.setState({
-            modalInfo: {
-                open: false,
-                type: "Add",
-                innerInfo: this.getDefaultModalInfo()
-            },
-        });
     }
 
     mapPosts(posts, classes) {
@@ -113,6 +29,27 @@ class Listings extends React.Component {
         return null;
     }
 
+    onModalClose = () => {
+        this.setState({
+            modalOpen: false,
+        });
+    }
+
+    /* closeModal = () => {
+        let curModalInfo = Object.assign({}, this.state.modalInfo);
+        curModalInfo.open = false;
+        this.setState({
+            modalInfo: curModalInfo,
+        });
+    } */
+
+    addNewPost() {
+        this.setState({
+            modalType: "Add",
+            modalOpen: true,
+        });
+    }
+
     getAllCurrentPosts() {
         console.warn("getAllCurrentPosts should be implemented in subclass")
     }
@@ -121,12 +58,8 @@ class Listings extends React.Component {
         console.warn("makePost should be implemented in subclass")
     }
 
-    addNewPost() {
-        console.warn("addNewPost should be implemented in subclass")
-    }
-
-    renderInnerModal() {
-        console.warn("renderInnerModal should be implemented in subclass")
+    onSubmit() {
+        console.warn("onSubmit should be implemented in subclass")
     }
 
     getTitle() {
@@ -134,8 +67,9 @@ class Listings extends React.Component {
     }
 
     render() {
-        console.log("rerender")
+        // console.log("rerender")
         const { classes } = this.props;
+        console.log(classes)
         return (
             <React.Fragment>
                 <div className={classes.toolbar} />
@@ -161,11 +95,6 @@ class Listings extends React.Component {
                                 <Typography variant="h4">
                                     My Posts
                                 </Typography>
-                                <AddCircleOutlineOutlinedIcon 
-                                    fontSize="large"
-                                    className={classes.clickableIcon}
-                                    onClick={() => this.addNewPost()}
-                                />
                             </Box>
                         }
                         className={classes.postList}
@@ -174,12 +103,24 @@ class Listings extends React.Component {
                     </List>
                 </Grid>
                 <ListingModal
-                    open={this.state.modalInfo.open}
+                    open={this.state.modalOpen}
                     onClose={this.onModalClose}
+                    type={this.state.modalType}
                     title={this.getTitle()}
-                >
-                    { this.renderInnerModal(classes) }
-                </ListingModal>
+                    closeModal={this.closeModal}
+                    apiWrapper={this.props.apiWrapper}
+                    onSubmit={this.onSubmit}
+                />
+                <Box className={classes.addButton}>
+                    <Fab
+                        color="primary"
+                        aria-label="add"
+                        onClick={() => this.addNewPost()}
+                        className={classes.rightAlign}
+                    >
+                        <AddIcon />
+                    </Fab>
+                </Box>
             </React.Fragment>
         );
     }

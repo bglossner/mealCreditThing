@@ -16,7 +16,6 @@ export default class LoginAPIWrapper {
                         resolve(JSON.parse(this.response));
                     } else if (this.status === 401) {
                         reject(JSON.parse(this.response));
-                        console.log("HERE");
                     } else {
                         reject({
                             status: 0,

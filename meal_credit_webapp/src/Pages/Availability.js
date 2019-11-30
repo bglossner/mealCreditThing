@@ -1,11 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import AvailabilityPost from "../Components/AvailabilityPost";
-import DateTimePicker from "../Components/DateTimePicker";
 import Listings from "./Listings";
-import { withStyles, Grid, InputAdornment, FormControl, InputLabel } from "@material-ui/core";
-import Selector from "../Components/Selector";
-import Input from "../Components/Input";
+import { withStyles } from "@material-ui/core";
 
 const styles = theme => ({
     toolbar: theme.mixins.toolbar,
@@ -23,91 +20,30 @@ const styles = theme => ({
         justifyContent: "center",
         alignItems: "center"
     },
-    clickableIcon: {
-        cursor: "pointer",
-        marginLeft: "5%",
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
+    addButton: {
+        position: "sticky",
+        bottom: "2vh",
+        display: "flex",
+        justifyContent: "flex-end",
+        marginRight: "2vh"
     },
 });
 
 class Availability extends Listings {
-    
-    setupPage() {
-        this.getAllCurrentPosts();
-        this.getAllLocations();
-    }
-
-    addNewPost() {
-        this.setState({
-            modalInfo: {
-                open: true,
-                type: "Add",
-                innerInfo: super.getDefaultModalInfo(new Date()),
-            }
-        });
-    }
-
-    renderInnerModal(classes) {
-        return (
-            <Grid
-                container
-                direction="column"
-            >
-                <DateTimePicker
-                    selectedDate={super.getCurrentModalInfo("startTime")}
-                    handleDateChange={this.handleNonSelectChange("startTime")}
-                />
-                <DateTimePicker
-                    selectedDate={super.getCurrentModalInfo("endTime")}
-                    handleDateChange={this.handleNonSelectChange("endTime")}
-                />
-                <Selector
-                    value={super.getCurrentModalInfo("location")}
-                    onChange={this.handleSelectChange("location")}
-                    formControlClass={classes.formControl}
-                    options={super.getLocationOptions()}
-                    label="Location"
-                    required={true}
-                />
-                {/* <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="standard-adornment-amount">
-                        Amount
-                    </InputLabel>
-                    <Input
-                        id="modal-price"
-                        label="Price"
-                        type="number"
-                        required
-                        onChange={this.handleNonSelectChange("askingPrice")}
-                        className={classes.textField}
-                        margin="normal"
-                        startAdornment={
-                            <InputAdornment
-                                position="start"
-                            >
-                                $
-                            </InputAdornment>
-                        }
-                    />
-                </FormControl> */}
-                <Input
-                    name="Price"
-                    type="number"
-                    required={true}
-                    /*onChange={evt => this.updatePassword(evt)}
-                    forceShowErrors={this.state.forceShowErrors}
-                    checkInput={this.validatePassword()}*/
-                />
-            </Grid>
-        );
-    }
 
     getTitle() {
-        return `${this.state.modalInfo.type} Availability Post`;
+        return `${this.state.modalType} Availability Post`;
     }
+
+    onSubmit = (jsonPostInfo) => {
+        let retPromise;
+        if (this.state.modalType === "Add") {
+            console.log(jsonPostInfo);
+            retPromise = this.props.apiWrapper.makeAvailabilityPost();
+        } else {
+            retPromise = this.props.apiWrapper.editAvailabilityPost();
+        }
+    };
 
     getAllCurrentPosts() {
         let retVal = this.props.apiWrapper.getAvailabilityPosts();

@@ -19,7 +19,7 @@ class Input extends Component {
         };
     }
 
-    triggerError() {
+    checkError() {
         if (this.props.checkInput.valid) {
             this.setState({
                 showErrorLabel: false
@@ -50,9 +50,10 @@ class Input extends Component {
                 required={this.props.required}
                 label={this.props.name}
                 className={classes.textField}
-                margin="normal"
-                onKeyUp={() => this.triggerError()}
-                onBlur={() => this.triggerError()}
+                margin={this.props.margin || "normal"}
+                defaultValue={this.props.defaultValue || ""}
+                onKeyUp={() => this.checkError()}
+                onBlur={() => this.checkError()}
                 type={this.props.type}
                 onChange={this.props.onChange}
                 variant="outlined"

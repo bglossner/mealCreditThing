@@ -1,2 +1,6 @@
 - Mb abstract event variable in onChange function of input so there is not event but rather just value given to function
-- Implement fetch instead of XHR?
+- Implement fetch instead of XHR OR mb axios?
+    - I have seen conflicting views on which one is best
+    - XHR has most abilities but is hardest to use
+    - Fetch is gaining popularity but the catch doesn't fire on error responses unless server can't be contacted. Supposed to be the future tho
+    - Axios is an outside library, so mb not the best. Seems like it has decent support and is better than fetch for use

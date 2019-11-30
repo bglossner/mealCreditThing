@@ -13,7 +13,6 @@ export default class GeneralAPIWrapper {
                 // Call a function when the state changes.
                 if (this.readyState === XMLHttpRequest.DONE) {
                     if (this.status === 200) {
-                        console.log(this.response)
                         resolve(JSON.parse(this.response).result);
                     } else {
                         reject({
