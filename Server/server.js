@@ -723,6 +723,12 @@ app.post("/create/availability/", function(req, res) {
         return authentic;
     }
 
+    console.log(Number(user_id),
+    Number(asking_price),
+    location,
+    start_time,
+    end_time);
+
     wrapper
         .postAvailabilityObject(
             Number(user_id),

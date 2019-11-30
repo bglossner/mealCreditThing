@@ -36,13 +36,29 @@ class Availability extends Listings {
     }
 
     onSubmit = (jsonPostInfo) => {
+        let transformedJSON = this.props.apiWrapper.getTransformedJSON(jsonPostInfo);
         let retPromise;
         if (this.state.modalType === "Add") {
-            console.log(jsonPostInfo);
-            retPromise = this.props.apiWrapper.makeAvailabilityPost();
+            // console.log(jsonPostInfo);
+            retPromise = this.props.apiWrapper.makeAvailabilityPost(transformedJSON);
         } else {
-            retPromise = this.props.apiWrapper.editAvailabilityPost();
+            retPromise = this.props.apiWrapper.editAvailabilityPost(transformedJSON);
         }
+
+        retPromise
+            .then((result) => {
+                // console.log(result);
+                let myPosts = this.state.myPosts.slice();
+                transformedJSON.username = this.props.loginInfo.username;
+                myPosts.push(transformedJSON);
+                this.setState({
+                    myPosts: myPosts,
+                    modalOpen: false, 
+                });
+            })
+            .catch((reason) => {
+                console.log(reason)
+            });
     };
 
     getAllCurrentPosts() {

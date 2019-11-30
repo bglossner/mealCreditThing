@@ -29,7 +29,7 @@ class StartEndDateTimePicker extends React.Component {
             endTime = dateTime;
         }
         let isValidChange = this.validateStartEndTime(startTime, endTime);
-        this.props.errorSetter(isValidChange.valid);
+        this.props.errorSetter(!isValidChange.valid);
         (this.props.handleInParent(which))(dateTime);
         this.setStateIfNeeded(isValidChange);
     }
@@ -42,7 +42,7 @@ class StartEndDateTimePicker extends React.Component {
                 who: 2,
                 errorMessage: "End time/date must be after start time/date"
             };
-        } else if (endTime && (endTime.getTime() < (new Date().getTime()))) {
+        } else if (endTime && (endTime.getTime() < Date.now())) {
             return {
                 valid: false,
                 who: 1,

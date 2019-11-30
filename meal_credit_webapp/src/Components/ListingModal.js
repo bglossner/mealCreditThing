@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles, Grid, Box, Typography, Button } from "@material-ui/core";
+import { Alert } from "react-bootstrap";
 import GeneralModal from "./GeneralModal";
 import Selector from "../Components/Selector";
 import StartEndDateTimePicker from "../Components/StartEndDateTimePicker";
@@ -31,12 +32,32 @@ class ListingModal extends React.Component {
         super(props);
         this.state = {
             forceShowErrors: true,
+            showSubmissionErrors: false,
+            submissionMessage: "",
             modalInfo: {
                 innerInfo: this.getDefaultModalInfo()
             },
             locations: null,
             errorStates: [false, false, false],
         };
+        this.fieldTransform = {
+            "askingPrice" : "price",
+            "endTime" : "end date/time",
+            "location" : "location",
+            "startTIme" : "start date/time"
+        }
+        this.getAllLocations();
+    }
+
+    resetModalState() {
+        this.setState({
+            showSubmissionErrors: false,
+            submissionMessage: "",
+            modalInfo: {
+                innerInfo: this.getDefaultModalInfo(),
+            },
+            errorStates: [false, false, false],
+        });
     }
 
     getAllLocations() {
@@ -50,6 +71,47 @@ class ListingModal extends React.Component {
             .catch(reason => {
                 console.log(reason)
             });
+    }
+
+    renderErrorMessage() {
+        // console.log(this.state.showSubmissionErrors, this.state.submissionMessage.length)
+        return (
+            this.state.showSubmissionErrors && this.state.submissionMessage.length !== 0 && (
+                <Grid
+                    container
+                    alignItems="center"
+                    direction="row"
+                    justify="center"
+                >
+                    <Alert variant="danger">{this.state.submissionMessage}</Alert>
+                </Grid>
+            )
+        );
+    }
+
+    validateSubmission() {
+        for (let key in this.state.modalInfo.innerInfo) {
+            if (key !== "startTime" && (this.getCurrentModalInfo(key) === null)) {
+                return {
+                    valid: false,
+                    errorMessage: `Please fill out the ${this.fieldTransform[key]} field`
+                };
+            }
+        }
+        let tempStates = this.state.errorStates.slice();
+        tempStates[1] = this.validateAskingPrice().valid === false;
+        for (let state of tempStates) {
+            if (state === true) {
+                return {
+                    valid: false,
+                    errorMessage: "Please fix all errors shown!"
+                }
+            }
+        }
+
+        return {
+            valid: true
+        };
     }
 
     errorSetter = (childNum) => (childErrorState) => {
@@ -90,7 +152,7 @@ class ListingModal extends React.Component {
     }
 
     handleNonEventChange = (field) => (newInfo) => {
-        console.log(field, newInfo);
+        // console.log(field, newInfo);
         this.setCurrentModalInfo(field, newInfo);
     }
 
@@ -109,7 +171,7 @@ class ListingModal extends React.Component {
         const price = this.getCurrentModalInfo("askingPrice");
         if (price) {
             const numPrice = Number(price);
-            if (numPrice > 20 && numPrice <= 20) {
+            if (numPrice > 20) {
                 return {
                     valid: false,
                     errorMessage: "Price can not be over $20"
@@ -129,10 +191,23 @@ class ListingModal extends React.Component {
                 errorMessage: "",
             };
         }
+        return {
+            valid: true,
+        }
     }
 
-    validatePostForSubmission() {
-        this.props.onSubmit(this.state.modalInfo);
+    attemptSubmission() {
+        let validationResults = this.validateSubmission();
+        // console.log(validationResults);
+        if (!validationResults.valid) {
+            this.setState({
+                showSubmissionErrors: true,
+                submissionMessage: validationResults.errorMessage
+            });
+        } else {
+            // this.props.onSubmit(this.state.modalInfo.innerInfo);
+            this.resetModalState();
+        }
     }
     
     render() {
@@ -147,6 +222,7 @@ class ListingModal extends React.Component {
                     container
                     direction="column"
                 >
+                    { this.renderErrorMessage() }
                     <StartEndDateTimePicker
                         startTime={this.getCurrentModalInfo("startTime")}
                         endTime={this.getCurrentModalInfo("endTime")}
@@ -187,7 +263,7 @@ class ListingModal extends React.Component {
                             color="primary"
                             className={classes.rightAlign}
                             endIcon={<CheckIcon />}
-                            onClick={() => this.validatePostForSubmission()}
+                            onClick={() => this.attemptSubmission()}
                         >
                             Submit
                         </Button>

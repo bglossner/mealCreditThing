@@ -4,13 +4,45 @@ import AvailabilityAPIWrapper from "./availability_wrapper";
 import GeneralAPIWrapper from "./general_wrapper";
 
 export default class APIWrapper {
-    constructor() {
+    constructor(store) {
         // TODO: Make this an environment variable??
         this.baseURL = "http://localhost:8000/";
         this.loginWrapper = new LoginAPIWrapper(this.baseURL);
         this.registerWrapper = new RegistrationAPIWrapper(this.baseURL);
-        this.availabilityWrapper = new AvailabilityAPIWrapper(this.baseURL);
-        this.generalWrapper = new GeneralAPIWrapper(this.baseURL)
+        this.availabilityWrapper = new AvailabilityAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
+        this.generalWrapper = new GeneralAPIWrapper(this.baseURL);
+        this.store = store;
+    }
+
+    getUserInformation() {
+        return this.store.getState().userLoginInfo;
+    }
+
+    getDefaultStatusResponse(status, error) {
+        let errorMessage;
+        switch (status) {
+            case 401: {
+                errorMessage = "Invalid user information. Are you logged in? Consider relogging.";
+                break
+            }
+            case 500: {
+                errorMessage = "Server error!";
+                break
+            }
+            case 0: {
+                errorMessage = "Could not connect to the server!"
+                break
+            }
+            default: {
+                errorMessage = "Unknown error occurred!"
+                break
+            }
+        }
+
+        return {
+            status: status,
+            message: errorMessage,
+        }
     }
 
     login(username, password) {
@@ -82,8 +114,23 @@ export default class APIWrapper {
         return this.availabilityWrapper.getAllPosts();
     }
 
-    makeAvailabilityPost() {
-        return this.availabilityWrapper.makeNewPost();
+    getTransformedJSON(jsonPostInfo) {
+        let currLoginInfo = this.getUserInformation();
+        if (jsonPostInfo.startTime === null) {
+            jsonPostInfo.startTime = new Date();
+        }
+        return {
+            asking_price: Number(jsonPostInfo.askingPrice),
+            location: jsonPostInfo.location,
+            end_time: jsonPostInfo.endTime.toISOString(),
+            start_time: jsonPostInfo.startTime.toISOString(),
+            user_id: currLoginInfo.user_id,
+            token: currLoginInfo.token
+        }
+    }
+
+    makeAvailabilityPost(jsonPostInfo) {
+        return this.availabilityWrapper.makeNewPost(jsonPostInfo);
     }
 
     getFilteredAvailabilityPosts(jsonFilter) {

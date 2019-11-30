@@ -1,6 +1,7 @@
 export default class AvailabilityAPIWrapper {
-    constructor(baseURL) {
+    constructor(baseURL, getDefaultStatusResponseFunc) {
         this.baseURL = baseURL;
+        this.getDefaultStatusResponse = getDefaultStatusResponseFunc;
     }
 
     getAllPosts() {
@@ -37,13 +38,8 @@ export default class AvailabilityAPIWrapper {
                 if (this.readyState === XMLHttpRequest.DONE) {
                     if (this.status === 200) {
                         resolve(JSON.parse(this.response));
-                    } else if (this.status === 401) {
-                        reject(JSON.parse(this.response));
                     } else {
-                        reject({
-                            status: 0,
-                            message: "Could not connect to the server!"
-                        });
+                        reject(this.getDefaultStatusResponse(this.status, this.response));
                     }
                 }
             };
@@ -65,7 +61,7 @@ export default class AvailabilityAPIWrapper {
                     } else {
                         reject({
                             status: this.status,
-                            message:  this.response.result || "Could not connect to the server!"
+                            message:  JSON.parse(this.response).result || "Could not connect to the server!"
                         });
                     }
                 }

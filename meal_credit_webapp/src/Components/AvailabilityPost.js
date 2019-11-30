@@ -37,6 +37,7 @@ class AvailabilityPost extends Post {
 
     renderFields() {
         const { classes } = this.props;
+        // console.log(this.props);
         const timeLeft = dateWrapper.getTimeFromNow(this.props.endTime);
         const comp = Math.round(this.props.askingPrice);
         const priceListing = this.props.askingPrice === comp ? comp : this.props.askingPrice.toFixed(2);

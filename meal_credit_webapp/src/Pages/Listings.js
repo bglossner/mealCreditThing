@@ -35,14 +35,6 @@ class Listings extends React.Component {
         });
     }
 
-    /* closeModal = () => {
-        let curModalInfo = Object.assign({}, this.state.modalInfo);
-        curModalInfo.open = false;
-        this.setState({
-            modalInfo: curModalInfo,
-        });
-    } */
-
     addNewPost() {
         this.setState({
             modalType: "Add",
@@ -69,7 +61,6 @@ class Listings extends React.Component {
     render() {
         // console.log("rerender")
         const { classes } = this.props;
-        console.log(classes)
         return (
             <React.Fragment>
                 <div className={classes.toolbar} />
@@ -113,7 +104,7 @@ class Listings extends React.Component {
                 />
                 <Box className={classes.addButton}>
                     <Fab
-                        color="primary"
+                        color="secondary"
                         aria-label="add"
                         onClick={() => this.addNewPost()}
                         className={classes.rightAlign}

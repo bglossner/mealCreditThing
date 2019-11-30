@@ -13,7 +13,6 @@ import theme from "./theme";
 
 
 const store = reducers;
-const apiWrapper = new APIWrapper();
 const cookieWrapper = new CookiesWrapper();
 const retrievedLoginInfo = cookieWrapper.retrieveCookieIfExists(
     "user_information"
@@ -24,6 +23,7 @@ if (retrievedLoginInfo !== null) {
         loginInfo: JSON.parse(retrievedLoginInfo)
     });
 }
+const apiWrapper = new APIWrapper(store);
 
 document.title = "Meal Credit App";
 
