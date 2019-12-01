@@ -35,13 +35,14 @@ class Availability extends Listings {
         return `${this.state.modalType} Availability Post`;
     }
 
-    onSubmit = (jsonPostInfo) => {
+    onSubmit = (jsonPostInfo, listKey) => {
         let transformedJSON = this.props.apiWrapper.getTransformedJSON(jsonPostInfo);
         let retPromise;
         if (this.state.modalType === "Add") {
             // console.log(jsonPostInfo);
             retPromise = this.props.apiWrapper.makeAvailabilityPost(transformedJSON);
         } else {
+            transformedJSON.av_id = this.state.myPosts[listKey].av_id;
             retPromise = this.props.apiWrapper.editAvailabilityPost(transformedJSON);
         }
 
@@ -50,7 +51,11 @@ class Availability extends Listings {
                 // console.log(result);
                 let myPosts = this.state.myPosts.slice();
                 transformedJSON.username = this.props.loginInfo.username;
-                myPosts.push(transformedJSON);
+                if (this.state.modalType === "Add") {
+                    myPosts.push(transformedJSON);
+                } else {
+                    myPosts[listKey] = transformedJSON;
+                }
                 this.setState({
                     myPosts: myPosts,
                     modalOpen: false, 
@@ -83,7 +88,7 @@ class Availability extends Listings {
             });
     }
 
-    makePostType(postInfo) {
+    makePostType(postInfo, isMyPosts, listKey) {
         return (
             <AvailabilityPost
                 username={postInfo.username}
@@ -92,6 +97,9 @@ class Availability extends Listings {
                 askingPrice={postInfo.asking_price}
                 startTime={postInfo.start_time}
                 endTime={postInfo.end_time}
+                allowEdits={isMyPosts}
+                listKey={listKey}
+                editPost={this.editPost}
             />
         );
     }

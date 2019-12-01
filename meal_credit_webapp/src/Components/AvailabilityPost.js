@@ -8,7 +8,6 @@ import DateWrapper from "../API/date_wrapper";
 const dateWrapper = new DateWrapper();
 const styles = theme => ({
     card: {
-        padding: "1% 5% 2%",
         textAlign: "center",
         width: "90%",
     },
@@ -30,6 +29,22 @@ const styles = theme => ({
     },
     nextToPic: {
         marginLeft: "2%",
+    },
+    top: {
+        position: "absolute",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "84%",
+        height: "88%",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "rgba(0, 0, 0, 0.5)"
+    },
+    paper: {
+        boxShadow: "none",
+        padding: "1% 5% 2%",
     }
 });
 

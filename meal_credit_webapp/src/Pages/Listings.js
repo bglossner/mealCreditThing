@@ -11,16 +11,20 @@ class Listings extends React.Component {
             myPosts: null,
             modalType: null,
             modalOpen: false,
+            editPostInfo: {
+                postInfo: null,
+                key: null,
+            },
         };
         this.getAllCurrentPosts();
     }
 
-    mapPosts(posts, classes) {
+    mapPosts(posts, classes, isMyPosts) {
         if (posts !== null) {
             return posts.map((postInfo, step) => {
                 return (
                     <ListItem className={classes.listItem} key={step} button>
-                        { this.makePostType(postInfo) }
+                        { this.makePostType(postInfo, isMyPosts, step) }
                     </ListItem>
                 );
             });
@@ -35,10 +39,26 @@ class Listings extends React.Component {
         });
     }
 
+    editPost = (key) => {
+        // console.log(this.state.myPosts[key]);
+        this.setState({
+            modalType: "Edit",
+            modalOpen: true,
+            editPostInfo: {
+                key: key,
+                postInfo: this.state.myPosts[key],
+            }
+        });
+    }
+
     addNewPost() {
         this.setState({
             modalType: "Add",
             modalOpen: true,
+            editPostInfo: {
+                postInfo: null,
+                key: null,
+            },
         });
     }
 
@@ -78,7 +98,7 @@ class Listings extends React.Component {
                         }
                         className={classes.postList}
                     >
-                        { this.mapPosts(this.state.currPosts, classes) }
+                        { this.mapPosts(this.state.currPosts, classes, false) }
                     </List>
                     <List
                         subheader={
@@ -90,7 +110,7 @@ class Listings extends React.Component {
                         }
                         className={classes.postList}
                     >
-                        { this.mapPosts(this.state.myPosts, classes) }
+                        { this.mapPosts(this.state.myPosts, classes, true) }
                     </List>
                 </Grid>
                 <ListingModal
@@ -101,6 +121,8 @@ class Listings extends React.Component {
                     closeModal={this.closeModal}
                     apiWrapper={this.props.apiWrapper}
                     onSubmit={this.onSubmit}
+                    defaultValues={this.state.editPostInfo.postInfo}
+                    listKey={this.state.editPostInfo.key}
                 />
                 <Box className={classes.addButton}>
                     <Fab

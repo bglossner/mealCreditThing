@@ -10,7 +10,7 @@ class Home extends React.Component {
         const { classes } = this.props;
         return (
             <React.Fragment>
-                <div class={classes.toolbar} />
+                <div className={classes.toolbar} />
                 <div>Home Page</div>
             </React.Fragment>
         );

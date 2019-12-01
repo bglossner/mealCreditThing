@@ -18,7 +18,7 @@ export default class APIWrapper {
         return this.store.getState().userLoginInfo;
     }
 
-    getDefaultStatusResponse(status, error) {
+    getDefaultStatusResponse = (status, error) => {
         let errorMessage;
         switch (status) {
             case 401: {
@@ -63,7 +63,6 @@ export default class APIWrapper {
         } else {
             json["username"] = username;
         }
-        //console.log(username + " | "  + password + password.length);
 
         return this.loginWrapper.makeLoginRequest(json);
     }
@@ -131,6 +130,10 @@ export default class APIWrapper {
 
     makeAvailabilityPost(jsonPostInfo) {
         return this.availabilityWrapper.makeNewPost(jsonPostInfo);
+    }
+
+    editAvailabilityPost(jsonPostInfo) {
+        return this.availabilityWrapper.editPost(jsonPostInfo);
     }
 
     getFilteredAvailabilityPosts(jsonFilter) {

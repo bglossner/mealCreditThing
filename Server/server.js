@@ -797,13 +797,13 @@ app.put("/change/availability/", (req, res) => {
     let user_id = Number(req.body.user_id);
     let availability_id = Number(req.body.av_id);
     let token = req.body.token;
-    //console.log("CHANGING");
+    console.log("CHANGING");
 
     // Authentiates if the user has the permission to do an action.
     let authentic = authenticate(token, res, user_id);
     if (authentic != true) {
         // This means that the user does not have permission or that something went wrong
-        console.log("HACKER!!");
+        // console.log("HACKER!!");
         return authentic;
     }
     let avObj = {

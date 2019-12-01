@@ -60,6 +60,12 @@ class ListingModal extends React.Component {
         });
     }
 
+    componentDidUpdate(prevProps) {
+        if ((this.props.open !== prevProps.open) && (prevProps.open === false)) {
+            this.resetModalState();
+        }
+    }
+
     getAllLocations() {
         let retVal = this.props.apiWrapper.getAllLocations();
         retVal
@@ -125,11 +131,12 @@ class ListingModal extends React.Component {
     }
 
     getDefaultModalInfo(startTime = null) {
+        // console.log(this.props.defaultValues);
         return {
-            startTime: startTime,
-            endTime: null,
-            askingPrice: null,
-            location: null,
+            startTime: this.props.defaultValues ? new Date(this.props.defaultValues.start_time) : startTime,
+            endTime: this.props.defaultValues ? new Date(this.props.defaultValues.end_time) : null,
+            askingPrice: this.props.defaultValues ? this.props.defaultValues.asking_price.toString() : null,
+            location: this.props.defaultValues ? this.props.defaultValues.location : null,
         };
     }
 
@@ -205,7 +212,7 @@ class ListingModal extends React.Component {
                 submissionMessage: validationResults.errorMessage
             });
         } else {
-            // this.props.onSubmit(this.state.modalInfo.innerInfo);
+            this.props.onSubmit(this.state.modalInfo.innerInfo, this.props.listKey);
             this.resetModalState();
         }
     }
@@ -250,7 +257,7 @@ class ListingModal extends React.Component {
                             <Input
                                 name="Price"
                                 type="number"
-                                defaultValue={this.props.type === "Edit" ? this.props.initialValues.askingPrice : ""}
+                                defaultValue={this.props.type === "Edit" ? this.getCurrentModalInfo("askingPrice") : ""}
                                 required={true}
                                 onChange={this.handleEventChange("askingPrice")}
                                 forceShowErrors={true}
