@@ -462,6 +462,21 @@ module.exports = class DataAccess {
         return unique;
     }
 
+    async getUserInfo(tableName, primaryKeyName, primaryKeyNum) {
+        let myQuery = `SELECT user_id FROM ${tableName} WHERE ${primaryKeyName} = ${primaryKeyNum}`;
+        let retResult;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                retResult = result.length > 0 ? result[0].user_id : -1;
+            }
+            resolve(result);
+        }));
+        return retResult;
+    }
+
     async changeTable(table_name, col_name, value, id, id_name){
         let myQuery = `UPDATE ${table_name} SET ${col_name} = '${value}' WHERE ${id_name} = '${id}'`;
         let retResult;

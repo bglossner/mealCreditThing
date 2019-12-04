@@ -1,6 +1,7 @@
 import React from "react";
-import { Card, Fade, Fab, Paper } from "@material-ui/core";
+import { Card, Fade, Fab, Paper, Box } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 
 class Post extends React.Component {
     constructor(props) {
@@ -25,13 +26,23 @@ class Post extends React.Component {
             this.props.allowEdits && 
             (<Fade in={this.state.hover} timeout={0}>
                 <Paper className={`${classes.top} ${classes.paper}`} elevation={2}>
-                    <Fab
-                        color="primary"
-                        aria-label="edit"
-                        onClick={() => this.props.editPost(this.props.listKey)}
-                    >
-                        <EditOutlinedIcon />
-                    </Fab>
+                    <Box className={`${classes.horizBox} ${classes.box}`}>
+                        <Fab
+                            color="primary"
+                            className={classes.rightMargin}
+                            aria-label="edit-post"
+                            onClick={() => this.props.editPost(this.props.listKey)}
+                        >
+                            <EditOutlinedIcon />
+                        </Fab>
+                        <Fab
+                            className={classes.red}
+                            aria-label="delete-post"
+                            onClick={() => this.props.deletePost(this.props.listKey)}
+                        >
+                            <DeleteOutlinedIcon />
+                        </Fab>
+                    </Box>
                 </Paper>
             </Fade>)
         );

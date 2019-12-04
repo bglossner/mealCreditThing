@@ -2,6 +2,7 @@ import React from "react";
 import { List, ListItem, Grid, Typography, Box, Fab } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import ListingModal from "../Components/ListingModal";
+import ListingsPost from "../Components/ListingsPost";
 
 class Listings extends React.Component {
     constructor(props) {
@@ -17,6 +18,64 @@ class Listings extends React.Component {
             },
         };
         this.getAllCurrentPosts();
+    }
+
+    setPosts(apiPromise) {
+        apiPromise
+            .then(posts => {
+                let myPosts = [], otherPosts = [];
+                for (let post of posts) {
+                    if (this.props.loginInfo && (post.user_id === this.props.loginInfo.user_id)) {
+                        myPosts.push(post);
+                    } else {
+                        otherPosts.push(post);
+                    }
+                }
+                this.setState({
+                    currPosts: otherPosts.length === 0 ? null : otherPosts,
+                    myPosts: myPosts.length === 0 ? null : myPosts,
+                });
+            })
+            .catch(reason => {
+                console.log(reason)
+            });
+    }
+
+    dealWithSubmissionResult(apiPromise) {
+        apiPromise
+            .then((result) => {
+                console.log(result);
+                let myPosts = this.state.myPosts.slice();
+                transformedJSON.username = this.props.loginInfo.username;
+                if (this.state.modalType === "Add") {
+                    myPosts.push(transformedJSON);
+                } else {
+                    myPosts[listKey] = transformedJSON;
+                }
+                this.setState({
+                    myPosts: myPosts,
+                    modalOpen: false, 
+                });
+            })
+            .catch((reason) => {
+                console.log(reason)
+            });
+    }
+
+    makePostType(postInfo, isMyPosts, listKey) {
+        return (
+            <ListingsPost
+                username={postInfo.username}
+                userId={postInfo.user_id}
+                location={postInfo.location}
+                askingPrice={postInfo.asking_price}
+                startTime={postInfo.start_time}
+                endTime={postInfo.end_time}
+                allowEdits={isMyPosts}
+                listKey={listKey}
+                editPost={this.editPost}
+            />
+        );
     }
 
     mapPosts(posts, classes, isMyPosts) {
@@ -68,6 +127,10 @@ class Listings extends React.Component {
 
     makePostType(postInfo) {
         console.warn("makePost should be implemented in subclass")
+    }
+
+    deletePost(listKey) {
+        console.warn("deletePost should be implemented in subclass")
     }
 
     onSubmit() {

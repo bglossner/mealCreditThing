@@ -797,48 +797,49 @@ app.put("/change/availability/", (req, res) => {
     let user_id = Number(req.body.user_id);
     let availability_id = Number(req.body.av_id);
     let token = req.body.token;
-    console.log("CHANGING");
+    // console.log("CHANGING");
 
     // Authentiates if the user has the permission to do an action.
     let authentic = authenticate(token, res, user_id);
-    if (authentic != true) {
+    if (authentic !== true) {
         // This means that the user does not have permission or that something went wrong
         // console.log("HACKER!!");
         return authentic;
     }
-    let avObj = {
-        asking_price: req.body.asking_price,
-        location: req.body.location,
-        start_time: req.body.start_time,
-        end_time: req.body.end_time
-    };
-    const keys = Object.keys(avObj);
-    for (let i in keys) {
-        let key = keys[i];
-        let value = avObj[key];
-        if (value != null) {
-            wrapper
-                .changeTable(
-                    "Availability",
-                    key,
-                    value,
-                    availability_id,
-                    "av_id"
-                )
-                .then(result => {
-                    if (!result) {
-                        console.log("unsuccessful");
-                        return res.status(500).json({
-                            message: "insertion failure"
-                        });
-                    }
+
+    wrapper.getUserInfo("Availability", "av_id", availability_id)
+        .then((postUserId) => {
+            if (postUserId !== user_id) {
+                // console.log(postUserId);
+                return res.status(403).json({
+                    message: "Permission denied! User not permitted to make change"
                 });
-        }
-    }
-    //console.log("successful");
-    return res.status(200).json({
-        message: "insertion success"
-    });
+            } else {
+                let avObj = {
+                    asking_price: req.body.asking_price,
+                    location: req.body.location,
+                    start_time: req.body.start_time,
+                    end_time: req.body.end_time
+                };
+            
+                const keys = Object.keys(avObj);
+                for (let i in keys) {
+                    let key = keys[i];
+                    let value = avObj[key];
+                    if (value != null) {
+                        wrapper
+                            .changeTable(
+                                "Availability",
+                                key,
+                                value,
+                                availability_id,
+                                "av_id"
+                            )
+                            .then(result => sendResult(res, result));
+                    }
+                }
+            }
+        });
 });
 
 app.put("/change/hunger/", (req, res) => {

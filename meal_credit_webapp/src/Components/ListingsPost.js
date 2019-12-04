@@ -60,7 +60,7 @@ const styles = theme => ({
     }
 });
 
-class AvailabilityPost extends Post {
+class ListingsPost extends Post {
 
     renderFields() {
         const { classes } = this.props;
@@ -107,4 +107,4 @@ class AvailabilityPost extends Post {
     }
 }
 
-export default (withStyles(styles)(AvailabilityPost));
+export default (withStyles(styles)(ListingsPost));

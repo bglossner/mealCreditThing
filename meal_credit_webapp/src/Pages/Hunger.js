@@ -27,10 +27,10 @@ const styles = theme => ({
     },
 });
 
-class Availability extends Listings {
+class Hunger extends Listings {
 
     getTitle() {
-        return `${this.state.modalType} Availability Post`;
+        return `${this.state.modalType} Hunger Post`;
     }
 
     onSubmit = (jsonPostInfo, listKey) => {
@@ -38,10 +38,10 @@ class Availability extends Listings {
         let retPromise;
         if (this.state.modalType === "Add") {
             // console.log(jsonPostInfo);
-            retPromise = this.props.apiWrapper.makeAvailabilityPost(transformedJSON);
+            retPromise = this.props.apiWrapper.makeHungerPost(transformedJSON);
         } else {
             transformedJSON.av_id = this.state.myPosts[listKey].av_id;
-            retPromise = this.props.apiWrapper.editAvailabilityPost(transformedJSON);
+            retPromise = this.props.apiWrapper.editHungerPost(transformedJSON);
         }
 
         super.dealWithSubmissionResult(retPromise);
@@ -49,9 +49,9 @@ class Availability extends Listings {
 
     deletePost = (listKey) => {
         let deletionJSON = {
-            av_id: this.state.myPosts[listKey].av_id,
+            hg_id: this.state.myPosts[listKey].hg_id,
         };
-        let retPromise = this.props.apiWrapper.deleteAvailabilityPost(deletionJSON);
+        let retPromise = this.props.apiWrapper.deleteHungerPost(deletionJSON);
         retPromise
             .then((result) => {
                 console.log(result);
@@ -60,7 +60,7 @@ class Availability extends Listings {
     }
 
     getAllCurrentPosts() {
-        let retVal = this.props.apiWrapper.getAvailabilityPosts();
+        let retVal = this.props.apiWrapper.getHungerPosts();
         super.setPosts(retVal);
     }
 }
@@ -74,4 +74,4 @@ const mapStateToProps = state => {
 export default connect(
     mapStateToProps,
     null
-)(withStyles(styles)(Availability));
+)(withStyles(styles)(Hunger));

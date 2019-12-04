@@ -1,6 +1,7 @@
 import LoginAPIWrapper from "./login_wrapper";
 import RegistrationAPIWrapper from "./registration_wrapper";
 import AvailabilityAPIWrapper from "./availability_wrapper";
+import HungerAPIWrapper from "./hunger_wrapper";
 import GeneralAPIWrapper from "./general_wrapper";
 
 export default class APIWrapper {
@@ -10,6 +11,7 @@ export default class APIWrapper {
         this.loginWrapper = new LoginAPIWrapper(this.baseURL);
         this.registerWrapper = new RegistrationAPIWrapper(this.baseURL);
         this.availabilityWrapper = new AvailabilityAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
+        this.hungerWrapper = new HungerAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
         this.generalWrapper = new GeneralAPIWrapper(this.baseURL);
         this.store = store;
     }
@@ -23,6 +25,10 @@ export default class APIWrapper {
         switch (status) {
             case 401: {
                 errorMessage = "Invalid user information. Are you logged in? Consider relogging.";
+                break
+            },
+            case 403: {
+                errorMessage = "You cannot change/delete this post!";
                 break
             }
             case 500: {
@@ -109,8 +115,16 @@ export default class APIWrapper {
         return true;
     }
 
-    getAvailabilityPosts() {
-        return this.availabilityWrapper.getAllPosts();
+    combineLoginInfoForRequest(json) {
+        let currLoginInfo = this.getUserInformation();
+        return Object.assign({
+            user_id: currLoginInfo.user_id,
+            token: currLoginInfo.token
+        }, json);
+    }
+
+    getAllLocations() {
+        return this.generalWrapper.getAllLocations();
     }
 
     getTransformedJSON(jsonPostInfo) {
@@ -128,6 +142,10 @@ export default class APIWrapper {
         }
     }
 
+    getAvailabilityPosts() {
+        return this.availabilityWrapper.getAllPosts();
+    }
+
     makeAvailabilityPost(jsonPostInfo) {
         return this.availabilityWrapper.makeNewPost(jsonPostInfo);
     }
@@ -140,11 +158,35 @@ export default class APIWrapper {
 
     }
 
-    getAllLocations() {
-        return this.generalWrapper.getAllLocations();
-    }
-
     getMyAvailabilityPosts(myID) {
         return this.availabilityWrapper.getUserPosts(myID);
+    }
+
+    deleteAvailabilityPost(avId) {
+        return this.availabilityWrapper.deletePost(this.combineLoginInfoForRequest({ av_id: avId }));
+    }
+
+    getHungerPosts() {
+        return this.hungerWrapper.getAllPosts();
+    }
+
+    makeHungerPost(jsonPostInfo) {
+        return this.hungerWrapper.makeNewPost(jsonPostInfo);
+    }
+
+    editHungerPost(jsonPostInfo) {
+        return this.hungerWrapper.editPost(jsonPostInfo);
+    }
+
+    getFilteredHungerPosts(jsonFilter) {
+
+    }
+
+    getMyHungerPosts(myID) {
+        return this.hungerWrapper.getUserPosts(myID);
+    }
+
+    deleteHungerPost(hgId) {
+        return this.hungerWrapper.deletePost(this.combineLoginInfoForRequest({ hg_id: hgId }));
     }
 }
