@@ -20,7 +20,7 @@ function parseDateTime(dateTime) {
     return [year, month, day, hour, minute, second];
 }
 
-function makeUsableDateTimeFromServer(serverDateTime) {
+function parseJSDateObject(serverDateTime) {
     let periodIndex = serverDateTime.indexOf(".");
     return serverDateTime.substring(0, periodIndex);
 }
@@ -47,7 +47,7 @@ function getCurrentDayOffset() {
 function getHourOffset(serverDateTime, hourOffsetAhead) {
     const MS_PER_HOUR = 3600000;
     let timeOffset = hourOffsetAhead * MS_PER_HOUR;
-    serverDateTime = makeUsableDateTimeFromServer(serverDateTime.toISOString());
+    serverDateTime = parseJSDateObject(serverDateTime.toISOString());
     //console.log(serverDateTime);
     let firstDate = (new Date(serverDateTime)).getTime();
     //console.log(firstDate - timeOffset);
@@ -59,7 +59,7 @@ function getHourOffset(serverDateTime, hourOffsetAhead) {
 module.exports = {
     makeDateTime,
     parseDateTime,
-    makeUsableDateTimeFromServer,
+    parseJSDateObject,
     getCurrentDate,
     getCurrentDayOffset,
     getHourOffset

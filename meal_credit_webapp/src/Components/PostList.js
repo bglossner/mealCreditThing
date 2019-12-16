@@ -1,14 +1,14 @@
+import { List, ListItem, Typography, withStyles } from "@material-ui/core";
+
+import ListingsPost from "./ListingsPost";
 import React from "react";
 import ReactLoading from "react-loading";
-import { List, ListItem,Typography, withStyles } from "@material-ui/core";
-import ListingsPost from "./ListingsPost";
-import PostListItem from "./PostListItem"
 
 const styles = theme => ({
     postList: {
         backgroundColor: theme.palette.primary.secondary,
         width: "30%",
-        marginTop: "1%",
+        marginTop: "1%"
     },
     listHeader: {
         display: "flex",
@@ -17,10 +17,10 @@ const styles = theme => ({
     },
     listItem: {
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "center"
     },
     italicize: {
-        fontStyle: "italic",
+        fontStyle: "italic"
     }
 });
 
@@ -32,13 +32,13 @@ class PostList extends React.Component {
 
     addToPostRefs = ref => {
         this.postRefs.push(ref);
-    }
+    };
 
-    moveDownTo = (postNum) => {
+    moveDownTo = postNum => {
         console.log("Post num:", postNum);
         console.log(this.postRef);
         this.postRefs[postNum].scrollHere();
-    }
+    };
 
     makePostType(postInfo, isMyPosts, listKey) {
         return (
@@ -71,9 +71,7 @@ class PostList extends React.Component {
     */
 
     renderLoader() {
-        return (
-            <ReactLoading type="spinningBubbles" color="#000" />
-        );
+        return <ReactLoading type="spinningBubbles" color="#000" />;
     }
 
     mapPosts(posts, isMyPosts, classes) {
@@ -83,14 +81,14 @@ class PostList extends React.Component {
                 //console.log(step);
                 return (
                     <ListItem className={classes.listItem} key={step} button>
-                        { this.makePostType(postInfo, isMyPosts, step) }
+                        {this.makePostType(postInfo, isMyPosts, step)}
                     </ListItem>
                 );
             });
         } else if (posts !== null && posts.length === 0) {
             // console.log("HERE2")
             return (
-                <ListItem key={-1} className={classes.listItem} >
+                <ListItem key={-1} className={classes.listItem}>
                     <Typography className={classes.italicize} variant="h6">
                         Sorry, no current posts
                     </Typography>
@@ -101,7 +99,7 @@ class PostList extends React.Component {
         // console.log("HERE")
         return (
             <ListItem key={-1} className={classes.listItem}>
-                { this.renderLoader() }
+                {this.renderLoader()}
             </ListItem>
         );
     }
@@ -112,12 +110,12 @@ class PostList extends React.Component {
             <List
                 subheader={
                     <Typography className={classes.listHeader} variant="h4">
-                        { this.props.title }
+                        {this.props.title}
                     </Typography>
                 }
                 className={classes.postList}
             >
-                { this.mapPosts(this.props.items, this.props.isMyPosts, classes) }
+                {this.mapPosts(this.props.items, this.props.isMyPosts, classes)}
             </List>
         );
     }

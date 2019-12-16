@@ -89,27 +89,23 @@ app.get("/", function(req, res) {
 
 app.get("/availability-list", (req, res) => {
     //get all availability data
-    wrapper
-        .getAvailabilityList(-1, "", "", "", "", -1)
-        .then(result => {
-            // console.log(result)
-            return res.json({
-                result: result
-            });
+    wrapper.getAvailabilityList(-1, "", "", "", "", -1).then(result => {
+        // console.log(result)
+        return res.json({
+            result: result
         });
+    });
     // What about error handling? Catch?
 });
 
 app.get("/hunger-list", (req, res) => {
     //get all availability data
-    wrapper
-        .getHungerList(-1, "", "", "", "", -1)
-        .then(result => {
-            // console.log(result)
-            return res.json({
-                result: result
-            });
+    wrapper.getHungerList(-1, "", "", "", "", -1).then(result => {
+        // console.log(result)
+        return res.json({
+            result: result
         });
+    });
     // What about error handling? Catch?
 });
 
@@ -128,7 +124,8 @@ app.get("/availability-list/:userId", (req, res) => {
 });
 
 app.get("/locations", (req, res) => {
-    wrapper.getAllLocations()
+    wrapper
+        .getAllLocations()
         .then(result => {
             res.status(200).json({
                 result: result
@@ -721,8 +718,8 @@ app.post("/create/availability/", function(req, res) {
     let user_id = req.body.user_id;
     let asking_price = req.body.asking_price;
     let location = req.body.location;
-    let start_time = req.body.start_time;
-    let end_time = req.body.end_time;
+    let start_time = dateParser.parseJSDateObject(req.body.start_time);
+    let end_time = dateParser.parseJSDateObject(req.body.end_time);
     let token = req.body.token;
     /*console.log(user_id + " " + asking_price + " " + location + " " + start_time + " " + end_time);
     res.json({
@@ -737,11 +734,13 @@ app.post("/create/availability/", function(req, res) {
         return authentic;
     }
 
-    console.log(Number(user_id),
-    Number(asking_price),
-    location,
-    start_time,
-    end_time);
+    console.log(
+        Number(user_id),
+        Number(asking_price),
+        location,
+        start_time,
+        end_time
+    );
 
     wrapper
         .postAvailabilityObject(
@@ -761,13 +760,13 @@ app.post("/create/hunger/", function(req, res) {
     let user_id = req.body.user_id;
     let max_price = req.body.max_price;
     let location = req.body.location;
-    let start_time = req.body.start_time;
-    let end_time = req.body.end_time;
+    let start_time = dateParser.parseJSDateObject(req.body.start_time);
+    let end_time = dateParser.parseJSDateObject(req.body.end_time);
     let token = req.body.token;
 
     // Authentiates if the user has the permission to do an action.
     let authentic = authenticate(token, res, user_id);
-    if (authentic != true){
+    if (authentic != true) {
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }
@@ -794,10 +793,7 @@ app.post("/user/", function(req, res) {
     }
 
     wrapper
-        .getUsersFromIDs(
-            Number(user_id),
-            1
-        )
+        .getUsersFromIDs(Number(user_id), 1)
         .then(result => sendResult(res, result));
 });
 
@@ -821,12 +817,14 @@ app.put("/change/availability/", (req, res) => {
         return authentic;
     }
 
-    wrapper.getUserInfo("Availability", "av_id", availability_id)
-        .then((postUserId) => {
+    wrapper
+        .getUserInfo("Availability", "av_id", availability_id)
+        .then(postUserId => {
             if (postUserId !== user_id) {
                 // console.log(postUserId);
                 return res.status(403).json({
-                    message: "Permission denied! User not permitted to make change"
+                    message:
+                        "Permission denied! User not permitted to make change"
                 });
             } else {
                 let avObj = {
@@ -846,9 +844,11 @@ app.put("/change/availability/", (req, res) => {
                     .catch(reason => sendResult(res, false));
             }
         })
-        .catch(reason => res.status(500).json({
-            message: "server edit error"
-        }));
+        .catch(reason =>
+            res.status(500).json({
+                message: "server edit error"
+            })
+        );
 });
 
 app.put("/change/hunger/", (req, res) => {
@@ -865,12 +865,14 @@ app.put("/change/hunger/", (req, res) => {
         return authentic;
     }
 
-    wrapper.getUserInfo("Hunger", "hg_id", hunger_id)
-        .then((postUserId) => {
+    wrapper
+        .getUserInfo("Hunger", "hg_id", hunger_id)
+        .then(postUserId => {
             if (postUserId !== user_id) {
                 // console.log(postUserId);
                 return res.status(403).json({
-                    message: "Permission denied! User not permitted to make change"
+                    message:
+                        "Permission denied! User not permitted to make change"
                 });
             } else {
                 let hgObj = {
@@ -880,19 +882,16 @@ app.put("/change/hunger/", (req, res) => {
                     end_time: req.body.end_time
                 };
                 wrapper
-                    .changeTable(
-                        "Hunger",
-                        hgObj,
-                        hunger_id,
-                        "hg_id"
-                    )
+                    .changeTable("Hunger", hgObj, hunger_id, "hg_id")
                     .then(result => sendResult(res, result))
                     .catch(reason => console.log(reason));
             }
         })
-        .catch(reason => res.status(500).json({
-            message: "server edit error"
-        }));
+        .catch(reason =>
+            res.status(500).json({
+                message: "server edit error"
+            })
+        );
 });
 
 app.put("/change/user/", (req, res) => {
