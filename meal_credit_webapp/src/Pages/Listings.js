@@ -32,8 +32,8 @@ class Listings extends React.Component {
                     }
                 }
                 this.setState({
-                    currPosts: otherPosts.length === 0 ? null : otherPosts,
-                    myPosts: myPosts.length === 0 ? null : myPosts,
+                    currPosts: otherPosts.length === 0 ? [] : otherPosts,
+                    myPosts: myPosts.length === 0 ? [] : myPosts,
                 });
             })
             .catch(reason => {
