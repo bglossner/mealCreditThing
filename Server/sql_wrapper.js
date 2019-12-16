@@ -56,7 +56,7 @@ module.exports = class DataAccess {
             }
         }
 
-        if(price) {
+        if (price >= 0) {
             if(who || where || startTime || endTime) {
                 myQuery += ` AND asking_price <= ${price}`;
             }
@@ -65,7 +65,7 @@ module.exports = class DataAccess {
             }
         }
 
-        if (sort){
+        if (sort) {
             myQuery += ` ORDER BY ${sort} ASC`;
         }
         
@@ -211,71 +211,82 @@ module.exports = class DataAccess {
         return users;
     }
 
-    // Gives a list of people who don't have a match yet
-    async getNeedsList(limit, location, username, start_time, end_time, price){
+    async getHungerList(size, where, who, startTime, endTime, price, sort) {
         let users = [];
-        let myQuery = `SELECT * FROM Hunger`;
-        if(username != "") {
-            myQuery = `SELECT * FROM Hunger INNER JOIN Users ON Hunger.user_id = Users.user_id 
-            WHERE Users.username = '${username}'`;
+        let myQuery = `SELECT a.*, u.username FROM Hunger AS a INNER JOIN Users AS u ON a.user_id = u.user_id`;
+
+        if(who != "") {
+            myQuery = `SELECT a.*, u.username FROM Hunger a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username = '${who}'`;
         }
-        if(location != "") {
-            if (who != ""){
-                myQuery += ` AND location = '${location.toLowerCase()}'`;
+
+        if(where != "") {
+            if (who != "") {
+                myQuery += ` AND location = '${where.toLowerCase()}'`;
             }
             else{
-                myQuery += ` WHERE location = '${location.toLowerCase()}'`;
+                myQuery += ` WHERE location = '${where.toLowerCase()}' OR location = 'anywhere'`;
             }
-            
         }
 
-        if(startTime != "" || endTime != "") {
-            if(who != "" || where != "") {
-                if(startTime != "") {
+        if(startTime || endTime) {
+            if(who || where) {
+                if(startTime) {
                     myQuery += ` AND end_time >= '${startTime}'`;
                 }
-                if(endTime != "") {
+                if(endTime) {
                     myQuery += ` AND start_time <= '${endTime}'`;
                 }
             }
             else {
-                if(startTime != "") {
+                if(startTime) {
                     myQuery += ` WHERE end_time >= '${endTime}'`;
                 }
-                if(endTime != "" && !(startTime != "")) {
+                if(endTime && !startTime) {
                     myQuery += ` WHERE start_time <= '${startTime}'`;
                 }
-                else if(endTime != "") {
+                else if(endTime) {
                     myQuery += ` AND start_time <= '${endTime}'`;
                 }
             }
         }
 
-        if(price != 0) {
-            if(start_time != "" || location != "" || end_time != "") {
-                myQuery += ` AND max_price >= ${price}`;
+        if (price >= 0) {
+            if(who || where || startTime || endTime) {
+                myQuery += ` AND max_price <= ${price}`;
             }
             else {
-                myQuery += ` WHERE max_price >= ${price}`;
+                myQuery += ` WHERE max_price <= ${price}`;
             }
         }
 
-        if(limit != -1) {
-            myQuery += ` LIMIT ${limit}`;
+        if (sort) {
+            myQuery += ` ORDER BY ${sort} ASC`;
         }
+        
+        if(size != -1) {
+            myQuery += ` LIMIT ${size}`;
+        }
+
+        //console.log(myQuery);
 
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
                 reject(err);
             }
-            else {
+            else {   
                 for(let element of result) {
                     let userRet = {
+                        "hg_id" : element.hg_id,
                         "user_id" : element.user_id,
+                        "username" : element.username,
+                        "max_price" : element.max_price,
                         "location" : element.location,
-                        "start_time": element.start_time,
-                        "end_time": element.end_time
+                        "start_time" : element.start_time,
+                        "end_time" : element.end_time
                     };
+                    //console.log(userRet.start_time);
+                    userRet.start_time = dateParser.getHourOffset(userRet.start_time, timeOff);
+                    userRet.end_time = dateParser.getHourOffset(userRet.end_time, timeOff);
                     users.push(userRet);
                 }
                 resolve(users);
@@ -299,8 +310,6 @@ module.exports = class DataAccess {
         }));
         return users;
     }
-    
-
 
     async postUserObject(firstname, lastname, username, password, phonenumber = null, email = null) {
         let myQuery = "";
@@ -477,8 +486,15 @@ module.exports = class DataAccess {
         return retResult;
     }
 
-    async changeTable(table_name, col_name, value, id, id_name){
-        let myQuery = `UPDATE ${table_name} SET ${col_name} = '${value}' WHERE ${id_name} = '${id}'`;
+    async changeTable(table_name, editObject, id, id_name) {
+        let myQuery = `UPDATE ${table_name} SET `;
+        for (let key in editObject) {
+            if (editObject[key] !== null) {
+                myQuery += `${key} = '${editObject[key]}', `;
+            }
+        }
+        myQuery = myQuery.substring(0, myQuery.length - 2) + ` WHERE ${id_name} = ${id};`;
+        console.log(myQuery);
         let retResult;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {

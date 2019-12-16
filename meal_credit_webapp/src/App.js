@@ -7,7 +7,8 @@ import {
 } from "react-router-dom";
 
 import Home from "./Pages/Home";
-import Availability from "./Pages/Availability"
+import Availability from "./Pages/Availability";
+import Hunger from "./Pages/Hunger"
 import Login from "./Pages/Login";
 import PropTypes from "prop-types";
 import Register from "./Pages/Register";
@@ -57,6 +58,15 @@ class App extends Component {
                     <Route path="/availability">
                         {this.props.userLoginInfo ? (
                             <Availability
+                                apiWrapper={this.props.apiWrapper}
+                            />
+                        ) : (
+                            <Redirect to="/login" />
+                        )}
+                    </Route>
+                    <Route path="/hunger">
+                        {this.props.userLoginInfo ? (
+                            <Hunger
                                 apiWrapper={this.props.apiWrapper}
                             />
                         ) : (

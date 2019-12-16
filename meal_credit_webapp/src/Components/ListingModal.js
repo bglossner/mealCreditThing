@@ -40,12 +40,6 @@ class ListingModal extends React.Component {
             locations: null,
             errorStates: [false, false, false],
         };
-        this.fieldTransform = {
-            "askingPrice" : "price",
-            "endTime" : "end date/time",
-            "location" : "location",
-            "startTIme" : "start date/time"
-        }
         this.getAllLocations();
     }
 
@@ -105,7 +99,7 @@ class ListingModal extends React.Component {
             }
         }
         let tempStates = this.state.errorStates.slice();
-        tempStates[1] = this.validateAskingPrice().valid === false;
+        tempStates[1] = this.validatePrice().valid === false;
         for (let state of tempStates) {
             if (state === true) {
                 return {
@@ -132,15 +126,18 @@ class ListingModal extends React.Component {
 
     getDefaultModalInfo(startTime = null) {
         // console.log(this.props.defaultValues);
-        return {
+        let defaultObj = {
             startTime: this.props.defaultValues ? new Date(this.props.defaultValues.start_time) : startTime,
             endTime: this.props.defaultValues ? new Date(this.props.defaultValues.end_time) : null,
-            askingPrice: this.props.defaultValues ? this.props.defaultValues.asking_price.toString() : null,
             location: this.props.defaultValues ? this.props.defaultValues.location : null,
         };
+        defaultObj[this.props.priceFieldName] = this.props.defaultValues ? 
+            this.props.defaultValues[this.props.serverPriceFieldName].toString() : null;
+        return defaultObj;
     }
 
     getCurrentModalInfo(field) {
+        // console.log(field, this.state.modalInfo.innerInfo[field]);
         return this.state.modalInfo.innerInfo ? this.state.modalInfo.innerInfo[field] : null;
     }
 
@@ -174,8 +171,9 @@ class ListingModal extends React.Component {
         return newArray;
     }
 
-    validateAskingPrice() {
-        const price = this.getCurrentModalInfo("askingPrice");
+    validatePrice() {
+        const price = this.getCurrentModalInfo(this.props.priceFieldName);
+        console.log(this.props.priceFieldName);
         if (price) {
             const numPrice = Number(price);
             if (numPrice > 20) {
@@ -215,6 +213,10 @@ class ListingModal extends React.Component {
             this.props.onSubmit(this.state.modalInfo.innerInfo, this.props.listKey);
             this.resetModalState();
         }
+    }
+
+    getDefaultPrice() {
+        console.warn("getDefaultPrice should be defined in subclass");
     }
     
     render() {
@@ -257,12 +259,12 @@ class ListingModal extends React.Component {
                             <Input
                                 name="Price"
                                 type="number"
-                                defaultValue={this.props.type === "Edit" ? this.getCurrentModalInfo("askingPrice") : ""}
+                                defaultValue={this.props.type === "Edit" ? this.getCurrentModalInfo(this.props.priceFieldName) : ""}
                                 required={true}
-                                onChange={this.handleEventChange("askingPrice")}
+                                onChange={this.handleEventChange(this.props.priceFieldName)}
                                 forceShowErrors={true}
                                 margin="none"
-                                checkInput={this.validateAskingPrice()}
+                                checkInput={this.validatePrice()}
                             />
                         </Box>
                         <Button

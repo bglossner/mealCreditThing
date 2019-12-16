@@ -1,8 +1,8 @@
 import React from "react";
-import { List, ListItem, Grid, Typography, Box, Fab } from "@material-ui/core";
+import { List, Grid, Typography, Box, Fab } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import ListingModal from "../Components/ListingModal";
-import ListingsPost from "../Components/ListingsPost";
+import PostList from "../Components/PostList";
 
 class Listings extends React.Component {
     constructor(props) {
@@ -37,11 +37,15 @@ class Listings extends React.Component {
                 });
             })
             .catch(reason => {
-                console.log(reason)
+                console.log("ERROR", reason)
+                this.setState({
+                    currPosts: [],
+                    myPosts: [],
+                });
             });
     }
 
-    dealWithSubmissionResult(apiPromise) {
+    dealWithSubmissionResult(apiPromise, transformedJSON, listKey) {
         apiPromise
             .then((result) => {
                 console.log(result);
@@ -62,35 +66,7 @@ class Listings extends React.Component {
             });
     }
 
-    makePostType(postInfo, isMyPosts, listKey) {
-        return (
-            <ListingsPost
-                username={postInfo.username}
-                userId={postInfo.user_id}
-                location={postInfo.location}
-                askingPrice={postInfo.asking_price}
-                startTime={postInfo.start_time}
-                endTime={postInfo.end_time}
-                allowEdits={isMyPosts}
-                listKey={listKey}
-                editPost={this.editPost}
-            />
-        );
-    }
-
-    mapPosts(posts, classes, isMyPosts) {
-        if (posts !== null) {
-            return posts.map((postInfo, step) => {
-                return (
-                    <ListItem className={classes.listItem} key={step} button>
-                        { this.makePostType(postInfo, isMyPosts, step) }
-                    </ListItem>
-                );
-            });
-        }
-
-        return null;
-    }
+    
 
     onModalClose = () => {
         this.setState({
@@ -125,10 +101,6 @@ class Listings extends React.Component {
         console.warn("getAllCurrentPosts should be implemented in subclass")
     }
 
-    makePostType(postInfo) {
-        console.warn("makePost should be implemented in subclass")
-    }
-
     deletePost(listKey) {
         console.warn("deletePost should be implemented in subclass")
     }
@@ -153,30 +125,23 @@ class Listings extends React.Component {
                     justify="center"
                     alignItems="flex-start"
                 >
-                    <List
-                        subheader={
-                            <Typography className={classes.listHeader} variant="h4">
-                                Latest Posts
-                            </Typography>
-                        }
-                        className={classes.postList}
-                    >
-                        { this.mapPosts(this.state.currPosts, classes, false) }
-                    </List>
-                    <List
-                        subheader={
-                            <Box className={classes.listHeader}>
-                                <Typography variant="h4">
-                                    My Posts
-                                </Typography>
-                            </Box>
-                        }
-                        className={classes.postList}
-                    >
-                        { this.mapPosts(this.state.myPosts, classes, true) }
-                    </List>
+                    <PostList
+                        items={this.state.currPosts}
+                        isMyPosts={false}
+                        title="Latest Posts"
+                        priceName={this.getModalSpecifics().serverPriceFieldName}
+                    />
+                    <PostList
+                        items={this.state.myPosts}
+                        isMyPosts={true}
+                        title="My Posts"
+                        editPost={this.editPost}
+                        deletePost={this.deletePost}
+                        priceName={this.getModalSpecifics().serverPriceFieldName}
+                    />
                 </Grid>
                 <ListingModal
+                    {...this.getModalSpecifics()}
                     open={this.state.modalOpen}
                     onClose={this.onModalClose}
                     type={this.state.modalType}

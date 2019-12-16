@@ -85,7 +85,7 @@ class TopNavbar extends React.Component {
                         <Navlink 
                             title="Hunger Listings"
                             onClick={() => this.handleClick(1)}
-                            to="/home"
+                            to="/hunger"
                             isActive={this.state.active === 1}
                             classes={classes}
                         />

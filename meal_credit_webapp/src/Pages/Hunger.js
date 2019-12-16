@@ -4,23 +4,10 @@ import { withStyles } from "@material-ui/core";
 
 const styles = theme => ({
     toolbar: theme.mixins.toolbar,
-    postList: {
-        backgroundColor: theme.palette.primary.secondary,
-        width: "30%",
-        marginTop: "1%",
-    },
-    listItem: {
-        display: "flex",
-        justifyContent: "center",
-    },
-    listHeader: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-    },
     addButton: {
-        position: "sticky",
+        position: "absolute",
         bottom: "2vh",
+        right: 0,
         display: "flex",
         justifyContent: "flex-end",
         marginRight: "2vh"
@@ -44,7 +31,7 @@ class Hunger extends Listings {
             retPromise = this.props.apiWrapper.editHungerPost(transformedJSON);
         }
 
-        super.dealWithSubmissionResult(retPromise);
+        super.dealWithSubmissionResult(retPromise, transformedJSON, listKey);
     };
 
     deletePost = (listKey) => {
@@ -62,6 +49,13 @@ class Hunger extends Listings {
     getAllCurrentPosts() {
         let retVal = this.props.apiWrapper.getHungerPosts();
         super.setPosts(retVal);
+    }
+
+    getModalSpecifics() {
+        return {
+            priceFieldName: "maxPrice",
+            serverPriceFieldName: "max_price",
+        };
     }
 }
 

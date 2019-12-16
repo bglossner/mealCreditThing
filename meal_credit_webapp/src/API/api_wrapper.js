@@ -26,7 +26,7 @@ export default class APIWrapper {
             case 401: {
                 errorMessage = "Invalid user information. Are you logged in? Consider relogging.";
                 break
-            },
+            }
             case 403: {
                 errorMessage = "You cannot change/delete this post!";
                 break
@@ -123,23 +123,27 @@ export default class APIWrapper {
         }, json);
     }
 
-    getAllLocations() {
-        return this.generalWrapper.getAllLocations();
-    }
-
     getTransformedJSON(jsonPostInfo) {
-        let currLoginInfo = this.getUserInformation();
         if (jsonPostInfo.startTime === null) {
             jsonPostInfo.startTime = new Date();
         }
-        return {
-            asking_price: Number(jsonPostInfo.askingPrice),
+        let tempJSON = {
             location: jsonPostInfo.location,
             end_time: jsonPostInfo.endTime.toISOString(),
             start_time: jsonPostInfo.startTime.toISOString(),
-            user_id: currLoginInfo.user_id,
-            token: currLoginInfo.token
         }
+
+        if ('askingPrice' in jsonPostInfo) {
+            tempJSON["asking_price"] = Number(jsonPostInfo.askingPrice);
+        } else {
+            tempJSON["max_price"] = Number(jsonPostInfo.maxPrice);
+        }
+
+        return this.combineLoginInfoForRequest(tempJSON);
+    }
+
+    getAllLocations() {
+        return this.generalWrapper.getAllLocations();
     }
 
     getAvailabilityPosts() {

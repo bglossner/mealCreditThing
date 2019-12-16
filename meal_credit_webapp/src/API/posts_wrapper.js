@@ -6,6 +6,10 @@ export default class PostsAPIWrapper {
         // console.log(this.getDefaultStatusResponse(401))
     }
 
+    /* getTransformedJSON(jsonPostInfo) {
+        console.warn("getTransformedJSON should be implemented in subclass");
+    } */
+
     getAllPosts() {
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();

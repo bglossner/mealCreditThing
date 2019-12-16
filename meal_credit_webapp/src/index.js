@@ -11,7 +11,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
 
-
+console.log("Running React: " + React.version)
 const store = reducers;
 const cookieWrapper = new CookiesWrapper();
 const retrievedLoginInfo = cookieWrapper.retrieveCookieIfExists(

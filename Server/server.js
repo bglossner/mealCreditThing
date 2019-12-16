@@ -90,7 +90,20 @@ app.get("/", function(req, res) {
 app.get("/availability-list", (req, res) => {
     //get all availability data
     wrapper
-        .getAvailabilityList(-1, false, false, false, false, false)
+        .getAvailabilityList(-1, "", "", "", "", -1)
+        .then(result => {
+            // console.log(result)
+            return res.json({
+                result: result
+            });
+        });
+    // What about error handling? Catch?
+});
+
+app.get("/hunger-list", (req, res) => {
+    //get all availability data
+    wrapper
+        .getHungerList(-1, "", "", "", "", -1)
         .then(result => {
             // console.log(result)
             return res.json({
@@ -685,6 +698,7 @@ function authenticate(token, res, user_id) {
 }
 
 function sendResult(res, result) {
+    // console.log(result);
     if (result.retResult || result === true) {
         if (result.retResult) {
             return res.status(200).json({
@@ -752,11 +766,11 @@ app.post("/create/hunger/", function(req, res) {
     let token = req.body.token;
 
     // Authentiates if the user has the permission to do an action.
-    /*let authentic = authenticate(token, res, user_id);
+    let authentic = authenticate(token, res, user_id);
     if (authentic != true){
         // This means that the user does not have permission or that something went wrong
         return authentic;
-    }*/
+    }
 
     wrapper
         .postHungerObject(
@@ -821,25 +835,20 @@ app.put("/change/availability/", (req, res) => {
                     start_time: req.body.start_time,
                     end_time: req.body.end_time
                 };
-            
-                const keys = Object.keys(avObj);
-                for (let i in keys) {
-                    let key = keys[i];
-                    let value = avObj[key];
-                    if (value != null) {
-                        wrapper
-                            .changeTable(
-                                "Availability",
-                                key,
-                                value,
-                                availability_id,
-                                "av_id"
-                            )
-                            .then(result => sendResult(res, result));
-                    }
-                }
+                wrapper
+                    .changeTable(
+                        "Availability",
+                        avObj,
+                        availability_id,
+                        "av_id"
+                    )
+                    .then(result => sendResult(res, result))
+                    .catch(reason => sendResult(res, false));
             }
-        });
+        })
+        .catch(reason => res.status(500).json({
+            message: "server edit error"
+        }));
 });
 
 app.put("/change/hunger/", (req, res) => {
@@ -855,33 +864,35 @@ app.put("/change/hunger/", (req, res) => {
         console.log("HACKER!!");
         return authentic;
     }
-    let avObj = {
-        max_price: req.body.max_price,
-        location: req.body.location,
-        start_time: req.body.start_time,
-        end_time: req.body.end_time
-    };
-    const keys = Object.keys(avObj);
-    for (let i in keys) {
-        let key = keys[i];
-        let value = avObj[key];
-        if (value != null) {
-            wrapper
-                .changeTable("Hunger", key, value, hunger_id, "hg_id")
-                .then(result => {
-                    if (!result) {
-                        console.log("unsuccessful");
-                        return res.status(500).json({
-                            message: "insertion failure"
-                        });
-                    }
+
+    wrapper.getUserInfo("Hunger", "hg_id", hunger_id)
+        .then((postUserId) => {
+            if (postUserId !== user_id) {
+                // console.log(postUserId);
+                return res.status(403).json({
+                    message: "Permission denied! User not permitted to make change"
                 });
-        }
-    }
-    //console.log("successful");
-    return res.status(200).json({
-        message: "insertion success"
-    });
+            } else {
+                let hgObj = {
+                    max_price: req.body.asking_price,
+                    location: req.body.location,
+                    start_time: req.body.start_time,
+                    end_time: req.body.end_time
+                };
+                wrapper
+                    .changeTable(
+                        "Hunger",
+                        hgObj,
+                        hunger_id,
+                        "hg_id"
+                    )
+                    .then(result => sendResult(res, result))
+                    .catch(reason => console.log(reason));
+            }
+        })
+        .catch(reason => res.status(500).json({
+            message: "server edit error"
+        }));
 });
 
 app.put("/change/user/", (req, res) => {

@@ -35,7 +35,7 @@ const styles = theme => ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "84%",
+        width: "85%",
         height: "88%",
         left: "50%",
         top: "50%",
@@ -44,7 +44,7 @@ const styles = theme => ({
     },
     paper: {
         boxShadow: "none",
-        padding: "1% 5% 2%",
+        padding: "1% 5%",
     },
     box: {
         width: "80%",
@@ -66,8 +66,8 @@ class ListingsPost extends Post {
         const { classes } = this.props;
         // console.log(this.props);
         const timeLeft = dateWrapper.getTimeFromNow(this.props.endTime);
-        const comp = Math.round(this.props.askingPrice);
-        const priceListing = this.props.askingPrice === comp ? comp : this.props.askingPrice.toFixed(2);
+        const comp = Math.round(this.props.price);
+        const priceListing = this.props.price === comp ? comp : this.props.price.toFixed(2);
         return (
             <Grid
                 container

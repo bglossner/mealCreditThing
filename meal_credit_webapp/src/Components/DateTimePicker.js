@@ -21,7 +21,7 @@ class DateTimePicker extends React.Component {
                     <KeyboardDatePicker
                         {...dateError}
                         margin="normal"
-                        id="date-picker-dialog"
+                        id={`date-picker-dialog-${this.props.label.toLowerCase()}`}
                         label={`${this.props.label} Date`}
                         format="MM/dd/yyyy"
                         value={this.props.selectedDate}
@@ -33,7 +33,7 @@ class DateTimePicker extends React.Component {
                     <KeyboardTimePicker
                         {...timeError}
                         margin="normal"
-                        id="time-picker"
+                        id={`date-picker-dialog-${this.props.label.toLowerCase()}`}
                         label={`${this.props.label} Time`}
                         value={this.props.selectedDate}
                         onChange={this.props.handleDateChange}

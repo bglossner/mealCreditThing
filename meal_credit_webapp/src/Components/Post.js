@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Fade, Fab, Paper, Box } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 class Post extends React.Component {
     constructor(props) {
@@ -48,11 +49,23 @@ class Post extends React.Component {
         );
     }
 
-
+    /*
+    <Box className={`${classes.fullBox} ${classes.horizBox}`}>
+        <Fab
+            className={classes.rightMargin}
+            aria-label="move-down"
+            onClick={() => this.props.moveDownTo(this.props.listKey + 5)}
+        >
+            <KeyboardArrowDownIcon />
+        </Fab>
+    </Box>
+    */
+    
     render() {
         const { classes } = this.props;
+        // console.log("dw", this.props.listKey)
         return (
-            <Card 
+            <Card
                 className={classes.card}
                 raised={this.state.hover}
                 onMouseOver={() => this.setHover(true)}
