@@ -494,7 +494,7 @@ module.exports = class DataAccess {
             }
         }
         myQuery = myQuery.substring(0, myQuery.length - 2) + ` WHERE ${id_name} = ${id};`;
-        console.log(myQuery);
+        // console.log(myQuery);
         let retResult;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
