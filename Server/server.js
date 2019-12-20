@@ -713,6 +713,7 @@ function sendResult(res, result) {
         });
     }
 }
+
 // Creates a new availability object
 app.post("/create/availability/", function(req, res) {
     let user_id = req.body.user_id;
@@ -797,6 +798,31 @@ app.post("/user/", function(req, res) {
         .then(result => sendResult(res, result));
 });
 
+function checkCorrectUser(table, id_name, id, user_id, res, onSuccess) {
+    wrapper.getUserInfo(
+        table,
+        id_name,
+        id
+    ).
+    then(postUserId => {
+        if (postUserId !== user_id) {
+            console.log("illegal user: ", postUserId);
+            return res.status(403).json({
+                message:
+                    "Permission denied! User not permitted to make change"
+            });
+        } else {
+            onSuccess();
+        }
+    })
+    .catch(reason => {
+        console.log(reason);
+        res.status(500).json({
+            message: "server edit error"
+        })
+    });
+}
+
 /** PUT Requests -- Alters the database
  * User
  * Availability
@@ -817,38 +843,24 @@ app.put("/change/availability/", (req, res) => {
         return authentic;
     }
 
-    wrapper
-        .getUserInfo("Availability", "av_id", availability_id)
-        .then(postUserId => {
-            if (postUserId !== user_id) {
-                // console.log(postUserId);
-                return res.status(403).json({
-                    message:
-                        "Permission denied! User not permitted to make change"
-                });
-            } else {
-                let avObj = {
-                    asking_price: req.body.asking_price,
-                    location: req.body.location,
-                    start_time: req.body.start_time,
-                    end_time: req.body.end_time
-                };
-                wrapper
-                    .changeTable(
-                        "Availability",
-                        avObj,
-                        availability_id,
-                        "av_id"
-                    )
-                    .then(result => sendResult(res, result))
-                    .catch(reason => sendResult(res, false));
-            }
-        })
-        .catch(reason =>
-            res.status(500).json({
-                message: "server edit error"
-            })
-        );
+    let avObj = {
+        asking_price: req.body.asking_price,
+        location: req.body.location,
+        start_time: req.body.start_time,
+        end_time: req.body.end_time
+    };
+
+    checkCorrectUser("Availability", "av_id", availability_id, user_id, res, () => {
+        wrapper
+            .changeTable(
+                "Availability",
+                avObj,
+                availability_id,
+                "av_id"
+            )
+            .then(result => sendResult(res, result))
+            .catch(reason => sendResult(res, false));
+    });
 });
 
 app.put("/change/hunger/", (req, res) => {
@@ -865,33 +877,19 @@ app.put("/change/hunger/", (req, res) => {
         return authentic;
     }
 
-    wrapper
-        .getUserInfo("Hunger", "hg_id", hunger_id)
-        .then(postUserId => {
-            if (postUserId !== user_id) {
-                // console.log(postUserId);
-                return res.status(403).json({
-                    message:
-                        "Permission denied! User not permitted to make change"
-                });
-            } else {
-                let hgObj = {
-                    max_price: req.body.asking_price,
-                    location: req.body.location,
-                    start_time: req.body.start_time,
-                    end_time: req.body.end_time
-                };
-                wrapper
-                    .changeTable("Hunger", hgObj, hunger_id, "hg_id")
-                    .then(result => sendResult(res, result))
-                    .catch(reason => console.log(reason));
-            }
-        })
-        .catch(reason =>
-            res.status(500).json({
-                message: "server edit error"
-            })
-        );
+    let hgObj = {
+        max_price: req.body.asking_price,
+        location: req.body.location,
+        start_time: req.body.start_time,
+        end_time: req.body.end_time
+    };
+
+    checkCorrectUser("Hunger", "hg_id", hunger_id, user_id, res, () => {
+        wrapper
+            .changeTable("Hunger", hgObj, hunger_id, "hg_id")
+            .then(result => sendResult(res, result))
+            .catch(reason => console.log(reason));
+    });
 });
 
 app.put("/change/user/", (req, res) => {
@@ -962,9 +960,12 @@ app.delete("/delete/availability/", (req, res) => {
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }
-    wrapper
-        .deleteAvailabilityObject(availability_id)
-        .then(result => sendResult(res, result));
+
+    checkCorrectUser("Availability", "av_id", availability_id, user_id, res, () => {
+        wrapper
+            .deleteAvailabilityObject(availability_id)
+            .then(result => sendResult(res, result));
+    });
 });
 
 app.delete("/delete/hunger/", (req, res) => {
@@ -978,9 +979,12 @@ app.delete("/delete/hunger/", (req, res) => {
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }
-    wrapper
-        .deleteHungerObject(hunger_id)
-        .then(result => sendResult(res, result));
+
+    checkCorrectUser("Hunger", "hg_id", hunger_id, user_id, res, () => {
+        wrapper
+            .deleteHungerObject(hunger_id)
+            .then(result => sendResult(res, result));
+    });
 });
 
 app.listen(8000, "127.0.0.1", () => {

@@ -173,7 +173,6 @@ class ListingModal extends React.Component {
 
     validatePrice() {
         const price = this.getCurrentModalInfo(this.props.priceFieldName);
-        console.log(this.props.priceFieldName);
         if (price) {
             const numPrice = Number(price);
             if (numPrice > 20) {

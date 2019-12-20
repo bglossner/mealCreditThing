@@ -27,7 +27,7 @@ class Hunger extends Listings {
             // console.log(jsonPostInfo);
             retPromise = this.props.apiWrapper.makeHungerPost(transformedJSON);
         } else {
-            transformedJSON.av_id = this.state.myPosts[listKey].av_id;
+            transformedJSON.hg_id = this.state.myPosts[listKey].hg_id;
             retPromise = this.props.apiWrapper.editHungerPost(transformedJSON);
         }
 
@@ -35,10 +35,7 @@ class Hunger extends Listings {
     };
 
     deletePost = (listKey) => {
-        let deletionJSON = {
-            hg_id: this.state.myPosts[listKey].hg_id,
-        };
-        let retPromise = this.props.apiWrapper.deleteHungerPost(deletionJSON);
+        let retPromise = this.props.apiWrapper.deleteHungerPost(this.state.myPosts[listKey].hg_id);
         retPromise
             .then((result) => {
                 console.log(result);

@@ -35,13 +35,16 @@ class Availability extends Listings {
     };
 
     deletePost = (listKey) => {
-        let deletionJSON = {
-            av_id: this.state.myPosts[listKey].av_id,
-        };
-        let retPromise = this.props.apiWrapper.deleteAvailabilityPost(deletionJSON);
+        let retPromise = this.props.apiWrapper.deleteAvailabilityPost(this.state.myPosts[listKey].av_id);
         retPromise
             .then((result) => {
-                console.log(result);
+                let slicedPosts = this.state.myPosts.slice();
+                console.log(result, listKey, slicedPosts);
+                slicedPosts.splice(listKey, 1);
+                console.log(result, slicedPosts);
+                this.setState({
+                    myPosts: slicedPosts,
+                });
             })
             .catch((reason) => console.log(reason));
     }

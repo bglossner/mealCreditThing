@@ -549,7 +549,8 @@ module.exports = class DataAccess {
     async changeTable(table_name, editObject, id, id_name) {
         let myQuery = `UPDATE ${table_name} SET `;
         for (let key in editObject) {
-            if (editObject[key] !== null) {
+            if (editObject[key]) {
+                // console.log(key, editObject[key]);
                 myQuery += `${key} = '${editObject[key]}', `;
             }
         }
