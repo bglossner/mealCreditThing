@@ -38,7 +38,11 @@ class Hunger extends Listings {
         let retPromise = this.props.apiWrapper.deleteHungerPost(this.state.myPosts[listKey].hg_id);
         retPromise
             .then((result) => {
-                console.log(result);
+                let slicedPosts = this.state.myPosts.slice();
+                slicedPosts.splice(listKey, 1);
+                this.setState({
+                    myPosts: slicedPosts,
+                });
             })
             .catch((reason) => console.log(reason));
     }

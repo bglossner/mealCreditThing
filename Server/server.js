@@ -969,13 +969,14 @@ app.delete("/delete/availability/", (req, res) => {
 });
 
 app.delete("/delete/hunger/", (req, res) => {
-    let user_id = Number(req.body.id);
+    let user_id = Number(req.body.user_id);
     let hunger_id = req.body.hg_id;
     let token = req.body.token;
 
     // Authentiates if the user has the permission to do an action.
     let authentic = authenticate(token, res, user_id);
     if (authentic != true) {
+        console.log("authentication failure");
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }

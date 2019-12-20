@@ -39,9 +39,7 @@ class Availability extends Listings {
         retPromise
             .then((result) => {
                 let slicedPosts = this.state.myPosts.slice();
-                console.log(result, listKey, slicedPosts);
                 slicedPosts.splice(listKey, 1);
-                console.log(result, slicedPosts);
                 this.setState({
                     myPosts: slicedPosts,
                 });
