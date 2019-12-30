@@ -38,7 +38,7 @@ module.exports = class DataAccess {
                 locationStrs += `location = '${where[i].toLowerCase()}' OR `
             }
             locationStrs += `location = 'anywhere')`;
-            console.log(locationStrs);
+            // console.log(locationStrs);
             if (who != "") {
                 myQuery += ` AND ${locationStrs}`;
             } else {
@@ -82,7 +82,7 @@ module.exports = class DataAccess {
             myQuery += ` LIMIT ${size}`;
         }
 
-        console.log(myQuery);
+        // console.log(myQuery);
 
         await new Promise((resolve, reject) =>
             this._connection.query(myQuery, (err, result, fields) => {
@@ -253,10 +253,16 @@ module.exports = class DataAccess {
         }
 
         if (where != "") {
+            let locationStrs = "(";
+            for (let i = 0; i < where.length; i++) {
+                locationStrs += `location = '${where[i].toLowerCase()}' OR `
+            }
+            locationStrs += `location = 'anywhere')`;
+            // console.log(locationStrs);
             if (who != "") {
-                myQuery += ` AND location = '${where.toLowerCase()}'`;
+                myQuery += ` AND ${locationStrs}`;
             } else {
-                myQuery += ` WHERE location = '${where.toLowerCase()}' OR location = 'anywhere'`;
+                myQuery += ` WHERE ${locationStrs}`;
             }
         }
 
@@ -280,11 +286,11 @@ module.exports = class DataAccess {
             }
         }
 
-        if (price >= 0) {
+        if (price && price >= 0) {
             if (who || where || startTime || endTime) {
-                myQuery += ` AND max_price <= ${price}`;
+                myQuery += ` AND max_price >= ${price}`;
             } else {
-                myQuery += ` WHERE max_price <= ${price}`;
+                myQuery += ` WHERE max_price >= ${price}`;
             }
         }
 

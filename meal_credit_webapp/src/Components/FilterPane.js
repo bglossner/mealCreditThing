@@ -153,6 +153,7 @@ class FilterPane extends React.Component {
             <TimeRangePicker
                 firstPickerLabel="From"
                 lastPickerLabel="To"
+                optionalID="filterRange"
                 handleInParent={this.handleChange(false)}
                 startTime={this.state.filterInfo.startTime}
                 endTime={this.state.filterInfo.endTime}
@@ -216,7 +217,7 @@ class FilterPane extends React.Component {
         if (this.state.checkboxStates[0] && value !== null) {
             jsonFilterInfo["endTime"] = value.toISOString();
         }
-        console.log(jsonFilterInfo)
+        // console.log(jsonFilterInfo)
         this.props.filter(jsonFilterInfo);
     }
 

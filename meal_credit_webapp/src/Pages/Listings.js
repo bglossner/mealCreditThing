@@ -11,6 +11,7 @@ class Listings extends React.Component {
         this.state = {
             currPosts: null,
             myPosts: null,
+            allPosts: null,
             modalType: null,
             modalOpen: false,
             editPostInfo: {
@@ -24,7 +25,7 @@ class Listings extends React.Component {
         this.getAllLocations();
     }
 
-    setPosts(apiPromise) {
+    setPosts(apiPromise, allPosts = false) {
         apiPromise
             .then(posts => {
                 let myPosts = [], otherPosts = [];
@@ -38,6 +39,7 @@ class Listings extends React.Component {
                 this.setState({
                     currPosts: otherPosts.length === 0 ? [] : otherPosts,
                     myPosts: myPosts.length === 0 ? [] : myPosts,
+                    allPosts: allPosts === true ? posts : [],
                 });
             })
             .catch(reason => {
@@ -121,6 +123,7 @@ class Listings extends React.Component {
             }
         }
         let apiPromise = this.onFilter(jsonFilterInfo);
+        this.setPosts(apiPromise, false);
     }
 
     getAllCurrentPosts() {

@@ -182,7 +182,7 @@ app.get(
 );
 
 // Same as availability but for hunger
-app.get("/hunger-list/:size/:where/:who/:start/:end/:price", (req, res) => {
+app.get("/hunger-list/:size/:where/:who/:start/:end/:price/:sortBy", (req, res) => {
     // Creates an object representing the parameters for the SQL wrapper
     let holder = {
         size: req.params.size,
@@ -190,7 +190,8 @@ app.get("/hunger-list/:size/:where/:who/:start/:end/:price", (req, res) => {
         who: req.params.who,
         start: req.params.start,
         end: req.params.end,
-        price: req.params.price
+        price: req.params.price,
+        sort: req.params.sortBy
     };
 
     for (let key in holder) {
@@ -199,14 +200,19 @@ app.get("/hunger-list/:size/:where/:who/:start/:end/:price", (req, res) => {
         }
     }
 
+    if (holder["where"]) {
+        holder["where"] = holder["where"].split("+");
+    }
+
     wrapper
-        .getNeedsList(
+        .getHungerList(
             holder["size"],
             holder["where"],
             holder["who"],
             holder["start"],
             holder["end"],
-            holder["price"]
+            holder["price"],
+            holder["sort"]
         )
         .then(result => {
             res.send(

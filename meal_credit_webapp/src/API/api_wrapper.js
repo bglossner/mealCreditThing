@@ -188,7 +188,7 @@ export default class APIWrapper {
     }
 
     getFilteredHungerPosts(jsonFilter) {
-
+        return this.hungerWrapper.getFilteredPosts(jsonFilter);
     }
 
     getMyHungerPosts(myID) {

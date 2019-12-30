@@ -12,6 +12,13 @@ const styles = theme => ({
         justifyContent: "flex-end",
         marginRight: "2vh"
     },
+    filterBox: {
+        display: "flex",
+        alignItems: "center",
+        width: "33%",
+        height: "100%",
+        marginTop: "4%",
+    },
 });
 
 class Hunger extends Listings {
@@ -47,9 +54,13 @@ class Hunger extends Listings {
             .catch((reason) => console.log(reason));
     }
 
+    onFilter = (json) => {
+        return this.props.apiWrapper.getFilteredHungerPosts(json);
+    }
+
     getAllCurrentPosts() {
         let retVal = this.props.apiWrapper.getHungerPosts();
-        super.setPosts(retVal);
+        super.setPosts(retVal, true);
     }
 
     getPriceSpecifics() {

@@ -60,6 +60,7 @@ class TimeRangePicker extends React.Component {
             <React.Fragment>
                 <DateTimePicker
                     selectedDate={this.props.startTime}
+                    optionalID={`startTime-${this.props.optionalID}`}
                     label={this.props.firstPickerLabel}
                     handleDateChange={this.handleDateTimeChange("startTime")}
                     hasError={false}
@@ -68,6 +69,7 @@ class TimeRangePicker extends React.Component {
                 <DateTimePicker
                     selectedDate={this.props.endTime}
                     label={this.props.lastPickerLabel}
+                    optionalID={`endTime-${this.props.optionalID}`}
                     handleDateChange={this.handleDateTimeChange("endTime")}
                     hasError={!this.state.error.valid && this.state.error.who > -1}
                     error={this.state.error}

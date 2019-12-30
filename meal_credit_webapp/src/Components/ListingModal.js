@@ -223,6 +223,7 @@ class ListingModal extends React.Component {
                         handleInParent={this.handleNonEventChange}
                         firstPickerLabel="Start"
                         lastPickerLabel="End"
+                        optionalID="modalRange"
                     />
                     <Selector
                         value={this.getCurrentModalInfo("location")}
