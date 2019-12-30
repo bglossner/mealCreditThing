@@ -33,6 +33,11 @@ const styles = theme => ({
     resetIcon: {
         marginLeft: "10%",
     },
+    active: {
+        paddingBottom: "5px",
+        borderBottom: `2px solid black`,
+        transform: "scale(2)"
+    },
 });
 
 class PostList extends React.Component {
@@ -114,6 +119,7 @@ class PostList extends React.Component {
 
     render() {
         const { classes } = this.props;
+        console.log(this.props.filterActive);
         return (
             <List
                 subheader={
@@ -126,7 +132,7 @@ class PostList extends React.Component {
                             onClick={this.props.onResetClick}
                         />
                         <FilterListIcon
-                            className={`${classes.filterIcon} ${classes.icon}`}
+                            className={`${classes.filterIcon} ${classes.icon} ${this.props.filterActive ? classes.active : '' }`}
                             onClick={this.props.onFilterClick}
                         />
                     </Box>

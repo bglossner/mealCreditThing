@@ -205,6 +205,7 @@ class Listings extends React.Component {
                     <PostList
                         items={this.state.currPosts}
                         isMyPosts={false}
+                        filterActive={this.state.filterActive && this.state.filterType === 0}
                         title="Latest Posts"
                         onFilterClick={() => this.onFilterClick(0)}
                         onResetClick={() => this.resetList(0)}
@@ -226,6 +227,7 @@ class Listings extends React.Component {
                     <PostList
                         items={this.state.myPosts}
                         isMyPosts={true}
+                        filterActive={this.state.filterActive && this.state.filterType === 1}
                         title="My Posts"
                         onFilterClick={() => this.onFilterClick(1)}
                         onResetClick={() => this.resetList(1)}

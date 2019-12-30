@@ -30,21 +30,6 @@ const styles = theme => ({
             marginLeft: "auto"
         }
     },
-    link: {
-        marginRight: theme.spacing(5),
-        color: PRIMARY_COLOR,
-        textTransform: "uppercase",
-        '&:hover': {
-            textDecoration: "none",
-            color: PRIMARY_COLOR,
-            paddingBottom: "10px",
-            borderBottom: `2px solid ${PRIMARY_COLOR}`,
-        }
-    },
-    underline: {
-        paddingBottom: "10px",
-        borderBottom: `2px solid ${PRIMARY_COLOR}`,
-    }
 });
 
 class TopNavbar extends React.Component {
@@ -84,28 +69,24 @@ class TopNavbar extends React.Component {
                             onClick={() => this.handleClick(0)}
                             to={this.linkList[0]}
                             isActive={this.state.active === 0 || at === this.linkList[0]}
-                            classes={classes}
                         />
                         <Navlink 
                             title="Hunger Listings"
                             onClick={() => this.handleClick(1)}
                             to={this.linkList[1]}
                             isActive={this.state.active === 1 || at === this.linkList[1]}
-                            classes={classes}
                         />
                         <Navlink 
                             title="Messages"
                             onClick={() => this.handleClick(2)}
                             to={this.linkList[2]}
                             isActive={this.state.active === 2 || at === this.linkList[2]}
-                            classes={classes}
                         />
                         <Navlink
                             title={<SettingsIcon />}
                             onClick={() => this.handleClick(3)}
                             to={this.linkList[3]}
                             isActive={this.state.active === 3 || at === this.linkList[3]}
-                            classes={classes}
                         >
 
                         </Navlink>
@@ -128,5 +109,5 @@ export default compose(
         mapStateToProps,
         null
     ),
-    withStyles(styles))
-(withRouter(TopNavbar));
+    withStyles(styles)
+)(withRouter(TopNavbar));

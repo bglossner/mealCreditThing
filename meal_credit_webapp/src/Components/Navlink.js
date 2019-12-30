@@ -1,9 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { withStyles } from "@material-ui/core";
+import { PRIMARY_COLOR } from "../Constants";
 
-export default class Navlink extends React.Component {
+const styles = theme => ({
+    link: {
+        marginRight: theme.spacing(5),
+        color: PRIMARY_COLOR,
+        textTransform: "uppercase",
+        '&:hover': {
+            textDecoration: "none",
+            color: PRIMARY_COLOR,
+            paddingBottom: "10px",
+            borderBottom: `2px solid ${PRIMARY_COLOR}`,
+        }
+    },
+    underline: {
+        paddingBottom: "10px",
+        borderBottom: `2px solid ${PRIMARY_COLOR}`,
+    },
+});
+
+class Navlink extends React.Component {
     render() {
-        const linkClass = `${this.props.classes.link} ${this.props.isActive ? this.props.classes.underline : '' }`;
+        const { classes } = this.props;
+        const linkClass = `${classes.link} ${this.props.isActive ? classes.underline : '' }`;
         return (
             <Link
                 onClick={ () => this.props.onClick() }
@@ -15,3 +36,5 @@ export default class Navlink extends React.Component {
         );
     }
 }
+
+export default withStyles(styles)(Navlink);
