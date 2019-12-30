@@ -158,6 +158,18 @@ class Listings extends React.Component {
         });
     }
 
+    resetList = (which) => {
+        if (which === 0) {
+            this.setState({
+                currPosts: this.state.unfilteredCurrPosts,
+            });
+        } else {
+            this.setState({
+                myPosts: this.state.unfilteredMyPosts,
+            });
+        }
+    }
+
     getAllCurrentPosts() {
         console.warn("getAllCurrentPosts should be implemented in subclass")
     }
@@ -195,6 +207,7 @@ class Listings extends React.Component {
                         isMyPosts={false}
                         title="Latest Posts"
                         onFilterClick={() => this.onFilterClick(0)}
+                        onResetClick={() => this.resetList(0)}
                         priceName={this.getPriceSpecifics().serverPriceFieldName}
                     />
                     { this.state.filterActive ?
@@ -215,6 +228,7 @@ class Listings extends React.Component {
                         isMyPosts={true}
                         title="My Posts"
                         onFilterClick={() => this.onFilterClick(1)}
+                        onResetClick={() => this.resetList(1)}
                         editPost={this.editPost}
                         deletePost={this.deletePost}
                         priceName={this.getPriceSpecifics().serverPriceFieldName}

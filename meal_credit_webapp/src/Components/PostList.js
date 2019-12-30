@@ -1,5 +1,6 @@
 import { List, ListItem, Typography, Box, withStyles } from "@material-ui/core";
 import FilterListIcon from '@material-ui/icons/FilterList';
+import CachedIcon from '@material-ui/icons/Cached';
 import ListingsPost from "./ListingsPost";
 import React from "react";
 import ReactLoading from "react-loading";
@@ -22,10 +23,15 @@ const styles = theme => ({
     italicize: {
         fontStyle: "italic"
     },
-    filterIcon: {
-        marginLeft: "10%",
+    icon: {
         cursor: "pointer",
         transform: "scale(1.5)",
+    },
+    filterIcon: {
+        marginLeft: "7%",
+    },
+    resetIcon: {
+        marginLeft: "10%",
     },
 });
 
@@ -115,8 +121,12 @@ class PostList extends React.Component {
                         <Typography className={classes.listHeader} variant="h4">
                             {this.props.title}
                         </Typography>
+                        <CachedIcon
+                            className={`${classes.resetIcon} ${classes.icon}`}
+                            onClick={this.props.onResetClick}
+                        />
                         <FilterListIcon
-                            className={classes.filterIcon}
+                            className={`${classes.filterIcon} ${classes.icon}`}
                             onClick={this.props.onFilterClick}
                         />
                     </Box>
