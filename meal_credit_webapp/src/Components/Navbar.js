@@ -5,6 +5,8 @@ import LogoutButton from '../Pages/Logout'
 import { withStyles, AppBar, Toolbar, Typography, Grid } from "@material-ui/core";
 import { PRIMARY_COLOR } from "../Constants";
 import { connect } from "react-redux";
+import { withRouter } from 'react-router-dom';
+import compose from 'recompose/compose'
 
 const styles = theme => ({
     appBar: {
@@ -51,6 +53,7 @@ class TopNavbar extends React.Component {
         this.state = {
             active: -1,
         };
+        this.linkList = ["/availability", "/hunger", "/home", "/home"];
     }
 
     handleClick = (i) => {
@@ -61,6 +64,7 @@ class TopNavbar extends React.Component {
 
     render() {
         const { classes } = this.props;
+        const at = this.props.location.pathname;
         return (
             <AppBar className={classes.appBar} position="fixed">
                 <Grid 
@@ -78,29 +82,29 @@ class TopNavbar extends React.Component {
                         <Navlink 
                             title="Availability Listings"
                             onClick={() => this.handleClick(0)}
-                            to="/availability"
-                            isActive={this.state.active === 0}
+                            to={this.linkList[0]}
+                            isActive={this.state.active === 0 || at === this.linkList[0]}
                             classes={classes}
                         />
                         <Navlink 
                             title="Hunger Listings"
                             onClick={() => this.handleClick(1)}
-                            to="/hunger"
-                            isActive={this.state.active === 1}
+                            to={this.linkList[1]}
+                            isActive={this.state.active === 1 || at === this.linkList[1]}
                             classes={classes}
                         />
                         <Navlink 
                             title="Messages"
                             onClick={() => this.handleClick(2)}
-                            to="/home"
-                            isActive={this.state.active === 2}
+                            to={this.linkList[2]}
+                            isActive={this.state.active === 2 || at === this.linkList[2]}
                             classes={classes}
                         />
                         <Navlink
                             title={<SettingsIcon />}
                             onClick={() => this.handleClick(3)}
-                            to="/home"
-                            isActive={this.state.active === 3}
+                            to={this.linkList[3]}
+                            isActive={this.state.active === 3 || at === this.linkList[3]}
                             classes={classes}
                         >
 
@@ -119,7 +123,10 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    null   
-)(withStyles(styles)(TopNavbar));
+export default compose(
+    connect(
+        mapStateToProps,
+        null
+    ),
+    withStyles(styles))
+(withRouter(TopNavbar));
