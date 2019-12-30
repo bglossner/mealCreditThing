@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Fade, Fab, Paper, Box } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+/* import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'; */
 
 class Post extends React.Component {
     constructor(props) {

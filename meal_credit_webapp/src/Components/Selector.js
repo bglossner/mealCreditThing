@@ -19,6 +19,7 @@ class Selector extends React.Component {
 
     render() {
         const lowerLabel = this.props.label.toLowerCase();
+        // console.log("Value change:", this.props.value)
         return (
             <FormControl variant="outlined" className={this.props.formControlClass}>
                 <InputLabel ref={this.inputLabel} htmlFor={`outlined-${lowerLabel}-native-simple`}>
@@ -43,7 +44,7 @@ class Selector extends React.Component {
 }
 
 Selector.propTypes = {
-    option: PropTypes.array,
+    options: PropTypes.array,
     value: PropTypes.string,
     label: PropTypes.string,
     formControlClass: PropTypes.string,

@@ -3,7 +3,7 @@ import { withStyles, Grid, Box, Typography, Button } from "@material-ui/core";
 import { Alert } from "react-bootstrap";
 import GeneralModal from "./GeneralModal";
 import Selector from "../Components/Selector";
-import StartEndDateTimePicker from "../Components/StartEndDateTimePicker";
+import TimeRangePicker from "../Components/TimeRangePicker";
 import Input from "../Components/Input";
 import CheckIcon from '@material-ui/icons/Check';
 
@@ -37,10 +37,8 @@ class ListingModal extends React.Component {
             modalInfo: {
                 innerInfo: this.getDefaultModalInfo()
             },
-            locations: null,
             errorStates: [false, false, false],
         };
-        this.getAllLocations();
     }
 
     resetModalState() {
@@ -58,19 +56,6 @@ class ListingModal extends React.Component {
         if ((this.props.open !== prevProps.open) && (prevProps.open === false)) {
             this.resetModalState();
         }
-    }
-
-    getAllLocations() {
-        let retVal = this.props.apiWrapper.getAllLocations();
-        retVal
-            .then(locations => {
-                this.setState({
-                    locations: locations,
-                });
-            })
-            .catch(reason => {
-                console.log(reason)
-            });
     }
 
     renderErrorMessage() {
@@ -161,11 +146,11 @@ class ListingModal extends React.Component {
     }
 
     getLocationOptions() {
-        if (!this.state.locations) {
+        if (!this.props.locations) {
             return null;
         }
         let newArray = [<option key={-1} value="" />]
-        newArray.push(...(this.state.locations.map((location, step) => {
+        newArray.push(...(this.props.locations.map((location, step) => {
             return <option key={step} value={location}>{location}</option>
         })));
         return newArray;
@@ -231,11 +216,13 @@ class ListingModal extends React.Component {
                     direction="column"
                 >
                     { this.renderErrorMessage() }
-                    <StartEndDateTimePicker
+                    <TimeRangePicker
                         startTime={this.getCurrentModalInfo("startTime")}
                         endTime={this.getCurrentModalInfo("endTime")}
                         errorSetter={this.errorSetter(0)}
                         handleInParent={this.handleNonEventChange}
+                        firstPickerLabel="Start"
+                        lastPickerLabel="End"
                     />
                     <Selector
                         value={this.getCurrentModalInfo("location")}
@@ -256,7 +243,7 @@ class ListingModal extends React.Component {
                                 $
                             </Typography>
                             <Input
-                                name="Price"
+                                name={this.props.readablePriceName}
                                 type="number"
                                 defaultValue={this.props.type === "Edit" ? this.getCurrentModalInfo(this.props.priceFieldName) : ""}
                                 required={true}

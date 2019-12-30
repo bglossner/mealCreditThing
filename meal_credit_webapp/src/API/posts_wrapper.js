@@ -33,6 +33,42 @@ export default class PostsAPIWrapper {
         });
     }
 
+    getFilteredPosts(filterJSON) {
+        return new Promise((resolve, reject) => {
+            var xhr = new XMLHttpRequest();
+            if (filterJSON["location"]) {
+                filterJSON["location"] = filterJSON["location"].join("+");
+            }
+            const fullURL = this.baseURL + `${this.postType}-list/` +
+                `${filterJSON["size"] || "-1"}/` +
+                `${filterJSON["location"] || "false"}/` +
+                `${filterJSON["username"] || "false"}/` +
+                `${filterJSON["startTime"] || "false"}/` +
+                `${filterJSON["endTime"] || "false"}/` +
+                `${this.postType === "hunger" ? (filterJSON["maxPrice"] || "false") : (filterJSON["askingPrice"] || "false")}/` +
+                `${filterJSON["sortBy"] || "false"}`
+            ;
+            xhr.open("GET", fullURL, true);
+            console.log(fullURL);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function() {
+                // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE) {
+                    if (this.status === 200) {
+                        resolve(JSON.parse(this.response).result);
+                    } else {
+                        reject({
+                            status: this.status,
+                            message:  this.response.result || "Could not connect to the server!"
+                        });
+                    }
+                }
+            };
+            // xhr.send();
+        });
+    }
+
     makeNewPost(json) {
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();

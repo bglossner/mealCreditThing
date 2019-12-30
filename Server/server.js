@@ -158,6 +158,10 @@ app.get(
             }
         }
 
+        if (holder["where"]) {
+            holder["where"] = holder["where"].split("+");
+        }
+
         wrapper
             .getAvailabilityList(
                 holder["size"],

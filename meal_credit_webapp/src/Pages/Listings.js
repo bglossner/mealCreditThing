@@ -1,8 +1,9 @@
 import React from "react";
-import { List, Grid, Typography, Box, Fab } from "@material-ui/core";
+import {Grid, Box, Fab } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import ListingModal from "../Components/ListingModal";
 import PostList from "../Components/PostList";
+import FilterPane from "../Components/FilterPane";
 
 class Listings extends React.Component {
     constructor(props) {
@@ -16,8 +17,11 @@ class Listings extends React.Component {
                 postInfo: null,
                 key: null,
             },
+            filterActive: true,
+            locations: null,
         };
         this.getAllCurrentPosts();
+        this.getAllLocations();
     }
 
     setPosts(apiPromise) {
@@ -45,6 +49,19 @@ class Listings extends React.Component {
             });
     }
 
+    getAllLocations() {
+        let retVal = this.props.apiWrapper.getAllLocations();
+        retVal
+            .then(locations => {
+                this.setState({
+                    locations: locations,
+                });
+            })
+            .catch(reason => {
+                console.log(reason)
+            });
+    }
+
     dealWithSubmissionResult(apiPromise, transformedJSON, listKey) {
         apiPromise
             .then((result) => {
@@ -65,8 +82,6 @@ class Listings extends React.Component {
                 console.log(reason)
             });
     }
-
-    
 
     onModalClose = () => {
         this.setState({
@@ -97,12 +112,27 @@ class Listings extends React.Component {
         });
     }
 
+    filter = (jsonFilterInfo) => {
+        if ("sortBy" in jsonFilterInfo) {
+            if (jsonFilterInfo["sortBy"] === "price") {
+                jsonFilterInfo["sortBy"] = this.getPriceSpecifics().serverPriceFieldName;
+            } else if (jsonFilterInfo["sortBy"] === "date") {
+                jsonFilterInfo["sortBy"] = "end_time";
+            }
+        }
+        let apiPromise = this.onFilter(jsonFilterInfo);
+    }
+
     getAllCurrentPosts() {
         console.warn("getAllCurrentPosts should be implemented in subclass")
     }
 
     deletePost(listKey) {
         console.warn("deletePost should be implemented in subclass")
+    }
+
+    onFilter() {
+        console.warn("onFilter should be implemented in subclass")
     }
 
     onSubmit() {
@@ -129,19 +159,30 @@ class Listings extends React.Component {
                         items={this.state.currPosts}
                         isMyPosts={false}
                         title="Latest Posts"
-                        priceName={this.getModalSpecifics().serverPriceFieldName}
+                        priceName={this.getPriceSpecifics().serverPriceFieldName}
                     />
+                    { this.state.filterActive ?
+                            <Box className={classes.filterBox}>
+                                <FilterPane
+                                    locations={this.state.locations}
+                                    filter={this.filter}
+                                    {...this.getPriceSpecifics()}
+                                />
+                            </Box>
+                        : 
+                            null
+                    }
                     <PostList
                         items={this.state.myPosts}
                         isMyPosts={true}
                         title="My Posts"
                         editPost={this.editPost}
                         deletePost={this.deletePost}
-                        priceName={this.getModalSpecifics().serverPriceFieldName}
+                        priceName={this.getPriceSpecifics().serverPriceFieldName}
                     />
                 </Grid>
                 <ListingModal
-                    {...this.getModalSpecifics()}
+                    {...this.getPriceSpecifics()}
                     open={this.state.modalOpen}
                     onClose={this.onModalClose}
                     type={this.state.modalType}
@@ -151,6 +192,7 @@ class Listings extends React.Component {
                     onSubmit={this.onSubmit}
                     defaultValues={this.state.editPostInfo.postInfo}
                     listKey={this.state.editPostInfo.key}
+                    locations={this.state.locations}
                 />
                 <Box className={classes.addButton}>
                     <Fab

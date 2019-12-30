@@ -1,6 +1,11 @@
 html {
     scroll-behavior: smooth;
     height: 100%;
+    overflow-x: hidden;
+}
+
+.no-margins {
+    margin: 0;
 }
 
 #root {

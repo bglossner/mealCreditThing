@@ -52,10 +52,12 @@ class Hunger extends Listings {
         super.setPosts(retVal);
     }
 
-    getModalSpecifics() {
+    getPriceSpecifics() {
         return {
             priceFieldName: "maxPrice",
             serverPriceFieldName: "max_price",
+            readablePriceName: "Max Price",
+            filterPriceName: "Minimum Price",
         };
     }
 }

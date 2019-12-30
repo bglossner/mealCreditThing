@@ -1,7 +1,7 @@
 import React from 'react';
 import DateTimePicker from "./DateTimePicker";
 
-class StartEndDateTimePicker extends React.Component {
+class TimeRangePicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -60,14 +60,14 @@ class StartEndDateTimePicker extends React.Component {
             <React.Fragment>
                 <DateTimePicker
                     selectedDate={this.props.startTime}
-                    label="Start"
+                    label={this.props.firstPickerLabel}
                     handleDateChange={this.handleDateTimeChange("startTime")}
                     hasError={false}
                     error={this.state.error}
                 />
                 <DateTimePicker
                     selectedDate={this.props.endTime}
-                    label="End"
+                    label={this.props.lastPickerLabel}
                     handleDateChange={this.handleDateTimeChange("endTime")}
                     hasError={!this.state.error.valid && this.state.error.who > -1}
                     error={this.state.error}
@@ -77,4 +77,4 @@ class StartEndDateTimePicker extends React.Component {
     }
 }
 
-export default (StartEndDateTimePicker);
+export default (TimeRangePicker);

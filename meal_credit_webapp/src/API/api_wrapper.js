@@ -14,6 +14,11 @@ export default class APIWrapper {
         this.hungerWrapper = new HungerAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
         this.generalWrapper = new GeneralAPIWrapper(this.baseURL);
         this.store = store;
+        this.filterSortByMap = {
+            "Date" : "end_time",
+            "Location" : "location",
+            "Username" : "username",
+        };
     }
 
     getUserInformation() {
@@ -159,7 +164,7 @@ export default class APIWrapper {
     }
 
     getFilteredAvailabilityPosts(jsonFilter) {
-
+        return this.availabilityWrapper.getFilteredPosts(jsonFilter);
     }
 
     getMyAvailabilityPosts(myID) {

@@ -12,6 +12,13 @@ const styles = theme => ({
         justifyContent: "flex-end",
         marginRight: "2vh"
     },
+    filterBox: {
+        display: "flex",
+        alignItems: "center",
+        width: "33%",
+        height: "100%",
+        marginTop: "4%",
+    },
 });
 
 class Availability extends Listings {
@@ -47,15 +54,21 @@ class Availability extends Listings {
             .catch((reason) => console.log(reason));
     }
 
+    onFilter = (json) => {
+        return this.props.apiWrapper.getFilteredAvailabilityPosts(json);
+    }
+
     getAllCurrentPosts() {
         let retVal = this.props.apiWrapper.getAvailabilityPosts();
         super.setPosts(retVal);
     }
 
-    getModalSpecifics() {
+    getPriceSpecifics() {
         return {
             priceFieldName: "askingPrice",
             serverPriceFieldName: "asking_price",
+            readablePriceName: "Asking Price",
+            filterPriceName: "Max Price",
         };
     }
 }
