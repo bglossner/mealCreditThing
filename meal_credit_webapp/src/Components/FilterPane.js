@@ -5,6 +5,7 @@ import TimeRangePicker from "./TimeRangePicker";
 import Input from "./Input";
 import Selector from "./Selector";
 import SmartCheckbox from "./Checkbox";
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = theme => ({
     mainContainer: {
@@ -23,11 +24,19 @@ const styles = theme => ({
     center: {
         margin: "auto",
     },
-    italic: {
+    title: {
         fontStyle: "italic",
+        marginRight: "30%",
+    },
+    titleBox: {
+        justifyContent: "flex-end",
     },
     topMargin: {
         marginTop: "3%",
+    },
+    cancel: {
+        backgroundColor: "transparent",
+        color: "red",
     },
 });
 
@@ -232,15 +241,21 @@ class FilterPane extends React.Component {
                 alignItems="flex-start"
                 className={classes.mainContainer}
             >
-                <Box className={`${classes.fullWidth} ${classes.horizBox}`}>
-                    <Typography className={classes.italic} variant="h5">
+                <Box className={`${classes.fullWidth} ${classes.horizBox} ${classes.titleBox}`}>
+                    <Typography className={classes.title} variant="h5">
                         Filter Menu
                     </Typography>
+                    <Button
+                        className={classes.cancel}
+                        onClick={() => this.props.onClose()}
+                    >
+                        <CloseIcon />
+                    </Button>
                 </Box>
                 { this.renderField(0, classes, this.renderTimeRangeFilter) }
                 { this.renderField(1, classes, this.renderLocationFilter) }
                 { this.renderField(2, classes, this.renderPriceFilter) }
-                { this.renderField(3, classes, this.renderUsernameFilter) }
+                { this.props.which === 0 ? this.renderField(3, classes, this.renderUsernameFilter) : null }
                 <Selector
                     options={this.getSortByOptions()}
                     value={this.state.filterInfo.sortingBy}

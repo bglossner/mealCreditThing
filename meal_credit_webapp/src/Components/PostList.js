@@ -1,5 +1,5 @@
-import { List, ListItem, Typography, withStyles } from "@material-ui/core";
-
+import { List, ListItem, Typography, Box, withStyles } from "@material-ui/core";
+import FilterListIcon from '@material-ui/icons/FilterList';
 import ListingsPost from "./ListingsPost";
 import React from "react";
 import ReactLoading from "react-loading";
@@ -21,7 +21,12 @@ const styles = theme => ({
     },
     italicize: {
         fontStyle: "italic"
-    }
+    },
+    filterIcon: {
+        marginLeft: "10%",
+        cursor: "pointer",
+        transform: "scale(1.5)",
+    },
 });
 
 class PostList extends React.Component {
@@ -78,7 +83,6 @@ class PostList extends React.Component {
         // console.log("Posts", posts)
         if (posts !== null && posts.length > 0) {
             return posts.map((postInfo, step) => {
-                //console.log(step);
                 return (
                     <ListItem className={classes.listItem} key={step} button>
                         {this.makePostType(postInfo, isMyPosts, step)}
@@ -86,7 +90,6 @@ class PostList extends React.Component {
                 );
             });
         } else if (posts !== null && posts.length === 0) {
-            // console.log("HERE2")
             return (
                 <ListItem key={-1} className={classes.listItem}>
                     <Typography className={classes.italicize} variant="h6">
@@ -96,7 +99,6 @@ class PostList extends React.Component {
             );
         }
 
-        // console.log("HERE")
         return (
             <ListItem key={-1} className={classes.listItem}>
                 {this.renderLoader()}
@@ -109,9 +111,15 @@ class PostList extends React.Component {
         return (
             <List
                 subheader={
-                    <Typography className={classes.listHeader} variant="h4">
-                        {this.props.title}
-                    </Typography>
+                    <Box className={classes.listHeader}>
+                        <Typography className={classes.listHeader} variant="h4">
+                            {this.props.title}
+                        </Typography>
+                        <FilterListIcon
+                            className={classes.filterIcon}
+                            onClick={this.props.onFilterClick}
+                        />
+                    </Box>
                 }
                 className={classes.postList}
             >

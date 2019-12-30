@@ -11,21 +11,23 @@ class Listings extends React.Component {
         this.state = {
             currPosts: null,
             myPosts: null,
-            allPosts: null,
+            unfilteredCurrPosts: null,
+            unfilteredMyPosts: null,
             modalType: null,
             modalOpen: false,
             editPostInfo: {
                 postInfo: null,
                 key: null,
             },
-            filterActive: true,
+            filterActive: false,
+            filterType: 0,
             locations: null,
         };
         this.getAllCurrentPosts();
         this.getAllLocations();
     }
 
-    setPosts(apiPromise, allPosts = false) {
+    setPosts(apiPromise, whichToSet = -1) {
         apiPromise
             .then(posts => {
                 let myPosts = [], otherPosts = [];
@@ -36,11 +38,23 @@ class Listings extends React.Component {
                         otherPosts.push(post);
                     }
                 }
-                this.setState({
-                    currPosts: otherPosts.length === 0 ? [] : otherPosts,
-                    myPosts: myPosts.length === 0 ? [] : myPosts,
-                    allPosts: allPosts === true ? posts : [],
-                });
+
+                if (whichToSet === 0) {
+                    this.setState({
+                        currPosts: otherPosts,
+                    });
+                } else if (whichToSet === 1) {
+                    this.setState({
+                        myPosts: myPosts,
+                    });
+                } else {
+                    this.setState({
+                        currPosts: otherPosts,
+                        myPosts: myPosts,
+                        unfilteredCurrPosts: otherPosts,
+                        unfilteredMyPosts: myPosts,
+                    });
+                }
             })
             .catch(reason => {
                 console.log("ERROR", reason)
@@ -122,8 +136,26 @@ class Listings extends React.Component {
                 jsonFilterInfo["sortBy"] = "end_time";
             }
         }
+
+        if (this.state.filterType === 1) {
+            jsonFilterInfo["username"] = this.props.loginInfo.username;
+        }
+
         let apiPromise = this.onFilter(jsonFilterInfo);
-        this.setPosts(apiPromise, false);
+        this.setPosts(apiPromise, this.state.filterType);
+    }
+
+    onFilterClick = (which) => {
+        this.setState({
+            filterActive: true,
+            filterType: which,
+        });
+    }
+
+    closeFilter = () => {
+        this.setState({
+            filterActive: false,
+        });
     }
 
     getAllCurrentPosts() {
@@ -162,6 +194,7 @@ class Listings extends React.Component {
                         items={this.state.currPosts}
                         isMyPosts={false}
                         title="Latest Posts"
+                        onFilterClick={() => this.onFilterClick(0)}
                         priceName={this.getPriceSpecifics().serverPriceFieldName}
                     />
                     { this.state.filterActive ?
@@ -169,6 +202,8 @@ class Listings extends React.Component {
                                 <FilterPane
                                     locations={this.state.locations}
                                     filter={this.filter}
+                                    onClose={() => this.closeFilter()}
+                                    which={this.state.filterType}
                                     {...this.getPriceSpecifics()}
                                 />
                             </Box>
@@ -179,6 +214,7 @@ class Listings extends React.Component {
                         items={this.state.myPosts}
                         isMyPosts={true}
                         title="My Posts"
+                        onFilterClick={() => this.onFilterClick(1)}
                         editPost={this.editPost}
                         deletePost={this.deletePost}
                         priceName={this.getPriceSpecifics().serverPriceFieldName}

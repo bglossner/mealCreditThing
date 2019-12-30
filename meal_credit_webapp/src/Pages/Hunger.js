@@ -60,7 +60,7 @@ class Hunger extends Listings {
 
     getAllCurrentPosts() {
         let retVal = this.props.apiWrapper.getHungerPosts();
-        super.setPosts(retVal, true);
+        super.setPosts(retVal, -1);
     }
 
     getPriceSpecifics() {

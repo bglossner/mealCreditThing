@@ -60,7 +60,7 @@ class Availability extends Listings {
 
     getAllCurrentPosts() {
         let retVal = this.props.apiWrapper.getAvailabilityPosts();
-        super.setPosts(retVal, true);
+        super.setPosts(retVal, -1);
     }
 
     getPriceSpecifics() {
