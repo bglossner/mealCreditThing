@@ -91,7 +91,7 @@ app.get("/availability-list", (req, res) => {
     //get all availability data
     wrapper.getAvailabilityList(-1, "", "", "", "", -1).then(result => {
         // console.log(result)
-        return res.json({
+        return res.status(200).json({
             result: result
         });
     });
@@ -102,7 +102,7 @@ app.get("/hunger-list", (req, res) => {
     //get all availability data
     wrapper.getHungerList(-1, "", "", "", "", -1).then(result => {
         // console.log(result)
-        return res.json({
+        return res.status(200).json({
             result: result
         });
     });
@@ -177,6 +177,12 @@ app.get(
                 res.status(200).json({
                     result: result
                 });
+            })
+            .catch(reason => {
+                console.log(reason);
+                res.status(500).json({
+                    message: "server error"
+                });
             });
     }
 );
@@ -215,11 +221,15 @@ app.get("/hunger-list/:size/:where/:who/:start/:end/:price/:sortBy", (req, res) 
             holder["sort"]
         )
         .then(result => {
-            res.send(
-                res.status(200).json({
-                    result: result
-                })
-            );
+            res.status(200).json({
+                result: result
+            })
+        })
+        .catch(reason => {
+            console.log(reason);
+            res.status(500).json({
+                message: "server error"
+            });
         });
 });
 

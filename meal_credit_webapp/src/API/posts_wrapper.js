@@ -49,7 +49,7 @@ export default class PostsAPIWrapper {
                 `${filterJSON["sortBy"] || "false"}`
             ;
             xhr.open("GET", fullURL, true);
-            // console.log(fullURL);
+            console.log(fullURL);
             xhr.setRequestHeader("Content-Type", "application/json");
 
             xhr.onreadystatechange = function() {

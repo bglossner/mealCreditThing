@@ -29,7 +29,7 @@ module.exports = class DataAccess {
         let myQuery = `SELECT a.*, u.username FROM Availability AS a INNER JOIN Users AS u ON a.user_id = u.user_id`;
 
         if (who != "") {
-            myQuery = `SELECT a.*, u.username FROM Availability a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username = '${who}'`;
+            myQuery = `SELECT a.*, u.username FROM Availability a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username LIKE '%${who}%'`;
         }
 
         if (where != "") {
@@ -249,7 +249,7 @@ module.exports = class DataAccess {
         let myQuery = `SELECT a.*, u.username FROM Hunger AS a INNER JOIN Users AS u ON a.user_id = u.user_id`;
 
         if (who != "") {
-            myQuery = `SELECT a.*, u.username FROM Hunger a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username = '${who}'`;
+            myQuery = `SELECT a.*, u.username FROM Hunger a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username LIKE '%${who}%'`;
         }
 
         if (where != "") {
