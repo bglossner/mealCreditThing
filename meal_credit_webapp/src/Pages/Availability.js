@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/core";
 const styles = theme => ({
     toolbar: theme.mixins.toolbar,
     addButton: {
-        position: "absolute",
+        position: "sticky",
         bottom: "2vh",
         display: "flex",
         right: 0,
