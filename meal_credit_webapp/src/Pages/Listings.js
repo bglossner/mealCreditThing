@@ -19,15 +19,19 @@ class Listings extends React.Component {
                 postInfo: null,
                 key: null,
             },
-            filterActive: false,
-            filterType: 0,
+            filteredInfo: {
+                active: false,
+                filterType: 0,
+                listsFiltered: [false, false],
+                dateFilters: [null, null],
+            },
             locations: null,
         };
         this.getAllCurrentPosts();
         this.getAllLocations();
     }
 
-    setPosts(apiPromise, whichToSet = -1) {
+    setPosts(apiPromise, whichToSet = -1, dates = null) {
         apiPromise
             .then(posts => {
                 let myPosts = [], otherPosts = [];
@@ -39,14 +43,23 @@ class Listings extends React.Component {
                     }
                 }
 
-                if (whichToSet === 0) {
-                    this.setState({
-                        currPosts: otherPosts,
-                    });
-                } else if (whichToSet === 1) {
-                    this.setState({
-                        myPosts: myPosts,
-                    });
+                if (whichToSet > -1) {
+                    let curFilterStatus = Object.assign({}, this.state.filteredInfo);
+                    curFilterStatus.listsFiltered[whichToSet] = true;
+                    if (dates) {
+                        curFilterStatus.dateFilters[whichToSet] = dates.slice();
+                    }
+                    if (whichToSet === 0) {
+                        this.setState({
+                            currPosts: otherPosts,
+                            filteredInfo: curFilterStatus,
+                        });
+                    } else {
+                        this.setState({
+                            myPosts: myPosts,
+                            filteredInfo: curFilterStatus,
+                        });
+                    }
                 } else {
                     this.setState({
                         currPosts: otherPosts,
@@ -137,35 +150,45 @@ class Listings extends React.Component {
             }
         }
 
-        if (this.state.filterType === 1) {
+        if (this.state.filteredInfo.filterType === 1) {
             jsonFilterInfo["username"] = this.props.loginInfo.username;
         }
 
         let apiPromise = this.onFilter(jsonFilterInfo);
-        this.setPosts(apiPromise, this.state.filterType);
+        this.setPosts(apiPromise, this.state.filteredInfo.filterType, 
+            jsonFilterInfo["startTime"] || jsonFilterInfo["endTime"] ? [jsonFilterInfo["startTime"], jsonFilterInfo["endTime"]] : null );
     }
 
     onFilterClick = (which) => {
+        let curFilterStatus = Object.assign({}, this.state.filteredInfo);
+        curFilterStatus.active = true;
+        curFilterStatus.filterType = which;
         this.setState({
-            filterActive: true,
-            filterType: which,
+            filteredInfo: curFilterStatus,
         });
     }
 
     closeFilter = () => {
+        let curFilterStatus = Object.assign({}, this.state.filteredInfo);
+        curFilterStatus.active = false;
         this.setState({
-            filterActive: false,
+            filteredInfo: curFilterStatus,
         });
     }
 
     resetList = (which) => {
+        let curFilterStatus = Object.assign({}, this.state.filteredInfo);
+        curFilterStatus.listsFiltered[which] = false;
+        curFilterStatus.dateFilters[which] = null;
         if (which === 0) {
             this.setState({
                 currPosts: this.state.unfilteredCurrPosts,
+                filteredInfo: curFilterStatus,
             });
         } else {
             this.setState({
                 myPosts: this.state.unfilteredMyPosts,
+                filteredInfo: curFilterStatus,
             });
         }
     }
@@ -197,6 +220,7 @@ class Listings extends React.Component {
     render() {
         // console.log("rerender")
         const { classes } = this.props;
+        console.log(this.state.filteredInfo.dateFilters)
         return (
             <React.Fragment>
                 <div className={classes.toolbar} />
@@ -209,20 +233,22 @@ class Listings extends React.Component {
                     <PostList
                         items={this.state.currPosts}
                         isMyPosts={false}
-                        filterActive={this.state.filterActive && this.state.filterType === 0}
+                        dateFiltered={this.state.filteredInfo.dateFilters[0] !== null}
+                        dates={this.state.filteredInfo.dateFilters[0]}
+                        filterActive={this.state.filteredInfo.active && this.state.filteredInfo.filterType === 0}
                         title="Latest Posts"
                         onFilterClick={() => this.onFilterClick(0)}
                         onResetClick={() => this.resetList(0)}
                         priceName={this.getPriceSpecifics().serverPriceFieldName}
                     />
-                    { this.state.filterActive ?
+                    { this.state.filteredInfo.active ?
                             <Box className={classes.filterBox}>
                                 <FilterPane
                                     locations={this.state.locations}
                                     filter={this.filter}
                                     for={this.getTitle()}
                                     onClose={() => this.closeFilter()}
-                                    which={this.state.filterType}
+                                    which={this.state.filteredInfo.filterType}
                                     {...this.getPriceSpecifics()}
                                 />
                             </Box>
@@ -232,7 +258,9 @@ class Listings extends React.Component {
                     <PostList
                         items={this.state.myPosts}
                         isMyPosts={true}
-                        filterActive={this.state.filterActive && this.state.filterType === 1}
+                        dateFiltered={this.state.filteredInfo.dateFilters[1] !== null}
+                        dates={this.state.filteredInfo.dateFilters[1]}
+                        filterActive={this.state.filteredInfo.active && this.state.filteredInfo.filterType === 1}
                         title="My Posts"
                         onFilterClick={() => this.onFilterClick(1)}
                         onResetClick={() => this.resetList(1)}

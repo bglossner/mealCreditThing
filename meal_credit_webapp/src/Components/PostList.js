@@ -67,6 +67,9 @@ class PostList extends React.Component {
                 endTime={postInfo.end_time}
                 allowEdits={isMyPosts}
                 listKey={listKey}
+                dateFiltered={this.props.dateFiltered}
+                dateFilter1={this.props.dates ? this.props.dates[0] : null}
+                dateFilter2={this.props.dates ? this.props.dates[1] : null}
                 editPost={this.props.editPost}
                 deletePost={this.props.deletePost}
                 moveDownTo={this.props.moveDownTo}

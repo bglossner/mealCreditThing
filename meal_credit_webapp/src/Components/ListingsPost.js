@@ -62,10 +62,27 @@ const styles = theme => ({
 
 class ListingsPost extends Post {
 
+    getTimeLeftField() {
+        if (this.props.dateFiltered) {
+            let dates = dateWrapper.getOverlappingRange(this.props.startTime, this.props.endTime, this.props.dateFilter1, this.props.dateFilter2);
+            return `${dates[0]}  --  ${dates[1]}`;
+        }
+        let timeBeforeStart = dateWrapper.getTimeFromNow(this.props.startTime);
+        if (timeBeforeStart !== null) {
+            return `${timeBeforeStart} until start`;
+        }
+        let timeBeforeEnd = dateWrapper.getTimeFromNow(this.props.endTime);
+        if (timeBeforeEnd !== null) {
+            return `${timeBeforeEnd} until end`;
+        }
+
+        return `No longer available!`
+    }
+
     renderFields() {
         const { classes } = this.props;
         // console.log(this.props);
-        const timeLeft = dateWrapper.getTimeFromNow(this.props.endTime);
+        const timeLeft = this.getTimeLeftField();
         const comp = Math.round(this.props.price);
         const priceListing = this.props.price === comp ? comp : this.props.price.toFixed(2);
         return (

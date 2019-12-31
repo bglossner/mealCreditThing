@@ -17,7 +17,7 @@ const styles = theme => ({
         alignItems: "center",
         width: "33%",
         height: "100%",
-        marginTop: "4%",
+        marginTop: "3.4%",
     },
 });
 
