@@ -4,6 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ListingModal from "../Components/ListingModal";
 import PostList from "../Components/PostList";
 import FilterPane from "../Components/FilterPane";
+import { Alert } from "react-bootstrap";
 
 class Listings extends React.Component {
     constructor(props) {
@@ -26,6 +27,10 @@ class Listings extends React.Component {
                 dateFilters: [null, null],
             },
             locations: null,
+            errorInfo: {
+                errorExists: false,
+                errorMessage: "",
+            },
         };
         this.getAllCurrentPosts();
         this.getAllLocations();
@@ -70,10 +75,14 @@ class Listings extends React.Component {
                 }
             })
             .catch(reason => {
-                console.log("ERROR", reason)
+                // console.log("ERROR", reason);
                 this.setState({
                     currPosts: [],
                     myPosts: [],
+                    errorInfo: {
+                        errorExists: true,
+                        errorMessage: reason.message,
+                    },
                 });
             });
     }
@@ -87,14 +96,23 @@ class Listings extends React.Component {
                 });
             })
             .catch(reason => {
-                console.log(reason)
+                this.setError(reason.message);
             });
+    }
+
+    setError(errorMessage) {
+        this.setState({
+            errorInfo: {
+                errorExists: true,
+                errorMessage: errorMessage,
+            }
+        });
     }
 
     dealWithSubmissionResult(apiPromise, transformedJSON, listKey) {
         apiPromise
             .then((result) => {
-                console.log(result);
+                // console.log(result);
                 let myPosts = this.state.myPosts.slice();
                 transformedJSON.username = this.props.loginInfo.username;
                 if (this.state.modalType === "Add") {
@@ -108,7 +126,7 @@ class Listings extends React.Component {
                 });
             })
             .catch((reason) => {
-                console.log(reason)
+                this.setError(reason.message);
             });
     }
 
@@ -182,15 +200,25 @@ class Listings extends React.Component {
         curFilterStatus.dateFilters[which] = null;
         if (which === 0) {
             this.setState({
-                currPosts: this.state.unfilteredCurrPosts,
+                currPosts: this.state.unfilteredCurrPosts || [],
                 filteredInfo: curFilterStatus,
             });
         } else {
             this.setState({
-                myPosts: this.state.unfilteredMyPosts,
+                myPosts: this.state.unfilteredMyPosts || [],
                 filteredInfo: curFilterStatus,
             });
         }
+    }
+
+    renderErrorMessage() {
+        if (this.state.errorInfo.errorExists) {
+            return (
+                <Alert style={{textAlign: "center", fontSize: "2em"}} variant="danger">{this.state.errorInfo.errorMessage}</Alert>
+            );
+        }
+
+        return null;
     }
 
     getAllCurrentPosts() {
@@ -220,10 +248,11 @@ class Listings extends React.Component {
     render() {
         // console.log("rerender")
         const { classes } = this.props;
-        console.log(this.state.filteredInfo.dateFilters)
+        // console.log(this.state.filteredInfo.dateFilters)
         return (
             <React.Fragment>
                 <div className={classes.toolbar} />
+                { this.renderErrorMessage() }
                 <Grid
                     container
                     direction="row"

@@ -143,6 +143,7 @@ class FilterPane extends React.Component {
                 getOptionLabel={option => option}
                 onChange={(evt, value) => this.handleChange(false)("location")(value)}
                 filterSelectedOptions
+                disabled={this.props.locations === null || this.props.locations === [] }
                 renderInput={params => (
                     <TextField
                         className={classes.fullWidth}

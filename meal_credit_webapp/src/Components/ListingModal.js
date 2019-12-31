@@ -39,6 +39,12 @@ class ListingModal extends React.Component {
             },
             errorStates: [false, false, false],
         };
+        this.fieldTransform = {
+            "location" : "Location",
+            [this.props.priceFieldName] : this.props.readablePriceName,
+            "endTime" : "End Time",
+            "startTime" : "Start Time",
+        };
     }
 
     resetModalState() {

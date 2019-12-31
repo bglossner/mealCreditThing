@@ -8,11 +8,11 @@ export default class APIWrapper {
     constructor(store) {
         // TODO: Make this an environment variable??
         this.baseURL = "http://localhost:8000/";
-        this.loginWrapper = new LoginAPIWrapper(this.baseURL);
-        this.registerWrapper = new RegistrationAPIWrapper(this.baseURL);
+        this.loginWrapper = new LoginAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
+        this.registerWrapper = new RegistrationAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
         this.availabilityWrapper = new AvailabilityAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
         this.hungerWrapper = new HungerAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
-        this.generalWrapper = new GeneralAPIWrapper(this.baseURL);
+        this.generalWrapper = new GeneralAPIWrapper(this.baseURL, this.getDefaultStatusResponse);
         this.store = store;
     }
 
@@ -36,7 +36,7 @@ export default class APIWrapper {
                 break
             }
             case 0: {
-                errorMessage = "Could not connect to the server!"
+                errorMessage = "Could not connect to the server... server is down or you are not connected to the Internet.  Consider refreshing the page"
                 break
             }
             default: {

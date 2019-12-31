@@ -13,6 +13,7 @@ export default class PostsAPIWrapper {
     getAllPosts() {
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
+            var getDefaultStatusResponse = this.getDefaultStatusResponse;
             xhr.open("GET", this.baseURL + `${this.postType}-list`, true);
             xhr.setRequestHeader("Content-Type", "application/json");
 
@@ -22,10 +23,7 @@ export default class PostsAPIWrapper {
                     if (this.status === 200) {
                         resolve(JSON.parse(this.response).result);
                     } else {
-                        reject({
-                            status: this.status,
-                            message:  this.response.result || "Could not connect to the server!"
-                        });
+                        reject(getDefaultStatusResponse(this.status, this.response));
                     }
                 }
             };
@@ -36,6 +34,7 @@ export default class PostsAPIWrapper {
     getFilteredPosts(filterJSON) {
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
+            var getDefaultStatusResponse = this.getDefaultStatusResponse;
             if (filterJSON["location"]) {
                 filterJSON["location"] = filterJSON["location"].join("+");
             }
@@ -58,10 +57,7 @@ export default class PostsAPIWrapper {
                     if (this.status === 200) {
                         resolve(JSON.parse(this.response).result);
                     } else {
-                        reject({
-                            status: this.status,
-                            message:  this.response.result || "Could not connect to the server!"
-                        });
+                        reject(getDefaultStatusResponse(this.status, this.response));
                     }
                 }
             };
@@ -135,6 +131,7 @@ export default class PostsAPIWrapper {
     getUserPosts(userID) {
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
+            var getDefaultStatusResponse = this.getDefaultStatusResponse;
             xhr.open("GET", this.baseURL + `${this.postType}-list/${userID}`, true);
             xhr.setRequestHeader("Content-Type", "application/json");
 
@@ -144,10 +141,7 @@ export default class PostsAPIWrapper {
                     if (this.status === 200) {
                         resolve(JSON.parse(this.response).result);
                     } else {
-                        reject({
-                            status: this.status,
-                            message:  JSON.parse(this.response).result || "Could not connect to the server!"
-                        });
+                        reject(getDefaultStatusResponse(this.status, this.response));
                     }
                 }
             };
