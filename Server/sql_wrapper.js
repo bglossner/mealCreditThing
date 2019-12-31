@@ -49,19 +49,19 @@ module.exports = class DataAccess {
         if (startTime || endTime) {
             if (who || where) {
                 if (startTime) {
-                    myQuery += ` AND end_time >= '${startTime}'`;
+                    myQuery += ` AND end_time > '${startTime}'`;
                 }
                 if (endTime) {
-                    myQuery += ` AND start_time <= '${endTime}'`;
+                    myQuery += ` AND start_time < '${endTime}'`;
                 }
             } else {
                 if (startTime) {
-                    myQuery += ` WHERE end_time >= '${endTime}'`;
+                    myQuery += ` WHERE end_time > '${startTime}'`;
                 }
                 if (endTime && !startTime) {
-                    myQuery += ` WHERE start_time <= '${startTime}'`;
+                    myQuery += ` WHERE start_time < '${endTime}'`;
                 } else if (endTime) {
-                    myQuery += ` AND start_time <= '${endTime}'`;
+                    myQuery += ` AND start_time < '${endTime}'`;
                 }
             }
         }
@@ -82,7 +82,7 @@ module.exports = class DataAccess {
             myQuery += ` LIMIT ${size}`;
         }
 
-        // console.log(myQuery);
+        console.log(myQuery);
 
         await new Promise((resolve, reject) =>
             this._connection.query(myQuery, (err, result, fields) => {
@@ -269,19 +269,19 @@ module.exports = class DataAccess {
         if (startTime || endTime) {
             if (who || where) {
                 if (startTime) {
-                    myQuery += ` AND end_time >= '${startTime}'`;
+                    myQuery += ` AND end_time > '${startTime}'`;
                 }
                 if (endTime) {
-                    myQuery += ` AND start_time <= '${endTime}'`;
+                    myQuery += ` AND start_time < '${endTime}'`;
                 }
             } else {
                 if (startTime) {
-                    myQuery += ` WHERE end_time >= '${endTime}'`;
+                    myQuery += ` WHERE end_time > '${startTime}'`;
                 }
                 if (endTime && !startTime) {
-                    myQuery += ` WHERE start_time <= '${startTime}'`;
+                    myQuery += ` WHERE start_time < '${endTime}'`;
                 } else if (endTime) {
-                    myQuery += ` AND start_time <= '${endTime}'`;
+                    myQuery += ` AND start_time < '${endTime}'`;
                 }
             }
         }

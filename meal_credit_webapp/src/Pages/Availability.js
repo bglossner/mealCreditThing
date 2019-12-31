@@ -24,6 +24,10 @@ const styles = theme => ({
 class Availability extends Listings {
 
     getTitle() {
+        return "Availability Posts";
+    }
+
+    getModalTitle() {
         return `${this.state.modalType} Availability Post`;
     }
 

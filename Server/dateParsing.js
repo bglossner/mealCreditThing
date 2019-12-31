@@ -21,8 +21,12 @@ function parseDateTime(dateTime) {
 }
 
 function parseJSDateObject(serverDateTime) {
-    let periodIndex = serverDateTime.indexOf(".");
-    return serverDateTime.substring(0, periodIndex);
+    if (serverDateTime !== undefined && serverDateTime !== null) {
+        let periodIndex = serverDateTime.indexOf(".");
+        return serverDateTime.substring(0, periodIndex);
+    }
+
+    return serverDateTime;
 }
 
 function getCurrentDate() {

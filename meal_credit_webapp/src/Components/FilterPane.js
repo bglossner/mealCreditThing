@@ -3,6 +3,7 @@ import { Grid, Typography, Box, TextField, Button, withStyles } from "@material-
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TimeRangePicker from "./TimeRangePicker";
 import Input from "./Input";
+import { Alert } from "react-bootstrap";
 import Selector from "./Selector";
 import SmartCheckbox from "./Checkbox";
 import CloseIcon from '@material-ui/icons/Close';
@@ -26,7 +27,7 @@ const styles = theme => ({
     },
     title: {
         fontStyle: "italic",
-        marginRight: "30%",
+        marginRight: "25%",
     },
     titleBox: {
         justifyContent: "flex-end",
@@ -47,10 +48,10 @@ class FilterPane extends React.Component {
         this.state = {
             error: {
                 valid: true,
-                who: -1,
+                message: "",
             },
             filterInfo: this.getDefaultInfo(),
-            errorStates: [false, false, false, false],
+            errorInDates: false,
             checkboxStates: [false, false, false, false],
         };
         this.checkBoxLabels = ["Time Range", "Location", "Price", "Username"];
@@ -103,12 +104,10 @@ class FilterPane extends React.Component {
         return newArray;
     }
 
-    errorSetter = (index) => (value) => {
-        if (this.state.errorStates[index] !== value) {
-            let curErrorState = this.state.errorStates.slice();
-            curErrorState[index] = value;
+    errorSetter = (key, value) => {
+        if (this.state[key] !== value) {
             this.setState({
-                errorStates: curErrorState,
+                [key]: value,
             });
         }
     }
@@ -166,7 +165,7 @@ class FilterPane extends React.Component {
                 handleInParent={this.handleChange(false)}
                 startTime={this.state.filterInfo.startTime}
                 endTime={this.state.filterInfo.endTime}
-                errorSetter={this.errorSetter(0)}
+                errorSetter={(value) => this.errorSetter("errorInDates", value)}
             />
         );
     }
@@ -187,7 +186,7 @@ class FilterPane extends React.Component {
                     onChange={(this.handleChange(true))(this.props.priceFieldName)}
                     forceShowErrors={true}
                     margin="none"
-                    /* checkInput={this.validatePrice()} */
+                    checkInput={this.validatePrice()}
                 />
             </Box>
         );
@@ -209,11 +208,61 @@ class FilterPane extends React.Component {
         );
     }
 
+    validatePrice() {
+        const price = this.state.filterInfo[this.props.priceFieldName];
+        if (price && this.state.checkboxStates[2]) {
+            const decimalIndex = price.indexOf(".");
+            if (decimalIndex > -1) {
+                if (!price.match(/^[0-9]{0,2}\.[0-9]{0,2}$/g)) {
+                    return {
+                        valid: false,
+                        errorMessage: "Price must have less than two numbers after decimal"
+                    };
+                }
+            }
+        }
+
+        return {
+            valid: true,
+        }
+    }
+
+    validateFilterInfo() {
+        let validPrice = this.validatePrice(), invalidDate = this.state.errorInDates && this.state.checkboxStates[0];
+        if (!validPrice.valid || invalidDate) {
+            return {
+                valid: false,
+                errorMessage: validPrice.valid ? "Please fix any date/time errors below" : validPrice.errorMessage,
+            }
+        }
+
+        return {
+            valid: true
+        }
+    }
+
+    renderErrorMessage() {
+        if (!this.state.error.valid) {
+            return (
+                <Grid
+                        container
+                        alignItems="center"
+                        direction="row"
+                        justify="center"
+                >
+                    <Alert variant="danger">{this.state.error.message}</Alert>
+                </Grid>
+            );
+        }
+
+        return null;
+    }
+
     attemptFilter() {
         let jsonFilterInfo = {}, i, value;
         for (i = 0; i < this.indexLabeling.length; i++) {
             value = this.state.filterInfo[this.indexLabeling[i]];
-            if (this.state.checkboxStates[i + 1] && value !== null) {
+            if ((this.state.checkboxStates[i + 1]) && (value !== null) && (value !== "")) {
                 jsonFilterInfo[this.indexLabeling[i]] = value;
             }
         }
@@ -226,13 +275,28 @@ class FilterPane extends React.Component {
         if (this.state.checkboxStates[0] && value !== null) {
             jsonFilterInfo["endTime"] = value.toISOString();
         }
-        // console.log(jsonFilterInfo)
-        this.props.filter(jsonFilterInfo);
+        
+        let validityCheck = this.validateFilterInfo();
+        if (validityCheck.valid) {
+            this.props.filter(jsonFilterInfo);
+            this.setState({
+                error: {
+                    valid: true,
+                    message: "",
+                }
+            });
+        } else {
+            this.setState({
+                error: {
+                    valid: false,
+                    message: validityCheck.errorMessage
+                }
+            });
+        }
     }
 
     render() {
         const { classes } = this.props;
-        // console.log(this.state.filterInfo);
         return (
             <Grid
                 container
@@ -243,7 +307,7 @@ class FilterPane extends React.Component {
             >
                 <Box className={`${classes.fullWidth} ${classes.horizBox} ${classes.titleBox}`}>
                     <Typography className={classes.title} variant="h5">
-                        Filter Menu
+                        {`Filter ${this.props.for}`}
                     </Typography>
                     <Button
                         className={classes.cancel}
@@ -252,6 +316,7 @@ class FilterPane extends React.Component {
                         <CloseIcon />
                     </Button>
                 </Box>
+                { this.renderErrorMessage() }
                 { this.renderField(0, classes, this.renderTimeRangeFilter) }
                 { this.renderField(1, classes, this.renderLocationFilter) }
                 { this.renderField(2, classes, this.renderPriceFilter) }

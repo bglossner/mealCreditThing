@@ -20,6 +20,7 @@ class Input extends Component {
     }
 
     checkError() {
+        // console.log(this.props.checkInput)
         if (this.props.checkInput.valid) {
             this.setState({
                 showErrorLabel: false

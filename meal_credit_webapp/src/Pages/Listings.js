@@ -190,6 +190,10 @@ class Listings extends React.Component {
         console.warn("getTitle should be implemented in subclass")
     }
 
+    getModalTitle() {
+        console.warn("getModalTitle should be implemented in subclass")
+    }
+
     render() {
         // console.log("rerender")
         const { classes } = this.props;
@@ -216,6 +220,7 @@ class Listings extends React.Component {
                                 <FilterPane
                                     locations={this.state.locations}
                                     filter={this.filter}
+                                    for={this.getTitle()}
                                     onClose={() => this.closeFilter()}
                                     which={this.state.filterType}
                                     {...this.getPriceSpecifics()}
@@ -241,7 +246,7 @@ class Listings extends React.Component {
                     open={this.state.modalOpen}
                     onClose={this.onModalClose}
                     type={this.state.modalType}
-                    title={this.getTitle()}
+                    title={this.getModalTitle()}
                     closeModal={this.closeModal}
                     apiWrapper={this.props.apiWrapper}
                     onSubmit={this.onSubmit}

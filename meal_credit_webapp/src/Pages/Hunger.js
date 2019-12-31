@@ -24,6 +24,10 @@ const styles = theme => ({
 class Hunger extends Listings {
 
     getTitle() {
+        return "Hunger Posts";
+    }
+
+    getModalTitle() {
         return `${this.state.modalType} Hunger Post`;
     }
 

@@ -142,13 +142,13 @@ app.get(
     "/availability-list/:size/:where/:who/:start/:end/:price/:sortBy",
     (req, res) => {
         // Creates an object representing the parameters for the SQL wrapper
-
+        
         let holder = {
             size: req.params.size,
             where: req.params.where,
             who: req.params.who,
-            start: req.params.start,
-            end: req.params.end,
+            start: dateParser.parseJSDateObject(req.params.start),
+            end: dateParser.parseJSDateObject(req.params.end),
             price: req.params.price,
             sort: req.params.sortBy
         };
@@ -194,8 +194,8 @@ app.get("/hunger-list/:size/:where/:who/:start/:end/:price/:sortBy", (req, res) 
         size: req.params.size,
         where: req.params.where,
         who: req.params.who,
-        start: req.params.start,
-        end: req.params.end,
+        start: dateParser.parseJSDateObject(req.params.start),
+        end: dateParser.parseJSDateObject(req.params.end),
         price: req.params.price,
         sort: req.params.sortBy
     };
@@ -866,8 +866,8 @@ app.put("/change/availability/", (req, res) => {
     let avObj = {
         asking_price: req.body.asking_price,
         location: req.body.location,
-        start_time: req.body.start_time,
-        end_time: req.body.end_time
+        start_time: dateParser.parseJSDateObject(req.body.start_time),
+        end_time: dateParser.parseJSDateObject(req.body.end_time)
     };
 
     checkCorrectUser("Availability", "av_id", availability_id, user_id, res, () => {
